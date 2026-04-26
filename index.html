@@ -4,215 +4,215 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>26빌딩 온라인</title>
-  <meta name="description" content="군산 26빌딩 안의 가게와 사무실 정보를 온라인에서 확인하세요." />
+  <meta name="description" content="군산 나운동 동아26빌딩 업체 안내" />
   <style>
     :root{
-      --dark:#07101d;
-      --dark2:#101827;
-      --paper:#ffffff;
-      --bg:#f5f7ff;
-      --ink:#101827;
-      --muted:#667085;
-      --line:#e8edf5;
-      --blue:#4f8cff;
-      --purple:#7c61ff;
-      --pink:#ff6fb1;
-      --green:#59e3a7;
-      --shadow:0 24px 70px rgba(16,24,40,.12);
+      --bg:#f7fbff;
+      --paper:#fff;
+      --ink:#102033;
+      --muted:#65758c;
+      --line:#e6eef8;
+      --blue:#1f8cff;
+      --sky:#75d7ff;
+      --mint:#34d399;
+      --yellow:#ffd166;
+      --shadow:0 20px 52px rgba(31,140,255,.12);
       --pageX:22px;
     }
 
     *{box-sizing:border-box}
-
-    html{
-      scroll-behavior:smooth;
-    }
-
+    html{scroll-behavior:smooth}
     body{
       margin:0;
       font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Noto Sans KR","Segoe UI",sans-serif;
-      color:#fff;
-      background:#07101d;
+      color:var(--ink);
+      background:#fff;
       word-break:keep-all;
       overflow-x:hidden;
     }
-
     a{color:inherit;text-decoration:none}
     button{font-family:inherit}
 
     .page{
       min-height:100vh;
       background:
-        radial-gradient(circle at 12% 4%, rgba(79,140,255,.24), transparent 30%),
-        radial-gradient(circle at 88% 9%, rgba(255,111,177,.18), transparent 32%),
-        linear-gradient(180deg,#050914 0%,#08101d 54%,#f5f7ff 54%,#f5f7ff 100%);
+        radial-gradient(circle at 12% 6%, rgba(31,140,255,.10), transparent 30%),
+        radial-gradient(circle at 88% 8%, rgba(52,211,153,.10), transparent 32%),
+        linear-gradient(180deg,#fff 0%,#f8fcff 100%);
     }
 
     .topbar{
       position:sticky;
       top:0;
-      z-index:50;
-      background:rgba(7,16,29,.86);
-      backdrop-filter:blur(20px);
-      border-bottom:1px solid rgba(255,255,255,.1);
+      z-index:100;
+      background:rgba(255,255,255,.82);
+      border-bottom:1px solid rgba(31,140,255,.12);
+      backdrop-filter:blur(22px);
+      -webkit-backdrop-filter:blur(22px);
+      box-shadow:0 10px 30px rgba(31,140,255,.07);
     }
-
     .nav{
       max-width:1180px;
       margin:0 auto;
-      padding:16px var(--pageX);
+      padding:14px var(--pageX);
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:18px;
     }
-
     .brand{
       display:flex;
       align-items:center;
       gap:12px;
+      font-size:21px;
       font-weight:1000;
       letter-spacing:-.06em;
-      font-size:21px;
+      color:var(--ink);
     }
-
     .brand-mark{
       width:42px;
       height:42px;
       border-radius:16px;
       display:grid;
       place-items:center;
-      background:linear-gradient(135deg,var(--blue),var(--pink));
-      box-shadow:0 14px 34px rgba(79,140,255,.28);
+      color:#fff;
+      background:linear-gradient(135deg,var(--blue),var(--sky) 55%,var(--mint));
+      box-shadow:0 14px 32px rgba(31,140,255,.22);
       font-size:15px;
       font-weight:1000;
-      letter-spacing:-.04em;
+      animation:pulseMark 3.2s ease-out infinite;
     }
-
+    @keyframes pulseMark{
+      0%{box-shadow:0 0 0 0 rgba(31,140,255,.20), 0 14px 32px rgba(31,140,255,.22)}
+      70%{box-shadow:0 0 0 12px rgba(31,140,255,0), 0 14px 32px rgba(31,140,255,.22)}
+      100%{box-shadow:0 0 0 0 rgba(31,140,255,0), 0 14px 32px rgba(31,140,255,.22)}
+    }
     .nav-links{
       display:flex;
       align-items:center;
       gap:20px;
-      color:rgba(255,255,255,.76);
+      color:#4f627a;
       font-size:14px;
       font-weight:850;
       letter-spacing:-.04em;
     }
-
-    .nav-links a:hover{color:#fff}
-
+    .nav-links a:hover{color:var(--blue)}
     .nav-cta{
       padding:11px 17px;
       border-radius:999px;
-      background:#fff;
-      color:#101827 !important;
-      box-shadow:0 12px 30px rgba(255,255,255,.12);
+      color:#fff!important;
+      background:linear-gradient(135deg,var(--blue),var(--sky) 58%,var(--mint));
+      box-shadow:0 14px 34px rgba(31,140,255,.20);
     }
 
-    /* ================= 데스크탑/모바일 공통 인트로 ================= */
-    .intro{
+    /* HERO: 사진 배경 없음. 텍스트만 깨끗하게 */
+    .hero{
+      position:relative;
+      overflow:hidden;
       max-width:1180px;
       margin:0 auto;
-      padding:58px var(--pageX) 26px;
+      padding:64px var(--pageX) 34px;
     }
-
-    .intro-grid{
-      display:grid;
-      grid-template-columns:1.08fr .92fr;
-      gap:38px;
-      align-items:end;
+    .hero::before{
+      content:"";
+      position:absolute;
+      right:-90px;
+      top:26px;
+      width:280px;
+      height:280px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(117,215,255,.24), transparent 68%);
+      pointer-events:none;
+      animation:floaty 7s ease-in-out infinite;
     }
-
+    .hero::after{
+      content:"";
+      position:absolute;
+      left:-100px;
+      bottom:10px;
+      width:260px;
+      height:260px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(52,211,153,.16), transparent 68%);
+      pointer-events:none;
+      animation:floaty 8s ease-in-out infinite reverse;
+    }
+    @keyframes floaty{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-14px)}
+    }
     .eyebrow{
+      position:relative;
+      z-index:1;
       width:fit-content;
       display:inline-flex;
       align-items:center;
       gap:9px;
       padding:10px 14px;
       border-radius:999px;
-      background:rgba(255,255,255,.1);
-      border:1px solid rgba(255,255,255,.14);
-      color:rgba(255,255,255,.86);
+      background:rgba(255,255,255,.92);
+      border:1px solid rgba(31,140,255,.14);
+      color:#38516e;
       font-size:13px;
       font-weight:900;
       letter-spacing:-.025em;
+      box-shadow:0 12px 30px rgba(31,140,255,.08);
       margin-bottom:18px;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
     }
-
-    .pulse{
+    .dot{
       width:8px;
       height:8px;
       border-radius:50%;
-      background:var(--green);
-      box-shadow:0 0 0 8px rgba(89,227,167,.14);
+      background:var(--mint);
+      box-shadow:0 0 0 8px rgba(52,211,153,.14);
     }
-
-    .intro-title{
+    .hero-title{
+      position:relative;
+      z-index:1;
       margin:0;
-      font-size:clamp(50px,8vw,92px);
-      line-height:.96;
-      letter-spacing:-.11em;
+      font-size:clamp(48px,8vw,88px);
+      line-height:.98;
+      letter-spacing:-.105em;
       font-weight:1000;
+      color:#102033;
+      animation:fadeUp .65s ease both;
     }
-
-    .intro-title .grad{
-      background:linear-gradient(90deg,#fff 0%,#dff5ff 42%,#ffe1f0 82%,#fff7d4 100%);
+    .hero-title .grad{
+      background:linear-gradient(90deg,#102033 0%,#1f8cff 34%,#13bfa6 72%,#102033 100%);
       -webkit-background-clip:text;
       background-clip:text;
       color:transparent;
+      background-size:200% 100%;
+      animation:gradFlow 6s linear infinite;
     }
-
-    .intro-desc{
-      margin:22px 0 0;
+    @keyframes gradFlow{
+      0%{background-position:0% 50%}
+      100%{background-position:200% 50%}
+    }
+    .hero-desc{
+      position:relative;
+      z-index:1;
+      margin:20px 0 0;
       max-width:680px;
-      color:rgba(255,255,255,.76);
+      color:#5b6e86;
       font-size:18px;
-      line-height:1.75;
+      line-height:1.72;
       letter-spacing:-.045em;
-      font-weight:650;
-    }
-
-    .intro-side{
-      display:grid;
-      gap:12px;
-    }
-
-    .quick-card{
-      padding:18px 18px;
-      border-radius:24px;
-      background:rgba(255,255,255,.1);
-      border:1px solid rgba(255,255,255,.14);
-      backdrop-filter:blur(16px);
-      box-shadow:0 18px 50px rgba(0,0,0,.15);
-    }
-
-    .quick-card b{
-      display:block;
-      font-size:18px;
-      line-height:1.25;
-      letter-spacing:-.065em;
-      font-weight:1000;
-      margin-bottom:6px;
-    }
-
-    .quick-card span{
-      display:block;
-      color:rgba(255,255,255,.68);
-      font-size:13px;
-      line-height:1.55;
-      letter-spacing:-.035em;
       font-weight:700;
+      animation:fadeUp .65s ease .08s both;
     }
-
-    .intro-actions{
+    .hero-actions{
+      position:relative;
+      z-index:1;
       display:flex;
       flex-wrap:wrap;
       gap:12px;
       margin-top:28px;
+      animation:fadeUp .65s ease .14s both;
     }
-
     .btn{
+      position:relative;
+      overflow:hidden;
       min-height:54px;
       padding:0 24px;
       border-radius:999px;
@@ -225,196 +225,205 @@
       letter-spacing:-.04em;
       transition:.22s ease;
     }
-
     .btn:hover{transform:translateY(-3px)}
-
     .btn-primary{
-      background:linear-gradient(135deg,#fff,#dff6ff);
-      color:#07101d;
-      box-shadow:0 18px 44px rgba(116,215,255,.22);
-    }
-
-    .btn-secondary{
+      background:linear-gradient(135deg,var(--blue),var(--sky) 58%,var(--mint));
       color:#fff;
-      background:rgba(255,255,255,.13);
-      border:1px solid rgba(255,255,255,.22);
-      backdrop-filter:blur(12px);
+      box-shadow:0 18px 44px rgba(31,140,255,.20);
     }
+    .btn-secondary{
+      color:#1f5f9c;
+      background:#fff;
+      border:1px solid rgba(31,140,255,.16);
+      box-shadow:0 14px 34px rgba(31,140,255,.08);
+    }
+    .btn::after,
+    .nav-cta::after,
+    .register-btn::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(110deg,transparent 0%,rgba(255,255,255,.55) 45%,transparent 70%);
+      transform:translateX(-120%);
+      transition:transform .55s ease;
+      pointer-events:none;
+    }
+    .btn:hover::after,
+    .nav-cta:hover::after,
+    .register-btn:hover::after{transform:translateX(120%)}
 
-    /* ================= 독립 영상 섹션 ================= */
+    /* VIDEO: 독립 섹션. 로컬이면 iframe 숨김 */
     .video-section{
       position:relative;
-      z-index:2;
-      width:100%;
-      padding:14px 0 54px;
+      padding:10px 0 50px;
       overflow:hidden;
     }
-
-    .video-shell{
-      position:relative;
-      width:min(100%, 1120px);
-      margin:0 auto;
-    }
-
     .video-frame{
       position:relative;
       width:100%;
-      aspect-ratio:16 / 8.5;
+      height:clamp(430px,56vw,740px);
       overflow:hidden;
-      background:#000;
-      box-shadow:0 34px 90px rgba(0,0,0,.34);
-    }
-
-    .video-bg{
-      position:absolute;
-      inset:0;
       background:
-        linear-gradient(180deg,rgba(7,10,18,.12),rgba(7,10,18,.82)),
+        linear-gradient(180deg,rgba(8,22,42,.04),rgba(8,22,42,.58)),
         url("https://img.youtube.com/vi/7mAUxuMU2WQ/maxresdefault.jpg") center/cover,
-        #000;
+        #dff4ff;
+      box-shadow:0 24px 70px rgba(31,140,255,.14);
     }
-
-    .video-bg iframe{
+    .video-frame iframe{
       position:absolute;
       top:50%;
       left:50%;
-      width:100%;
-      height:134%;
+      width:100vw;
+      height:56.25vw;
+      min-width:100vw;
+      min-height:100%;
       transform:translate(-50%,-50%);
       border:0;
       pointer-events:none;
+      z-index:0;
     }
-
+    .video-frame.local-fallback iframe{display:none}
+    .video-frame.local-fallback::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(to top, rgba(8,22,42,.72), rgba(8,22,42,.18), rgba(255,255,255,.04)),
+        url("https://img.youtube.com/vi/7mAUxuMU2WQ/maxresdefault.jpg") center/cover;
+      z-index:0;
+    }
     .video-overlay{
       position:absolute;
       inset:0;
+      z-index:1;
       pointer-events:none;
       background:
-        linear-gradient(to top, rgba(0,0,0,.86) 0%, rgba(0,0,0,.44) 34%, rgba(0,0,0,.06) 67%, rgba(0,0,0,.12) 100%),
-        radial-gradient(circle at 12% 14%, rgba(79,140,255,.2), transparent 34%),
-        radial-gradient(circle at 86% 16%, rgba(255,111,177,.18), transparent 33%);
-      z-index:1;
+        linear-gradient(to top,rgba(8,22,42,.70) 0%,rgba(8,22,42,.26) 38%,rgba(8,22,42,.04) 70%),
+        radial-gradient(circle at 12% 14%,rgba(31,140,255,.18),transparent 34%),
+        radial-gradient(circle at 86% 18%,rgba(52,211,153,.14),transparent 32%);
     }
-
-    .video-content{
+    .video-copy{
       position:absolute;
       inset:0;
       z-index:2;
       display:flex;
       flex-direction:column;
       justify-content:flex-end;
-      padding:44px;
+      max-width:1180px;
+      margin:0 auto;
+      padding:42px var(--pageX);
+      left:0;
+      right:0;
+      color:#fff;
     }
-
     .video-badge{
       position:absolute;
-      left:44px;
       top:36px;
+      left:var(--pageX);
       display:inline-flex;
       align-items:center;
       gap:10px;
-      width:fit-content;
       padding:10px 14px;
       border-radius:999px;
-      background:rgba(255,255,255,.14);
-      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.18);
+      border:1px solid rgba(255,255,255,.22);
       backdrop-filter:blur(14px);
-      color:rgba(255,255,255,.9);
       font-size:13px;
       font-weight:950;
       letter-spacing:-.035em;
     }
-
     .video-badge span{
       width:26px;
       height:26px;
       border-radius:10px;
       display:grid;
       place-items:center;
-      background:linear-gradient(135deg,var(--blue),var(--pink));
       color:#fff;
+      background:linear-gradient(135deg,var(--blue),var(--sky),var(--mint));
       font-weight:1000;
       font-size:12px;
     }
-
-    .video-content h2{
+    .video-copy h2{
       margin:0;
       color:#fff;
-      font-size:clamp(42px,6.2vw,72px);
-      line-height:1.02;
-      letter-spacing:-.1em;
+      font-size:clamp(38px,6.2vw,68px);
+      line-height:1.03;
+      letter-spacing:-.095em;
       font-weight:1000;
-      text-shadow:0 3px 18px rgba(0,0,0,.38);
+      text-shadow:0 4px 22px rgba(0,0,0,.38);
     }
-
-    .video-content p{
-      margin:18px 0 0;
+    .video-copy p{
+      margin:16px 0 0;
       max-width:660px;
-      color:rgba(255,255,255,.82);
+      color:rgba(255,255,255,.84);
       font-size:17px;
-      line-height:1.65;
+      line-height:1.62;
       letter-spacing:-.04em;
       font-weight:750;
       text-shadow:0 2px 12px rgba(0,0,0,.34);
     }
 
     .content{
-      color:var(--ink);
-      background:var(--bg);
-      border-radius:42px 42px 0 0;
-      margin-top:-26px;
       position:relative;
       z-index:3;
+      margin-top:-28px;
+      background:var(--bg);
+      border-radius:36px 36px 0 0;
       padding-top:34px;
+      box-shadow:0 -18px 44px rgba(31,140,255,.06);
     }
-
-    section.body-section{
+    .body-section{
       max-width:1180px;
       margin:0 auto;
       padding:58px var(--pageX);
     }
-
-    .section-head{
-      margin-bottom:26px;
-    }
-
+    .section-head{margin-bottom:26px}
     .kicker{
-      color:#5b6fff;
+      color:var(--blue);
       font-size:13px;
       font-weight:1000;
       letter-spacing:.02em;
       margin-bottom:9px;
     }
-
     .section-title{
+      position:relative;
+      display:inline-block;
       margin:0;
+      color:var(--ink);
       font-size:clamp(34px,4.2vw,52px);
       line-height:1.08;
       letter-spacing:-.095em;
       font-weight:1000;
-      color:#0b1020;
     }
-
+    .section-title::after{
+      content:"";
+      position:absolute;
+      left:2px;
+      right:2px;
+      bottom:-8px;
+      height:8px;
+      z-index:-1;
+      border-radius:999px;
+      background:linear-gradient(90deg,rgba(31,140,255,.20),rgba(52,211,153,.18),rgba(255,209,102,.20));
+    }
     .section-desc{
       margin:14px 0 0;
       max-width:680px;
-      color:#667085;
+      color:var(--muted);
       font-size:17px;
-      line-height:1.75;
+      line-height:1.72;
       letter-spacing:-.045em;
       font-weight:650;
     }
 
     .floor-panel{
-      position:relative;
       margin:26px 0 24px;
       padding:14px;
       border-radius:28px;
-      background:rgba(255,255,255,.76);
-      border:1px solid rgba(16,24,40,.07);
-      box-shadow:0 18px 50px rgba(16,24,40,.08);
+      background:rgba(255,255,255,.94);
+      border:1px solid rgba(31,140,255,.12);
+      box-shadow:var(--shadow);
     }
-
     .floor-title{
       display:flex;
       align-items:center;
@@ -422,39 +431,30 @@
       gap:12px;
       padding:2px 4px 12px;
     }
-
     .floor-title b{
+      color:var(--ink);
       font-size:16px;
       letter-spacing:-.055em;
       font-weight:1000;
-      color:#101827;
     }
-
     .floor-title span{
-      color:#667085;
+      color:var(--muted);
       font-size:12px;
       font-weight:800;
       letter-spacing:-.03em;
     }
-
     .floor-scroll{
       display:flex;
       gap:9px;
       overflow-x:auto;
       overflow-y:hidden;
       padding:2px 2px 4px;
-      -webkit-overflow-scrolling:touch;
       scrollbar-width:none;
-      scroll-snap-type:x proximity;
+      -webkit-overflow-scrolling:touch;
     }
-
-    .floor-scroll::-webkit-scrollbar{
-      display:none;
-    }
-
+    .floor-scroll::-webkit-scrollbar{display:none}
     .floor-chip{
       flex:0 0 auto;
-      scroll-snap-align:start;
       min-width:68px;
       height:50px;
       border:0;
@@ -465,60 +465,63 @@
       font-weight:950;
       letter-spacing:-.04em;
       cursor:pointer;
-      box-shadow:0 10px 24px rgba(16,24,40,.06);
+      box-shadow:0 10px 24px rgba(31,140,255,.08);
       transition:.18s ease;
     }
-
     .floor-chip.active{
       color:#fff;
-      background:linear-gradient(135deg,var(--blue),var(--purple) 58%,var(--pink));
-      box-shadow:0 14px 30px rgba(79,140,255,.28);
+      background:linear-gradient(135deg,var(--blue),var(--sky),var(--mint));
+      box-shadow:0 14px 30px rgba(31,140,255,.28);
+      animation:chipPop .25s ease both;
+    }
+    @keyframes chipPop{
+      0%{transform:scale(.96)}
+      55%{transform:scale(1.045)}
+      100%{transform:scale(1)}
     }
 
-    .floor-chip:active{
-      transform:scale(.96);
-    }
-
-    .stores-grid{
+    .stores-grid,
+    .category-store-grid{
       display:grid;
       grid-template-columns:repeat(3,1fr);
       gap:20px;
     }
-
     .store-card{
       overflow:hidden;
       border-radius:30px;
       background:#fff;
+      border:1px solid rgba(31,140,255,.10);
       box-shadow:var(--shadow);
-      border:1px solid rgba(16,24,40,.07);
-      transition:.22s ease;
+      opacity:0;
+      animation:cardIn .58s cubic-bezier(.2,.9,.22,1) both;
+      animation-delay:calc(var(--card-i,0) * 70ms);
+      transition:transform .25s ease, box-shadow .25s ease;
     }
-
     .store-card:hover{
       transform:translateY(-6px);
+      box-shadow:0 28px 70px rgba(31,140,255,.16);
     }
-
+    @keyframes cardIn{
+      0%{opacity:0;transform:translateY(28px) scale(.985);filter:blur(4px)}
+      100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
+    }
     .store-photo{
       position:relative;
       height:220px;
       background:center/cover;
     }
-
     .store-photo::after{
       content:"";
       position:absolute;
       inset:0;
       background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.58));
     }
-
     .store-photo.p1{background-image:url("https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=700&q=80")}
     .store-photo.p2{background-image:url("https://images.unsplash.com/photo-1573497491208-6b1acb260507?auto=format&fit=crop&w=700&q=80")}
     .store-photo.p3{background-image:url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=700&q=80")}
     .store-photo.p4{background-image:url("https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=700&q=80")}
     .store-photo.p5{background-image:url("https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=700&q=80")}
     .store-photo.p6{background-image:url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=700&q=80")}
-
-
     .store-photo.p7{background-image:url("https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=700&q=80")}
     .store-photo.p8{background-image:url("https://images.unsplash.com/photo-1580281657521-7a7e0f85e0b9?auto=format&fit=crop&w=700&q=80")}
     .store-photo.p9{background-image:url("https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=700&q=80")}
@@ -529,7 +532,6 @@
     .store-photo.p14{background-image:url("https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=700&q=80")}
     .store-photo.p15{background-image:url("https://images.unsplash.com/photo-1581579186913-45ac3e6efe93?auto=format&fit=crop&w=700&q=80")}
     .store-photo.p16{background-image:url("https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=700&q=80")}
-
     .tag{
       position:absolute;
       left:16px;
@@ -538,13 +540,12 @@
       padding:8px 12px;
       border-radius:999px;
       color:#fff;
-      background:rgba(0,0,0,.35);
+      background:rgba(0,0,0,.38);
       backdrop-filter:blur(10px);
       font-size:12px;
       font-weight:950;
       letter-spacing:-.035em;
     }
-
     .floor-badge{
       position:absolute;
       right:16px;
@@ -555,41 +556,34 @@
       border-radius:20px;
       display:grid;
       place-items:center;
-      color:#08101f;
-      background:rgba(255,255,255,.92);
+      color:var(--ink);
+      background:rgba(255,255,255,.93);
       font-size:15px;
       font-weight:1000;
       letter-spacing:-.06em;
     }
-
-    .store-body{
-      padding:24px;
-    }
-
+    .store-body{padding:24px}
     .store-body h3{
       margin:0;
-      color:#101827;
+      color:var(--ink);
       font-size:24px;
       line-height:1.15;
       font-weight:1000;
       letter-spacing:-.075em;
     }
-
     .store-body p{
       margin:12px 0 22px;
-      color:#667085;
+      color:var(--muted);
       font-size:15px;
       line-height:1.65;
       font-weight:600;
       letter-spacing:-.04em;
     }
-
     .store-actions{
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:10px;
     }
-
     .small-btn{
       min-height:46px;
       border-radius:17px;
@@ -599,41 +593,35 @@
       font-size:14px;
       font-weight:950;
       letter-spacing:-.04em;
-      background:#f2f4f7;
-      color:#101827;
+      background:#f2f7ff;
+      color:var(--ink);
     }
-
     .small-btn.dark{
       color:#fff;
-      background:#101827;
+      background:linear-gradient(135deg,var(--blue),#1677df);
     }
-
     .empty{
       display:none;
       margin-top:18px;
       padding:30px 22px;
       border-radius:28px;
       background:#fff;
-      color:#667085;
+      color:var(--muted);
       text-align:center;
       font-size:15px;
       font-weight:850;
       letter-spacing:-.04em;
-      box-shadow:0 18px 50px rgba(16,24,40,.08);
-      border:1px solid rgba(16,24,40,.07);
+      box-shadow:var(--shadow);
+      border:1px solid rgba(31,140,255,.10);
     }
 
-    .category-section{
-      padding-top:34px !important;
-      padding-bottom:86px !important;
-    }
-
+    /* 업종 카드: 사진 전용 ::before, 광택 없음 */
+    .category-section{padding-top:34px!important}
     .category-grid{
       display:grid;
       grid-template-columns:repeat(4,1fr);
       gap:16px;
     }
-
     .cat{
       position:relative;
       overflow:hidden;
@@ -641,15 +629,11 @@
       border-radius:28px;
       padding:22px;
       color:#fff;
-      box-shadow:0 22px 60px rgba(16,24,40,.12);
-      transition:.22s ease;
+      box-shadow:var(--shadow);
+      transition:.25s ease;
       isolation:isolate;
     }
-
-    .cat:hover{
-      transform:translateY(-6px);
-    }
-
+    .cat:hover{transform:translateY(-6px)}
     .cat::before{
       content:"";
       position:absolute;
@@ -658,19 +642,14 @@
       background:center/cover;
       transition:.28s ease;
     }
-
-    .cat:hover::before{
-      transform:scale(1.06);
-    }
-
+    .cat:hover::before{transform:scale(1.06)}
     .cat::after{
       content:"";
       position:absolute;
       inset:0;
       z-index:-1;
-      background:linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.74));
+      background:linear-gradient(180deg,rgba(10,28,52,.10),rgba(10,28,52,.68));
     }
-
     .cat.food::before{background-image:url("https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80")}
     .cat.health::before{background-image:url("https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=600&q=80")}
     .cat.edu::before{background-image:url("https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=600&q=80")}
@@ -679,542 +658,239 @@
     .cat.life::before{background-image:url("https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&q=80")}
     .cat.shop::before{background-image:url("https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=600&q=80")}
     .cat.etc::before{background-image:url("https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=600&q=80")}
-
     .cat-icon{
       width:44px;
       height:44px;
       border-radius:16px;
       display:grid;
       place-items:center;
-      background:rgba(255,255,255,.2);
+      background:rgba(255,255,255,.22);
       backdrop-filter:blur(10px);
       font-size:20px;
       margin-bottom:50px;
     }
-
     .cat h3{
       margin:0 0 7px;
       font-size:22px;
       letter-spacing:-.065em;
       font-weight:1000;
     }
-
     .cat p{
       margin:0;
-      color:rgba(255,255,255,.78);
+      color:rgba(255,255,255,.84);
       font-size:13px;
       line-height:1.5;
       letter-spacing:-.035em;
       font-weight:650;
     }
-
-
-    .register-guide-section{
-      max-width:1180px;
-      margin:0 auto;
-      padding:0 var(--pageX) 86px;
-    }
-
-    .register-guide-card{
-      position:relative;
-      overflow:hidden;
-      border-radius:32px;
-      padding:34px;
-      color:#fff;
-      background:
-        radial-gradient(circle at 12% 18%, rgba(89,227,167,.22), transparent 30%),
-        radial-gradient(circle at 86% 16%, rgba(255,111,177,.24), transparent 32%),
-        linear-gradient(135deg,#101827 0%,#17213f 100%);
-      box-shadow:0 28px 80px rgba(16,24,40,.18);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:26px;
-    }
-
-    .register-guide-card::after{
-      content:"26";
-      position:absolute;
-      right:-18px;
-      bottom:-44px;
-      font-size:160px;
-      line-height:.8;
-      font-weight:1000;
-      letter-spacing:-.12em;
-      color:rgba(255,255,255,.055);
-      pointer-events:none;
-    }
-
-    .register-guide-copy{
-      position:relative;
-      z-index:1;
-      max-width:680px;
-    }
-
-    .register-guide-kicker{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:9px 13px;
-      border-radius:999px;
-      background:rgba(255,255,255,.12);
-      border:1px solid rgba(255,255,255,.16);
-      color:rgba(255,255,255,.86);
-      font-size:12px;
-      font-weight:950;
-      letter-spacing:-.025em;
-      margin-bottom:16px;
-    }
-
-    .register-guide-kicker span{
-      width:8px;
-      height:8px;
-      border-radius:50%;
-      background:var(--green);
-      box-shadow:0 0 0 7px rgba(89,227,167,.13);
-    }
-
-    .register-guide-card h2{
-      margin:0;
-      color:#fff;
-      font-size:clamp(28px,4vw,44px);
-      line-height:1.12;
-      letter-spacing:-.09em;
-      font-weight:1000;
-    }
-
-    .register-guide-card p{
-      margin:14px 0 0;
-      color:rgba(255,255,255,.74);
-      font-size:16px;
-      line-height:1.7;
-      letter-spacing:-.04em;
-      font-weight:650;
-    }
-
-    .register-guide-btn{
-      position:relative;
-      z-index:1;
-      flex:0 0 auto;
-      min-height:56px;
-      padding:0 26px;
-      border-radius:999px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      background:#fff;
-      color:#101827;
-      font-size:15px;
-      font-weight:1000;
-      letter-spacing:-.04em;
-      box-shadow:0 18px 44px rgba(255,255,255,.14);
-      transition:.22s ease;
-      white-space:nowrap;
-    }
-
-    .register-guide-btn:hover{
-      transform:translateY(-3px);
-    }
-
-    footer{
-      background:#07101d;
-      color:#fff;
-      padding:36px var(--pageX);
-    }
-
-    .footer-inner{
-      max-width:1180px;
-      margin:0 auto;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:20px;
-    }
-
-    .footer-brand{
-      font-size:21px;
-      font-weight:1000;
-      letter-spacing:-.06em;
-    }
-
-    .footer-text{
-      margin-top:6px;
-      color:rgba(255,255,255,.62);
-      font-size:13px;
-      letter-spacing:-.03em;
-      font-weight:600;
-    }
-
-    /* ================= 데스크탑 최적화 ================= */
-    @media(min-width:980px){
-      .video-shell{
-        max-width:none;
-        width:100%;
-      }
-
-      .video-frame{
-        aspect-ratio:21 / 8;
-      }
-
-      .video-bg iframe{
-        width:100%;
-        height:150%;
-      }
-    }
-
-
-    .category-card{
-      cursor:pointer;
-    }
-
-    .category-card.active-category{
-      outline:4px solid rgba(79,140,255,.34);
-      transform:translateY(-6px);
+    .cat.active-category{
+      outline:3px solid rgba(31,140,255,.28);
+      box-shadow:0 24px 70px rgba(31,140,255,.22);
     }
 
     .category-results{
       margin-top:26px;
       padding:28px;
       border-radius:32px;
-      background:rgba(255,255,255,.74);
-      border:1px solid rgba(16,24,40,.08);
-      box-shadow:0 20px 60px rgba(16,24,40,.09);
+      background:rgba(255,255,255,.95);
+      border:1px solid rgba(31,140,255,.12);
+      box-shadow:var(--shadow);
     }
-
-    .category-result-head{
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap:18px;
-      margin-bottom:20px;
-    }
-
+    .category-result-head{margin-bottom:20px}
     .category-result-head h3{
       margin:0;
-      color:#101827;
+      color:var(--ink);
       font-size:34px;
       line-height:1.1;
       letter-spacing:-.08em;
       font-weight:1000;
     }
-
     .category-result-head p{
       margin:8px 0 0;
-      color:#667085;
+      color:var(--muted);
       font-size:15px;
       line-height:1.55;
       letter-spacing:-.035em;
       font-weight:650;
     }
+    .category-result-block{display:none}
+    .category-result-block.active{display:block}
 
-    .category-result-block{
-      display:none;
+    .register-section{
+      max-width:1180px;
+      margin:0 auto;
+      padding:0 var(--pageX) 72px;
     }
-
-    .category-result-block.active{
-      display:block;
+    .register-card{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:22px;
+      padding:26px;
+      border-radius:28px;
+      background:
+        radial-gradient(circle at 12% 18%,rgba(31,140,255,.13),transparent 30%),
+        radial-gradient(circle at 86% 12%,rgba(52,211,153,.14),transparent 30%),
+        #fff;
+      border:1px solid rgba(31,140,255,.12);
+      box-shadow:var(--shadow);
     }
-
-    .category-store-grid{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:20px;
+    .register-card h2{
+      margin:0;
+      color:var(--ink);
+      font-size:28px;
+      line-height:1.16;
+      letter-spacing:-.08em;
+      font-weight:1000;
     }
-
-    .category-empty{
-      padding:34px 22px;
-      border-radius:26px;
-      background:#fff;
-      color:#667085;
-      text-align:center;
+    .register-card p{
+      margin:10px 0 0;
+      color:var(--muted);
       font-size:15px;
-      font-weight:850;
+      line-height:1.6;
+      letter-spacing:-.035em;
+      font-weight:650;
+    }
+    .register-btn{
+      position:relative;
+      overflow:hidden;
+      flex:0 0 auto;
+      min-height:52px;
+      padding:0 22px;
+      border-radius:999px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      color:#fff;
+      background:linear-gradient(135deg,var(--blue),var(--sky),var(--mint));
+      font-size:14px;
+      font-weight:1000;
       letter-spacing:-.04em;
-      border:1px solid rgba(16,24,40,.07);
-      box-shadow:0 14px 40px rgba(16,24,40,.07);
+      box-shadow:0 14px 34px rgba(31,140,255,.20);
+      white-space:nowrap;
+    }
+
+    footer{
+      background:#fff;
+      border-top:1px solid rgba(31,140,255,.10);
+      color:var(--ink);
+      padding:34px var(--pageX);
+    }
+    .footer-inner{
+      max-width:1180px;
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+    }
+    .footer-brand{
+      font-size:21px;
+      font-weight:1000;
+      letter-spacing:-.06em;
+    }
+    .footer-text{
+      margin-top:6px;
+      color:var(--muted);
+      font-size:13px;
+      letter-spacing:-.03em;
+      font-weight:600;
+    }
+
+    @keyframes fadeUp{
+      0%{opacity:0;transform:translateY(20px)}
+      100%{opacity:1;transform:translateY(0)}
     }
 
     @media(max-width:980px){
-      .intro-grid{
-        grid-template-columns:1fr;
-      }
-
-      .intro-side{
-        grid-template-columns:1fr 1fr;
-      }
-
-      .intro-actions{
-        margin-top:22px;
-      }
-
-      .stores-grid{
-        grid-template-columns:repeat(2,1fr);
-      }
-
-      .category-grid{
-        grid-template-columns:repeat(2,1fr);
-      }
-
-      .video-content{
-        padding:34px;
-      }
-
-      .video-badge{
-        left:34px;
-        top:30px;
-      }
+      .stores-grid,.category-store-grid{grid-template-columns:repeat(2,1fr)}
+      .category-grid{grid-template-columns:repeat(4,1fr); gap:10px}
     }
 
-    /* ================= 모바일 최적화 ================= */
     @media(max-width:720px){
-      :root{
-        --pageX:16px;
-      }
+      :root{--pageX:16px}
+      .nav{padding:14px var(--pageX)}
+      .brand{font-size:20px}
+      .brand-mark{width:46px;height:46px;border-radius:17px}
+      .nav-links{display:none}
 
-      .page{
-        background:
-          radial-gradient(circle at 12% 4%, rgba(79,140,255,.24), transparent 30%),
-          radial-gradient(circle at 88% 9%, rgba(255,111,177,.18), transparent 32%),
-          linear-gradient(180deg,#050914 0%,#08101d 50%,#f5f7ff 50%,#f5f7ff 100%);
-      }
+      .hero{padding:36px var(--pageX) 24px}
+      .hero-title{font-size:52px}
+      .hero-desc{font-size:15px;line-height:1.68}
+      .hero-actions .btn{width:100%}
 
-      .nav{
-        padding:14px var(--pageX);
-      }
-
-      .brand{
-        font-size:20px;
-      }
-
-      .brand-mark{
-        width:46px;
-        height:46px;
-        border-radius:17px;
-      }
-
-      .nav-links{
-        display:none;
-      }
-
-      .intro{
-        padding:34px var(--pageX) 22px;
-      }
-
-      .intro-title{
-        font-size:54px;
-      }
-
-      .intro-desc{
-        font-size:15px;
-        line-height:1.7;
-        margin-top:18px;
-      }
-
-      .intro-side{
-        display:none;
-      }
-
-      .intro-actions{
-        display:none;
-      }
-
-      .video-section{
-        padding:0 0 44px;
-      }
-
+      .video-section{padding:4px 0 40px}
       .video-frame{
-        aspect-ratio:3 / 4;
-        width:100%;
+        height:calc(100vh - 205px);
+        min-height:500px;
+        max-height:760px;
       }
+      .video-frame iframe{
+        width:177vh;
+        height:100vh;
+        min-width:100vw;
+        min-height:100%;
+      }
+      .video-copy{padding:30px 22px}
+      .video-badge{top:22px;left:22px}
+      .video-copy h2{font-size:40px}
+      .video-copy p{font-size:15px}
 
-      .video-bg iframe{
-        width:178%;
-        height:100%;
-      }
+      .content{border-radius:30px 30px 0 0;padding-top:22px}
+      .body-section{padding:46px 18px}
+      .section-title{font-size:38px}
+      .section-desc{font-size:16px}
 
-      .video-content{
-        padding:28px 22px 26px;
-      }
+      .floor-panel{margin:22px 0 22px;padding:13px;border-radius:24px}
+      .floor-chip{min-width:58px;height:48px;border-radius:16px}
 
-      .video-badge{
-        left:22px;
-        top:22px;
-      }
-
-      .video-content h2{
-        font-size:42px;
-      }
-
-      .video-content p{
-        font-size:15px;
-        line-height:1.62;
-      }
-
-      .content{
-        border-radius:32px 32px 0 0;
-        margin-top:-24px;
-        padding-top:24px;
-      }
-
-      section.body-section{
-        padding:48px 24px;
-      }
-
-      .section-title{
-        font-size:40px;
-      }
-
-      .section-desc{
-        font-size:17px;
-      }
-
-      .floor-panel{
-        margin:24px -2px 24px;
-        padding:13px;
-        border-radius:26px;
-      }
-
-      .floor-title{
-        padding:2px 4px 11px;
-      }
-
-      .floor-chip{
-        min-width:64px;
-        height:50px;
-        border-radius:17px;
-        font-size:15px;
-      }
-
-      .stores-grid{
-        grid-template-columns:1fr;
-      }
-
-      .store-photo{
-        height:230px;
-      }
-
-      .store-body{
-        padding:26px 24px;
-      }
-
-      .store-body h3{
-        font-size:30px;
-      }
-
-      .store-body p{
-        font-size:17px;
-      }
+      .stores-grid,.category-store-grid{grid-template-columns:1fr}
+      .store-photo{height:230px}
+      .store-body{padding:24px}
+      .store-body h3{font-size:28px}
+      .store-body p{font-size:16px}
 
       .category-grid{
         grid-template-columns:repeat(4,1fr);
         gap:8px;
       }
-
       .cat{
-        min-height:92px;
-        border-radius:18px;
-        padding:12px 8px;
+        min-height:88px;
+        border-radius:17px;
+        padding:10px 7px;
       }
-
       .cat-icon{
-        width:30px;
-        height:30px;
+        width:29px;
+        height:29px;
         border-radius:11px;
-        font-size:15px;
-        margin-bottom:16px;
+        font-size:14px;
+        margin-bottom:14px;
       }
-
       .cat h3{
-        font-size:13px;
+        font-size:12px;
         line-height:1.15;
         letter-spacing:-.055em;
-        margin-bottom:4px;
+        margin-bottom:0;
       }
-
-      .cat p{
-        display:none;
-      }
-
+      .cat p{display:none}
 
       .category-results{
         margin-top:22px;
         padding:18px;
-        border-radius:28px;
+        border-radius:26px;
       }
+      .category-result-head h3{font-size:30px}
 
-      .category-result-head h3{
-        font-size:30px;
-      }
+      .register-section{padding:0 18px 58px}
+      .register-card{display:block;padding:24px 20px;border-radius:26px}
+      .register-card h2{font-size:28px}
+      .register-btn{width:100%;margin-top:20px}
 
-      .category-store-grid{
-        grid-template-columns:1fr;
-      }
-
-
-      .register-guide-section{
-        padding:0 18px 64px;
-      }
-
-      .register-guide-card{
-        display:block;
-        border-radius:28px;
-        padding:26px 22px;
-      }
-
-      .register-guide-card h2{
-        font-size:30px;
-      }
-
-      .register-guide-card p{
-        font-size:15px;
-      }
-
-      .register-guide-btn{
-        width:100%;
-        margin-top:22px;
-      }
-
-      .footer-inner{
-        display:block;
-      }
+      .footer-inner{display:block}
     }
 
-    @media(max-width:420px){
-      section.body-section{
-        padding-left:18px;
-        padding-right:18px;
-      }
-
-      .section-title{
-        font-size:38px;
-      }
-
-      .floor-chip{
-        min-width:58px;
-        height:48px;
-      }
-
-      .category-grid{
-        grid-template-columns:repeat(4,1fr);
-        gap:7px;
-      }
-
-      .cat{
-        min-height:86px;
-        padding:10px 6px;
-        border-radius:16px;
-      }
-
-      .cat-icon{
-        width:28px;
-        height:28px;
-        font-size:14px;
-        margin-bottom:14px;
-      }
-
-      .cat h3{
-        font-size:12px;
-      }
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
     }
   </style>
 </head>
@@ -1222,11 +898,10 @@
   <div class="page">
     <header class="topbar">
       <nav class="nav">
-        <a href="#top" class="brand" aria-label="26빌딩 온라인 홈">
+        <a href="#top" class="brand">
           <span class="brand-mark">26</span>
           <span>26빌딩 온라인</span>
         </a>
-
         <div class="nav-links">
           <a href="#stores">가게·사무실</a>
           <a href="#categories">업종별 보기</a>
@@ -1236,53 +911,28 @@
     </header>
 
     <main id="top">
-      <section class="intro" aria-label="26빌딩 온라인 소개">
-        <div class="intro-grid">
-          <div>
-            <div class="eyebrow"><span class="pulse"></span> 군산 나운동 · 동아26빌딩</div>
-            <h1 class="intro-title"><span class="grad">나운동의 중심,</span><br>26빌딩을 한눈에</h1>
-            <p class="intro-desc">
-              층마다 흩어져 있던 가게와 사무실 정보를 이제 한곳에서 확인할 수 있습니다.
-            </p>
-            <div class="intro-actions">
-              <a class="btn btn-primary" href="#stores">가게·사무실 보기</a>
-              <a class="btn btn-secondary" href="#categories">업종별 보기</a>
-            </div>
-          </div>
-
-          <div class="intro-side" aria-label="주요 안내">
-            <div class="quick-card">
-              <b>층별 안내</b>
-              <span>건물 안의 업체를 층별로 찾아볼 수 있습니다.</span>
-            </div>
-            <div class="quick-card">
-              <b>나운동 생활동선</b>
-              <span>방문 전 필요한 업체 정보를 짧고 빠르게 확인합니다.</span>
-            </div>
-          </div>
+      <section class="hero">
+        <div class="eyebrow"><span class="dot"></span> 군산 나운동 · 동아26빌딩</div>
+        <h1 class="hero-title"><span class="grad">나운동의 중심,</span><br>26빌딩을 한눈에</h1>
+        <p class="hero-desc">층마다 흩어져 있던 가게와 사무실 정보를 이제 한곳에서 확인할 수 있습니다.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#stores">가게·사무실 보기</a>
+          <a class="btn btn-secondary" href="#categories">업종별 보기</a>
         </div>
       </section>
 
       <section class="video-section" aria-label="26빌딩 드론 영상">
-        <div class="video-shell">
-          <div class="video-frame">
-            <div class="video-bg">
-              <iframe
-                src="https://www.youtube.com/embed/7mAUxuMU2WQ?autoplay=1&mute=1&loop=1&playlist=7mAUxuMU2WQ&controls=0&playsinline=1&rel=0&modestbranding=1"
-                allow="autoplay; fullscreen"
-                frameborder="0">
-              </iframe>
-            </div>
-
-            <div class="video-overlay"></div>
-
-            <div class="video-content">
-              <div class="video-badge"><span>26</span> Drone View</div>
-              <h2>나운동을 오래 지켜온<br>동아26빌딩</h2>
-              <p>
-                드론으로 본 26빌딩 위에 층별 안내와 업체 정보를 더합니다.
-              </p>
-            </div>
+        <div class="video-frame" id="videoFrame">
+          <iframe
+            src="https://www.youtube.com/embed/7mAUxuMU2WQ?autoplay=1&mute=1&loop=1&playlist=7mAUxuMU2WQ&controls=0&playsinline=1&rel=0&modestbranding=1"
+            allow="autoplay; fullscreen"
+            frameborder="0">
+          </iframe>
+          <div class="video-overlay"></div>
+          <div class="video-copy">
+            <div class="video-badge"><span>26</span> Drone View</div>
+            <h2>나운동을 오래 지켜온<br>동아26빌딩</h2>
+            <p>드론으로 본 26빌딩 위에 층별 안내와 업체 정보를 더합니다.</p>
           </div>
         </div>
       </section>
@@ -1300,7 +950,7 @@
               <b>층 선택</b>
               <span>옆으로 밀어서 층을 선택하세요</span>
             </div>
-            <div class="floor-scroll" aria-label="층별 선택">
+            <div class="floor-scroll">
               <button class="floor-chip active" type="button" data-floor="all">전체</button>
               <button class="floor-chip" type="button" data-floor="B1">B1</button>
               <button class="floor-chip" type="button" data-floor="1F">1F</button>
@@ -1326,159 +976,7 @@
             </div>
           </div>
 
-          <div class="stores-grid" id="storeGrid">
-            <article class="store-card" data-floor="1F" data-category="음식·카페">
-              <div class="store-photo p1">
-                <span class="tag">음식·카페</span>
-                <span class="floor-badge">1F</span>
-              </div>
-              <div class="store-body">
-                <h3>26 커피라운지</h3>
-                <p>커피와 간단한 디저트를 즐길 수 있는 26빌딩 안의 편안한 휴식 공간입니다.</p>
-                <div class="store-actions">
-                  <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                  <a class="small-btn" href="#">상세보기</a>
-                </div>
-              </div>
-            </article>
-
-            <article class="store-card" data-floor="5F" data-category="사무실·전문서비스">
-              <div class="store-photo p2">
-                <span class="tag">전문서비스</span>
-                <span class="floor-badge">5F</span>
-              </div>
-              <div class="store-body">
-                <h3>나운 상담오피스</h3>
-                <p>상담, 문서, 업무 지원 서비스를 제공하는 사무실 소개 페이지 예시입니다.</p>
-                <div class="store-actions">
-                  <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                  <a class="small-btn" href="#">상세보기</a>
-                </div>
-              </div>
-            </article>
-
-            <article class="store-card" data-floor="7F" data-category="학원·교육">
-              <div class="store-photo p3">
-                <span class="tag">학원·교육</span>
-                <span class="floor-badge">7F</span>
-              </div>
-              <div class="store-body">
-                <h3>26 스터디랩</h3>
-                <p>학생과 직장인을 위한 학습공간, 교육 프로그램을 소개하는 카드 예시입니다.</p>
-                <div class="store-actions">
-                  <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                  <a class="small-btn" href="#">상세보기</a>
-                </div>
-              </div>
-            </article>
-
-            <article class="store-card" data-floor="9F" data-category="사무실·전문서비스">
-              <div class="store-photo p4">
-                <span class="tag">사무실</span>
-                <span class="floor-badge">9F</span>
-              </div>
-              <div class="store-body">
-                <h3>비즈니스 스튜디오</h3>
-                <p>소규모 사무실, 회의, 상담 업무에 적합한 비즈니스 공간 소개 예시입니다.</p>
-                <div class="store-actions">
-                  <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                  <a class="small-btn" href="#">상세보기</a>
-                </div>
-              </div>
-            </article>
-
-            <article class="store-card" data-floor="B1" data-category="음식·카페">
-              <div class="store-photo p5">
-                <span class="tag">음식점</span>
-                <span class="floor-badge">B1</span>
-              </div>
-              <div class="store-body">
-                <h3>26 다이닝</h3>
-                <p>건물 이용객과 주변 직장인을 위한 식사 공간을 소개하는 더미 카드입니다.</p>
-                <div class="store-actions">
-                  <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                  <a class="small-btn" href="#">상세보기</a>
-                </div>
-              </div>
-            </article>
-
-            <article class="store-card" data-floor="3F" data-category="생활서비스">
-              <div class="store-photo p6">
-                <span class="tag">생활서비스</span>
-                <span class="floor-badge">3F</span>
-              </div>
-              <div class="store-body">
-                <h3>생활편의 센터</h3>
-                <p>예약, 문의, 운영시간 등 방문자에게 필요한 정보를 한눈에 보여줄 수 있습니다.</p>
-                <div class="store-actions">
-                  <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                  <a class="small-btn" href="#">상세보기</a>
-                </div>
-              </div>
-            </article>
-
-
-                <article class="store-card" data-floor="2F" data-category="미용·뷰티">
-                  <div class="store-photo p10">
-                    <span class="tag">미용·뷰티</span>
-                    <span class="floor-badge">2F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>라온헤어</h3>
-                    <p>헤어 시술과 예약 정보를 보여주는 미용실 카드 예시입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-
-                <article class="store-card" data-floor="4F" data-category="병원·건강">
-                  <div class="store-photo p7">
-                    <span class="tag">병원·건강</span>
-                    <span class="floor-badge">4F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>26 메디컬클리닉</h3>
-                    <p>방문 전 진료시간과 위치를 확인할 수 있는 병원 카드 예시입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-
-                <article class="store-card" data-floor="11F" data-category="사무실·전문서비스">
-                  <div class="store-photo p9">
-                    <span class="tag">세무·회계</span>
-                    <span class="floor-badge">11F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>26 세무회계</h3>
-                    <p>세무, 회계, 사업자 상담 정보를 보여주는 전문서비스 카드입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-
-                <article class="store-card" data-floor="1F" data-category="판매·소매">
-                  <div class="store-photo p13">
-                    <span class="tag">판매·소매</span>
-                    <span class="floor-badge">1F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>26 셀렉트샵</h3>
-                    <p>생활용품과 소형 상품을 판매하는 매장 카드 예시입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-          </div>
-
+          <div class="stores-grid" id="storeGrid"></div>
           <div class="empty" id="emptyMessage">선택한 층에 표시할 업체 정보를 준비하고 있습니다.</div>
         </section>
 
@@ -1486,474 +984,39 @@
           <div class="section-head">
             <div class="kicker">CATEGORY</div>
             <h2 class="section-title">업종별 보기</h2>
-            <p class="section-desc">업종별로 26빌딩 안의 업체를 둘러볼 수 있습니다.</p>
+            <p class="section-desc">업종을 선택하면 해당 업체가 아래에 표시됩니다.</p>
           </div>
 
           <div class="category-grid">
-            <a class="cat food category-card" href="#categoryResults" data-category="food">
-              <div class="cat-icon">🍽️</div>
-              <h3>음식·카페</h3>
-              <p>식사, 커피, 간식, 포장</p>
-            </a>
-            <a class="cat health category-card" href="#categoryResults" data-category="health">
-              <div class="cat-icon">🏥</div>
-              <h3>병원·건강</h3>
-              <p>병원, 약국, 건강관리</p>
-            </a>
-            <a class="cat edu category-card" href="#categoryResults" data-category="edu">
-              <div class="cat-icon">📚</div>
-              <h3>학원·교육</h3>
-              <p>학원, 공부방, 교육 서비스</p>
-            </a>
-            <a class="cat office category-card" href="#categoryResults" data-category="office">
-              <div class="cat-icon">💼</div>
-              <h3>사무실·전문서비스</h3>
-              <p>법무, 세무, 보험, 사무실</p>
-            </a>
-            <a class="cat beauty category-card" href="#categoryResults" data-category="beauty">
-              <div class="cat-icon">✨</div>
-              <h3>미용·뷰티</h3>
-              <p>미용, 피부, 네일, 관리</p>
-            </a>
-            <a class="cat life category-card" href="#categoryResults" data-category="life">
-              <div class="cat-icon">🛠️</div>
-              <h3>생활서비스</h3>
-              <p>수리, 세탁, 생활 편의</p>
-            </a>
-            <a class="cat shop category-card" href="#categoryResults" data-category="shop">
-              <div class="cat-icon">🛍️</div>
-              <h3>판매·소매</h3>
-              <p>상품 판매, 쇼핑, 매장</p>
-            </a>
-            <a class="cat etc category-card" href="#categoryResults" data-category="etc">
-              <div class="cat-icon">➕</div>
-              <h3>기타</h3>
-              <p>다양한 업체와 사무공간</p>
-            </a>
+            <a class="cat food category-card" href="#categoryResults" data-category="food"><div class="cat-icon">🍽️</div><h3>음식·카페</h3><p>식사, 커피, 간식</p></a>
+            <a class="cat health category-card" href="#categoryResults" data-category="health"><div class="cat-icon">🏥</div><h3>병원·건강</h3><p>병원, 약국, 건강관리</p></a>
+            <a class="cat edu category-card" href="#categoryResults" data-category="edu"><div class="cat-icon">📚</div><h3>학원·교육</h3><p>학원, 교육 서비스</p></a>
+            <a class="cat office category-card" href="#categoryResults" data-category="office"><div class="cat-icon">💼</div><h3>사무실</h3><p>전문서비스, 사무실</p></a>
+            <a class="cat beauty category-card" href="#categoryResults" data-category="beauty"><div class="cat-icon">✨</div><h3>미용·뷰티</h3><p>미용, 피부, 네일</p></a>
+            <a class="cat life category-card" href="#categoryResults" data-category="life"><div class="cat-icon">🛠️</div><h3>생활서비스</h3><p>수리, 생활 편의</p></a>
+            <a class="cat shop category-card" href="#categoryResults" data-category="shop"><div class="cat-icon">🛍️</div><h3>판매·소매</h3><p>상품 판매, 쇼핑</p></a>
+            <a class="cat etc category-card" href="#categoryResults" data-category="etc"><div class="cat-icon">➕</div><h3>기타</h3><p>기타 업체</p></a>
           </div>
 
           <div class="category-results" id="categoryResults">
             <div class="category-result-head">
-              <div>
-                <div class="kicker">CATEGORY RESULT</div>
-                <h3 id="categoryResultTitle">음식·카페</h3>
-                <p id="categoryResultDesc">선택한 업종의 업체를 확인할 수 있습니다.</p>
-              </div>
+              <div class="kicker">CATEGORY RESULT</div>
+              <h3 id="categoryResultTitle">음식·카페</h3>
+              <p id="categoryResultDesc">음식·카페 업종의 업체를 확인할 수 있습니다.</p>
             </div>
-
-            <div class="category-result-block active" data-result="food">
-              <div class="category-store-grid">
-                <article class="store-card" data-floor="1F" data-category="음식·카페">
-                  <div class="store-photo p1">
-                    <span class="tag">음식·카페</span>
-                    <span class="floor-badge">1F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>26 커피라운지</h3>
-                    <p>커피와 간단한 디저트를 즐길 수 있는 26빌딩 안의 편안한 휴식 공간입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-                <article class="store-card" data-floor="B1" data-category="음식·카페">
-                  <div class="store-photo p5">
-                    <span class="tag">음식점</span>
-                    <span class="floor-badge">B1</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>26 다이닝</h3>
-                    <p>건물 이용객과 주변 직장인을 위한 식사 공간을 소개하는 더미 카드입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-                <article class="store-card" data-floor="1F" data-category="음식·카페">
-                  <div class="store-photo p7">
-                    <span class="tag">간식·분식</span>
-                    <span class="floor-badge">1F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>나운 스낵바</h3>
-                    <p>가볍게 들러 간식과 분식을 즐길 수 있는 점포 예시입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-                <article class="store-card" data-floor="2F" data-category="음식·카페">
-                  <div class="store-photo p8">
-                    <span class="tag">디저트</span>
-                    <span class="floor-badge">2F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>달콤한 오후</h3>
-                    <p>케이크, 음료, 작은 모임을 소개하는 디저트 카페 예시입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-              </div>
-            </div>
-            <div class="category-result-block" data-result="health">
-              <div class="category-store-grid">
-                <article class="store-card" data-floor="4F" data-category="병원·건강">
-                  <div class="store-photo p7">
-                    <span class="tag">병원·건강</span>
-                    <span class="floor-badge">4F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>26 메디컬클리닉</h3>
-                    <p>방문 전 진료시간과 위치를 확인할 수 있는 병원 카드 예시입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-                <article class="store-card" data-floor="1F" data-category="병원·건강">
-                  <div class="store-photo p8">
-                    <span class="tag">약국·상담</span>
-                    <span class="floor-badge">1F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>나운 건강약국</h3>
-                    <p>처방, 상담, 생활 건강용품 정보를 보여주는 카드 예시입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-                <article class="store-card" data-floor="6F" data-category="병원·건강">
-                  <div class="store-photo p15">
-                    <span class="tag">운동·관리</span>
-                    <span class="floor-badge">6F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>바른몸 케어센터</h3>
-                    <p>체형 관리와 운동 상담 서비스를 소개하는 더미 업체입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-              </div>
-            </div>
-            <div class="category-result-block" data-result="edu">
-              <div class="category-store-grid">
-                <article class="store-card" data-floor="7F" data-category="학원·교육">
-                  <div class="store-photo p3">
-                    <span class="tag">학원·교육</span>
-                    <span class="floor-badge">7F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>26 스터디랩</h3>
-                    <p>학생과 직장인을 위한 학습공간, 교육 프로그램을 소개하는 카드 예시입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-                <article class="store-card" data-floor="8F" data-category="학원·교육">
-                  <div class="store-photo p12">
-                    <span class="tag">어학·학습</span>
-                    <span class="floor-badge">8F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>나운 잉글리시</h3>
-                    <p>어학 수업과 학습 상담 정보를 보여주는 학원 카드 예시입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-                <article class="store-card" data-floor="10F" data-category="학원·교육">
-                  <div class="store-photo p16">
-                    <span class="tag">입시·상담</span>
-                    <span class="floor-badge">10F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>대학로 입시센터</h3>
-                    <p>상담 예약과 교육 프로그램을 안내하는 더미 업체입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-              </div>
-            </div>
-            <div class="category-result-block" data-result="office">
-              <div class="category-store-grid">
-                <article class="store-card" data-floor="5F" data-category="사무실·전문서비스">
-                  <div class="store-photo p2">
-                    <span class="tag">전문서비스</span>
-                    <span class="floor-badge">5F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>나운 상담오피스</h3>
-                    <p>상담, 문서, 업무 지원 서비스를 제공하는 사무실 소개 페이지 예시입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-                <article class="store-card" data-floor="9F" data-category="사무실·전문서비스">
-                  <div class="store-photo p4">
-                    <span class="tag">사무실</span>
-                    <span class="floor-badge">9F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>비즈니스 스튜디오</h3>
-                    <p>소규모 사무실, 회의, 상담 업무에 적합한 비즈니스 공간 소개 예시입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-                <article class="store-card" data-floor="11F" data-category="사무실·전문서비스">
-                  <div class="store-photo p9">
-                    <span class="tag">세무·회계</span>
-                    <span class="floor-badge">11F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>26 세무회계</h3>
-                    <p>세무, 회계, 사업자 상담 정보를 보여주는 전문서비스 카드입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-                <article class="store-card" data-floor="12F" data-category="사무실·전문서비스">
-                  <div class="store-photo p14">
-                    <span class="tag">공유오피스</span>
-                    <span class="floor-badge">12F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>나운 워크라운지</h3>
-                    <p>업무공간과 회의실 정보를 소개하는 사무공간 예시입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-              </div>
-            </div>
-            <div class="category-result-block" data-result="beauty">
-              <div class="category-store-grid">
-                <article class="store-card" data-floor="2F" data-category="미용·뷰티">
-                  <div class="store-photo p10">
-                    <span class="tag">미용·뷰티</span>
-                    <span class="floor-badge">2F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>라온헤어</h3>
-                    <p>헤어 시술과 예약 정보를 보여주는 미용실 카드 예시입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-                <article class="store-card" data-floor="3F" data-category="미용·뷰티">
-                  <div class="store-photo p11">
-                    <span class="tag">네일·피부</span>
-                    <span class="floor-badge">3F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>글로우 뷰티룸</h3>
-                    <p>네일, 피부관리, 예약 상담을 소개하는 뷰티 업체입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-                <article class="store-card" data-floor="6F" data-category="미용·뷰티">
-                  <div class="store-photo p15">
-                    <span class="tag">관리·케어</span>
-                    <span class="floor-badge">6F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>바디케어 스튜디오</h3>
-                    <p>관리 프로그램과 상담 정보를 보여주는 더미 카드입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-              </div>
-            </div>
-            <div class="category-result-block" data-result="life">
-              <div class="category-store-grid">
-                <article class="store-card" data-floor="3F" data-category="생활서비스">
-                  <div class="store-photo p6">
-                    <span class="tag">생활서비스</span>
-                    <span class="floor-badge">3F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>생활편의 센터</h3>
-                    <p>예약, 문의, 운영시간 등 방문자에게 필요한 정보를 한눈에 보여줄 수 있습니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-                <article class="store-card" data-floor="B1" data-category="생활서비스">
-                  <div class="store-photo p15">
-                    <span class="tag">수리·관리</span>
-                    <span class="floor-badge">B1</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>26 수리센터</h3>
-                    <p>간단한 수리와 생활 편의 서비스를 안내하는 카드 예시입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-                <article class="store-card" data-floor="4F" data-category="생활서비스">
-                  <div class="store-photo p13">
-                    <span class="tag">예약·대행</span>
-                    <span class="floor-badge">4F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>나운 생활지원</h3>
-                    <p>방문 예약, 대행, 문의 서비스를 보여주는 생활서비스 업체입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-              </div>
-            </div>
-            <div class="category-result-block" data-result="shop">
-              <div class="category-store-grid">
-                <article class="store-card" data-floor="1F" data-category="판매·소매">
-                  <div class="store-photo p13">
-                    <span class="tag">판매·소매</span>
-                    <span class="floor-badge">1F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>26 셀렉트샵</h3>
-                    <p>생활용품과 소형 상품을 판매하는 매장 카드 예시입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-                <article class="store-card" data-floor="1F" data-category="판매·소매">
-                  <div class="store-photo p8">
-                    <span class="tag">꽃·선물</span>
-                    <span class="floor-badge">1F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>나운 플라워</h3>
-                    <p>꽃다발, 선물, 예약 주문 정보를 보여주는 더미 업체입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-                <article class="store-card" data-floor="5F" data-category="판매·소매">
-                  <div class="store-photo p14">
-                    <span class="tag">문구·사무</span>
-                    <span class="floor-badge">5F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>오피스 스토어</h3>
-                    <p>문구, 사무용품, 소모품 판매 정보를 소개합니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-              </div>
-            </div>
-            <div class="category-result-block" data-result="etc">
-              <div class="category-store-grid">
-                <article class="store-card" data-floor="13F" data-category="기타">
-                  <div class="store-photo p16">
-                    <span class="tag">기타</span>
-                    <span class="floor-badge">13F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>26 프로젝트룸</h3>
-                    <p>행사, 모임, 프로젝트 공간 정보를 보여주는 더미 카드입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-                <article class="store-card" data-floor="15F" data-category="기타">
-                  <div class="store-photo p14">
-                    <span class="tag">상담공간</span>
-                    <span class="floor-badge">15F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>나운 라운지</h3>
-                    <p>예약제 상담과 소규모 모임을 위한 공간 예시입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-                <article class="store-card" data-floor="16F" data-category="기타">
-                  <div class="store-photo p9">
-                    <span class="tag">스튜디오</span>
-                    <span class="floor-badge">16F</span>
-                  </div>
-                  <div class="store-body">
-                    <h3>26 콘텐츠룸</h3>
-                    <p>촬영, 콘텐츠 제작, 소규모 작업실 정보를 보여주는 더미 업체입니다.</p>
-                    <div class="store-actions">
-                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
-                      <a class="small-btn" href="#">상세보기</a>
-                    </div>
-                  </div>
-                </article>
-              </div>
-            </div>
-          </div>
-
-        </section>
-
-        <section class="register-guide-section" aria-label="업체등록 안내">
-          <div class="register-guide-card">
-            <div class="register-guide-copy">
-              <div class="register-guide-kicker"><span></span> 입점업체 안내</div>
-              <h2>26빌딩 업체 정보를<br>등록하거나 수정하세요</h2>
-              <p>
-                26빌딩에 입점한 가게와 사무실은 업체명, 층/호실, 연락처, 운영시간, 사진과 소개글을 등록할 수 있습니다.
-              </p>
-            </div>
-            <a class="register-guide-btn" href="/register">업체등록 바로가기</a>
+            <div class="category-store-grid" id="categoryStoreGrid"></div>
           </div>
         </section>
 
+        <section class="register-section">
+          <div class="register-card">
+            <div>
+              <h2>26빌딩 입점업체이신가요?</h2>
+              <p>업체 정보 등록·수정은 전용 페이지에서 신청할 수 있습니다.</p>
+            </div>
+            <a class="register-btn" href="/register">업체등록</a>
+          </div>
+        </section>
       </div>
     </main>
 
@@ -1969,87 +1032,122 @@
   </div>
 
   <script>
-    if ("scrollRestoration" in history) {
-      history.scrollRestoration = "manual";
-    }
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
     window.addEventListener("load", function(){
       if (!location.hash) window.scrollTo(0, 0);
+      var vf = document.getElementById("videoFrame");
+      if (vf && (location.protocol === "file:" || location.protocol === "content:")) {
+        vf.classList.add("local-fallback");
+      }
     });
 
-    (function(){
-      const chips = document.querySelectorAll(".floor-chip");
-      const cards = document.querySelectorAll(".store-card[data-floor]");
-      const empty = document.getElementById("emptyMessage");
+    const stores = [
+      {name:"26 커피라운지", floor:"1F", cat:"food", tag:"음식·카페", photo:"p1", desc:"커피와 간단한 디저트를 즐길 수 있는 편안한 휴식 공간입니다."},
+      {name:"26 다이닝", floor:"B1", cat:"food", tag:"음식점", photo:"p5", desc:"건물 이용객과 주변 직장인을 위한 식사 공간입니다."},
+      {name:"나운 스낵바", floor:"1F", cat:"food", tag:"간식·분식", photo:"p7", desc:"가볍게 들러 간식과 분식을 즐길 수 있는 점포 예시입니다."},
+      {name:"달콤한 오후", floor:"2F", cat:"food", tag:"디저트", photo:"p8", desc:"케이크, 음료, 작은 모임을 소개하는 디저트 카페입니다."},
 
-      function setFloor(floor){
-        let count = 0;
+      {name:"26 메디컬클리닉", floor:"4F", cat:"health", tag:"병원·건강", photo:"p7", desc:"방문 전 진료시간과 위치를 확인할 수 있는 병원 카드 예시입니다."},
+      {name:"나운 건강약국", floor:"1F", cat:"health", tag:"약국·상담", photo:"p8", desc:"처방, 상담, 생활 건강용품 정보를 보여주는 카드 예시입니다."},
+      {name:"바른몸 케어센터", floor:"6F", cat:"health", tag:"운동·관리", photo:"p15", desc:"체형 관리와 운동 상담 서비스를 소개하는 더미 업체입니다."},
 
-        cards.forEach(card => {
-          const match = floor === "all" || card.dataset.floor === floor;
-          card.style.display = match ? "" : "none";
-          if(match) count++;
-        });
+      {name:"26 스터디랩", floor:"7F", cat:"edu", tag:"학원·교육", photo:"p3", desc:"학생과 직장인을 위한 학습공간, 교육 프로그램을 소개합니다."},
+      {name:"나운 잉글리시", floor:"8F", cat:"edu", tag:"어학·학습", photo:"p12", desc:"어학 수업과 학습 상담 정보를 보여주는 학원 카드 예시입니다."},
+      {name:"대학로 입시센터", floor:"10F", cat:"edu", tag:"입시·상담", photo:"p16", desc:"상담 예약과 교육 프로그램을 안내하는 더미 업체입니다."},
 
-        empty.style.display = count === 0 ? "block" : "none";
-      }
+      {name:"나운 상담오피스", floor:"5F", cat:"office", tag:"전문서비스", photo:"p2", desc:"상담, 문서, 업무 지원 서비스를 제공하는 사무실 소개 예시입니다."},
+      {name:"비즈니스 스튜디오", floor:"9F", cat:"office", tag:"사무실", photo:"p4", desc:"소규모 사무실, 회의, 상담 업무에 적합한 공간입니다."},
+      {name:"26 세무회계", floor:"11F", cat:"office", tag:"세무·회계", photo:"p9", desc:"세무, 회계, 사업자 상담 정보를 보여주는 전문서비스 카드입니다."},
+      {name:"나운 워크라운지", floor:"12F", cat:"office", tag:"공유오피스", photo:"p14", desc:"업무공간과 회의실 정보를 소개하는 사무공간 예시입니다."},
 
-      chips.forEach(chip => {
-        chip.addEventListener("click", () => {
-          chips.forEach(c => c.classList.remove("active"));
-          chip.classList.add("active");
-          chip.scrollIntoView({behavior:"smooth", inline:"center", block:"nearest"});
-          setFloor(chip.dataset.floor);
-        });
+      {name:"라온헤어", floor:"2F", cat:"beauty", tag:"미용·뷰티", photo:"p10", desc:"헤어 시술과 예약 정보를 보여주는 미용실 카드 예시입니다."},
+      {name:"글로우 뷰티룸", floor:"3F", cat:"beauty", tag:"네일·피부", photo:"p11", desc:"네일, 피부관리, 예약 상담을 소개하는 뷰티 업체입니다."},
+      {name:"바디케어 스튜디오", floor:"6F", cat:"beauty", tag:"관리·케어", photo:"p15", desc:"관리 프로그램과 상담 정보를 보여주는 더미 카드입니다."},
+
+      {name:"생활편의 센터", floor:"3F", cat:"life", tag:"생활서비스", photo:"p6", desc:"예약, 문의, 운영시간 등 방문자에게 필요한 정보를 보여줍니다."},
+      {name:"26 수리센터", floor:"B1", cat:"life", tag:"수리·관리", photo:"p15", desc:"간단한 수리와 생활 편의 서비스를 안내하는 카드 예시입니다."},
+      {name:"나운 생활지원", floor:"4F", cat:"life", tag:"예약·대행", photo:"p13", desc:"방문 예약, 대행, 문의 서비스를 보여주는 생활서비스 업체입니다."},
+
+      {name:"26 셀렉트샵", floor:"1F", cat:"shop", tag:"판매·소매", photo:"p13", desc:"생활용품과 소형 상품을 판매하는 매장 카드 예시입니다."},
+      {name:"나운 플라워", floor:"1F", cat:"shop", tag:"꽃·선물", photo:"p8", desc:"꽃다발, 선물, 예약 주문 정보를 보여주는 더미 업체입니다."},
+      {name:"오피스 스토어", floor:"5F", cat:"shop", tag:"문구·사무", photo:"p14", desc:"문구, 사무용품, 소모품 판매 정보를 소개합니다."},
+
+      {name:"26 프로젝트룸", floor:"13F", cat:"etc", tag:"기타", photo:"p16", desc:"행사, 모임, 프로젝트 공간 정보를 보여주는 더미 카드입니다."},
+      {name:"나운 라운지", floor:"15F", cat:"etc", tag:"상담공간", photo:"p14", desc:"예약제 상담과 소규모 모임을 위한 공간 예시입니다."},
+      {name:"26 콘텐츠룸", floor:"16F", cat:"etc", tag:"스튜디오", photo:"p9", desc:"촬영, 콘텐츠 제작, 소규모 작업실 정보를 보여주는 더미 업체입니다."}
+    ];
+
+    const catText = {
+      food:["음식·카페","음식·카페 업종의 업체를 확인할 수 있습니다."],
+      health:["병원·건강","병원·건강 업종의 업체를 확인할 수 있습니다."],
+      edu:["학원·교육","학원·교육 업종의 업체를 확인할 수 있습니다."],
+      office:["사무실·전문서비스","사무실·전문서비스 업종의 업체를 확인할 수 있습니다."],
+      beauty:["미용·뷰티","미용·뷰티 업종의 업체를 확인할 수 있습니다."],
+      life:["생활서비스","생활서비스 업종의 업체를 확인할 수 있습니다."],
+      shop:["판매·소매","판매·소매 업종의 업체를 확인할 수 있습니다."],
+      etc:["기타","기타 업종의 업체를 확인할 수 있습니다."]
+    };
+
+    function cardHTML(s, i){
+      return `<article class="store-card" data-floor="${s.floor}" data-category="${s.cat}" style="--card-i:${i+1}">
+        <div class="store-photo ${s.photo}">
+          <span class="tag">${s.tag}</span>
+          <span class="floor-badge">${s.floor}</span>
+        </div>
+        <div class="store-body">
+          <h3>${s.name}</h3>
+          <p>${s.desc}</p>
+          <div class="store-actions">
+            <a class="small-btn dark" href="tel:01000000000">전화하기</a>
+            <a class="small-btn" href="#">상세보기</a>
+          </div>
+        </div>
+      </article>`;
+    }
+
+    const storeGrid = document.getElementById("storeGrid");
+    const emptyMessage = document.getElementById("emptyMessage");
+    const categoryStoreGrid = document.getElementById("categoryStoreGrid");
+    const resultTitle = document.getElementById("categoryResultTitle");
+    const resultDesc = document.getElementById("categoryResultDesc");
+
+    function renderStores(list){
+      storeGrid.innerHTML = list.map(cardHTML).join("");
+      emptyMessage.style.display = list.length ? "none" : "block";
+    }
+
+    function renderCategory(cat, shouldScroll){
+      document.querySelectorAll(".category-card").forEach(c=>{
+        c.classList.toggle("active-category", c.dataset.category === cat);
       });
-    })();
-  
-    (function(){
-      const categoryCards = document.querySelectorAll(".category-card[data-category]");
-      const resultBlocks = document.querySelectorAll(".category-result-block[data-result]");
-      const resultTitle = document.getElementById("categoryResultTitle");
-      const resultDesc = document.getElementById("categoryResultDesc");
-      const resultWrap = document.getElementById("categoryResults");
-
-      const categoryText = {
-        food: ["음식·카페", "음식·카페 업종의 업체를 확인할 수 있습니다."],
-        health: ["병원·건강", "병원·건강 업종의 업체를 확인할 수 있습니다."],
-        edu: ["학원·교육", "학원·교육 업종의 업체를 확인할 수 있습니다."],
-        office: ["사무실·전문서비스", "사무실·전문서비스 업종의 업체를 확인할 수 있습니다."],
-        beauty: ["미용·뷰티", "미용·뷰티 업종의 업체를 확인할 수 있습니다."],
-        life: ["생활서비스", "생활서비스 업종의 업체를 확인할 수 있습니다."],
-        shop: ["판매·소매", "판매·소매 업종의 업체를 확인할 수 있습니다."],
-        etc: ["기타", "기타 업종의 업체를 확인할 수 있습니다."]
-      };
-
-      function showCategory(category, shouldScroll){
-        categoryCards.forEach(card => {
-          card.classList.toggle("active-category", card.dataset.category === category);
-        });
-
-        resultBlocks.forEach(block => {
-          block.classList.toggle("active", block.dataset.result === category);
-        });
-
-        if(categoryText[category]){
-          resultTitle.textContent = categoryText[category][0];
-          resultDesc.textContent = categoryText[category][1];
-        }
-
-        if(shouldScroll && resultWrap){
-          resultWrap.scrollIntoView({ behavior:"smooth", block:"start" });
-        }
+      const list = stores.filter(s=>s.cat === cat);
+      categoryStoreGrid.innerHTML = list.map(cardHTML).join("");
+      resultTitle.textContent = catText[cat][0];
+      resultDesc.textContent = catText[cat][1];
+      if(shouldScroll){
+        document.getElementById("categoryResults").scrollIntoView({behavior:"smooth", block:"start"});
       }
+    }
 
-      categoryCards.forEach(card => {
-        card.addEventListener("click", function(e){
-          e.preventDefault();
-          showCategory(card.dataset.category, true);
-        });
+    document.querySelectorAll(".floor-chip").forEach(chip=>{
+      chip.addEventListener("click", ()=>{
+        document.querySelectorAll(".floor-chip").forEach(c=>c.classList.remove("active"));
+        chip.classList.add("active");
+        chip.scrollIntoView({behavior:"smooth", inline:"center", block:"nearest"});
+        const floor = chip.dataset.floor;
+        renderStores(floor === "all" ? stores : stores.filter(s=>s.floor === floor));
       });
+    });
 
-      showCategory("food", false);
-    })();
+    document.querySelectorAll(".category-card").forEach(card=>{
+      card.addEventListener("click", e=>{
+        e.preventDefault();
+        renderCategory(card.dataset.category, true);
+      });
+    });
 
+    renderStores(stores);
+    renderCategory("food", false);
   </script>
 </body>
 </html>
