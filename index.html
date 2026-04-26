@@ -1823,6 +1823,13 @@
   </div>
 
   <script>
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+    window.addEventListener("load", function(){
+      if (!location.hash) window.scrollTo(0, 0);
+    });
+
     (function(){
       const chips = document.querySelectorAll(".floor-chip");
       const cards = document.querySelectorAll(".store-card[data-floor]");
@@ -1868,7 +1875,7 @@
         etc: ["기타", "기타 업종의 업체를 확인할 수 있습니다."]
       };
 
-      function showCategory(category){
+      function showCategory(category, shouldScroll){
         categoryCards.forEach(card => {
           card.classList.toggle("active-category", card.dataset.category === category);
         });
@@ -1882,7 +1889,7 @@
           resultDesc.textContent = categoryText[category][1];
         }
 
-        if(resultWrap){
+        if(shouldScroll && resultWrap){
           resultWrap.scrollIntoView({ behavior:"smooth", block:"start" });
         }
       }
@@ -1890,11 +1897,11 @@
       categoryCards.forEach(card => {
         card.addEventListener("click", function(e){
           e.preventDefault();
-          showCategory(card.dataset.category);
+          showCategory(card.dataset.category, true);
         });
       });
 
-      showCategory("food");
+      showCategory("food", false);
     })();
 
   </script>
