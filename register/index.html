@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <title>입점자 미니홈 편집기 MVP</title>
+  <title>입점자 미니홈 편집기 MVP v2</title>
   <style>
     :root{
       --app-bg:#f3f4f6;
@@ -539,15 +539,15 @@
     <div class="top-left">
       <div class="brand-title">입점자 미니홈 편집기</div>
       <div id="viewportTabs" class="viewport-tabs">
-        <button class="viewport-tab active" data-vp="mobile">모바일</button>
-        <button class="viewport-tab" data-vp="desktop">데스크탑</button>
+        <button type="button" class="viewport-tab active" data-vp="mobile">모바일</button>
+        <button type="button" class="viewport-tab" data-vp="desktop">데스크탑</button>
       </div>
     </div>
     <div class="top-right">
-      <button class="btn" id="undoBtn">↶</button>
-      <button class="btn" id="redoBtn">↷</button>
-      <button class="btn" id="previewBtn">미리보기</button>
-      <button class="btn blue" id="saveBtn">저장</button>
+      <button type="button" class="btn" id="undoBtn">↶</button>
+      <button type="button" class="btn" id="redoBtn">↷</button>
+      <button type="button" class="btn" id="previewBtn">미리보기</button>
+      <button type="button" class="btn blue" id="saveBtn">저장</button>
     </div>
   </header>
 
@@ -577,10 +577,10 @@
   </main>
 
   <nav class="bottom-bar">
-    <button class="bottom-btn active" data-panel="widgets">위젯</button>
-    <button class="bottom-btn" data-panel="templates">템플릿</button>
-    <button class="bottom-btn" data-panel="colors">색상</button>
-    <button class="bottom-btn" data-panel="more">도구</button>
+    <button type="button" class="bottom-btn active" data-panel="widgets">위젯</button>
+    <button type="button" class="bottom-btn" data-panel="templates">템플릿</button>
+    <button type="button" class="bottom-btn" data-panel="colors">색상</button>
+    <button type="button" class="bottom-btn" data-panel="more">도구</button>
   </nav>
 
   <div id="sheet" class="sheet"></div>
@@ -596,6 +596,15 @@
   const viewportTabs = document.getElementById("viewportTabs");
   const sheet = document.getElementById("sheet");
   const toast = document.getElementById("toast");
+  const topbarEl = document.querySelector(".topbar");
+  const bottomBarEl = document.querySelector(".bottom-bar");
+  const sideEl = document.querySelector(".side");
+
+  [topbarEl, bottomBarEl, sideEl, sheet].forEach(el => {
+    if (!el) return;
+    el.addEventListener("pointerdown", e => e.stopPropagation());
+    el.addEventListener("click", e => e.stopPropagation());
+  });
 
   const PALETTE_GROUPS = [
     {
@@ -846,10 +855,10 @@
       const toolbar = document.createElement("div");
       toolbar.className = "mini-toolbar edit-ui";
       toolbar.innerHTML = `
-        <button class="mini-btn" title="복제" data-act="dup">⧉</button>
-        <button class="mini-btn" title="앞으로" data-act="front">↑</button>
-        <button class="mini-btn" title="뒤로" data-act="back">↓</button>
-        <button class="mini-btn danger" title="삭제" data-act="del">×</button>
+        <button type="button" class="mini-btn" title="복제" data-act="dup">⧉</button>
+        <button type="button" class="mini-btn" title="앞으로" data-act="front">↑</button>
+        <button type="button" class="mini-btn" title="뒤로" data-act="back">↓</button>
+        <button type="button" class="mini-btn danger" title="삭제" data-act="del">×</button>
       `;
       toolbar.addEventListener("pointerdown", e => e.stopPropagation());
       toolbar.addEventListener("click", e => {
@@ -1036,7 +1045,7 @@
       if(!editorState.preview){
         const row = document.createElement("div");
         row.className = "input-row";
-        row.innerHTML = `<input value="${escapeAttr(widget.props.videoUrl||"")}" placeholder="유튜브/인스타/틱톡/네이버TV 링크"><button class="btn primary">적용</button>`;
+        row.innerHTML = `<input value="${escapeAttr(widget.props.videoUrl||"")}" placeholder="유튜브/인스타/틱톡/네이버TV 링크"><button type="button" class="btn primary">적용</button>`;
         const input = row.querySelector("input");
         row.querySelector("button").addEventListener("click",()=>applyVideoUrl(widget.id,input.value));
         input.addEventListener("pointerdown",e=>e.stopPropagation());
@@ -1078,6 +1087,7 @@
     target.innerHTML = "";
     WIDGETS.forEach(([type,label])=>{
       const btn = document.createElement("button");
+      btn.type = "button";
       btn.className = "tool-card";
       btn.textContent = label;
       btn.onclick = () => addWidget(type);
@@ -1092,6 +1102,7 @@
       const rot = group.rotations[pageDraft.paletteGroupId===group.id ? pageDraft.paletteRotationIndex : 0];
       const c = rot.colors;
       const btn = document.createElement("button");
+      btn.type = "button";
       btn.className = "palette-card" + (pageDraft.paletteGroupId===group.id ? " active" : "");
       btn.innerHTML = `
         <div class="palette-name">${group.name}</div>
@@ -1113,6 +1124,7 @@
     target.innerHTML = "";
     TEMPLATES.forEach(t=>{
       const btn = document.createElement("button");
+      btn.type = "button";
       btn.className = "template-card";
       btn.innerHTML = `<strong>${t.name}</strong><small>${t.desc}</small>`;
       btn.onclick = () => applyTemplate(t.id);
@@ -1142,10 +1154,10 @@
       sheet.innerHTML = `
         <div class="panel-title">도구</div>
         <div class="tool-grid">
-          <button class="tool-card" id="mUndo">되돌리기</button>
-          <button class="tool-card" id="mRedo">다시하기</button>
-          <button class="tool-card" id="mPreview">미리보기</button>
-          <button class="tool-card" id="mSave">저장</button>
+          <button type="button" class="tool-card" id="mUndo">되돌리기</button>
+          <button type="button" class="tool-card" id="mRedo">다시하기</button>
+          <button type="button" class="tool-card" id="mPreview">미리보기</button>
+          <button type="button" class="tool-card" id="mSave">저장</button>
         </div>
         <div class="note" style="margin-top:12px;">모바일에서는 모바일 화면만 편집됩니다. 데스크탑 화면 편집은 PC에서 가능합니다.</div>
       `;
@@ -1522,12 +1534,24 @@
     if(btn) setActiveViewport(btn.dataset.vp);
   });
 
-  document.querySelector(".bottom-bar").addEventListener("click", e=>{
+  bottomBarEl.addEventListener("click", e=>{
     const btn = e.target.closest(".bottom-btn");
     if(!btn) return;
     editorState.activePanel = btn.dataset.panel;
     renderMobileSheet();
   });
+
+  document.addEventListener("click", e => {
+    const target = e.target;
+    if (target.closest && target.closest("#saveBtn")) { saveNow(); return; }
+    if (target.closest && target.closest("#previewBtn")) { togglePreview(); return; }
+    if (target.closest && target.closest("#undoBtn")) { undo(); return; }
+    if (target.closest && target.closest("#redoBtn")) { redo(); return; }
+    const vpBtn = target.closest && target.closest(".viewport-tab");
+    if (vpBtn) { setActiveViewport(vpBtn.dataset.vp); return; }
+    const bottomBtn = target.closest && target.closest(".bottom-btn");
+    if (bottomBtn) { editorState.activePanel = bottomBtn.dataset.panel; renderMobileSheet(); return; }
+  }, true);
 
   window.addEventListener("resize", debounce(()=>{
     const old = editorState.deviceType;
