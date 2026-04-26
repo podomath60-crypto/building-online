@@ -3,74 +3,85 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>26빌딩 온라인</title>
-  <meta name="description" content="군산 나운동 동아26빌딩 업체 안내" />
+  <title>26빌딩 온라인 - 업체 상세 빌더</title>
+  <meta name="description" content="26빌딩 입점업체 상세 위젯을 직접 꾸미는 빌더 페이지입니다." />
   <style>
     :root{
-      --bg:#f7fbff;
-      --paper:#fff;
+      --page-bg:#f7fbff;
+      --panel:#ffffff;
       --ink:#102033;
       --muted:#65758c;
       --line:#e6eef8;
-      --blue:#1f8cff;
-      --sky:#75d7ff;
-      --mint:#34d399;
-      --yellow:#ffd166;
+      --primary:#1f8cff;
+      --secondary:#75d7ff;
+      --accent:#34d399;
+      --soft:#eef8ff;
       --shadow:0 20px 52px rgba(31,140,255,.12);
-      --pageX:22px;
+      --radius:28px;
     }
 
     *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
+
+    html,body{
       margin:0;
+      min-height:100%;
       font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Noto Sans KR","Segoe UI",sans-serif;
       color:var(--ink);
-      background:#fff;
+      background:
+        radial-gradient(circle at 10% 4%, rgba(31,140,255,.12), transparent 30%),
+        radial-gradient(circle at 88% 7%, rgba(52,211,153,.12), transparent 32%),
+        var(--page-bg);
       word-break:keep-all;
       overflow-x:hidden;
     }
-    body.detail-open{overflow:hidden}
+
+    body{
+      --builder-primary:var(--primary);
+      --builder-secondary:var(--secondary);
+      --builder-accent:var(--accent);
+      --builder-soft:var(--soft);
+      --builder-bg:#f7fbff;
+      --builder-ink:#102033;
+    }
+
     a{color:inherit;text-decoration:none}
     button,input,textarea{font-family:inherit}
     button{cursor:pointer}
 
-    .page{
+    .builder-page{
       min-height:100vh;
-      background:
-        radial-gradient(circle at 12% 6%, rgba(31,140,255,.10), transparent 30%),
-        radial-gradient(circle at 88% 8%, rgba(52,211,153,.10), transparent 32%),
-        linear-gradient(180deg,#fff 0%,#f8fcff 100%);
+      display:flex;
+      flex-direction:column;
     }
 
     .topbar{
       position:sticky;
       top:0;
       z-index:100;
-      background:rgba(255,255,255,.82);
+      background:rgba(255,255,255,.84);
       border-bottom:1px solid rgba(31,140,255,.12);
       backdrop-filter:blur(22px);
       -webkit-backdrop-filter:blur(22px);
       box-shadow:0 10px 30px rgba(31,140,255,.07);
     }
+
     .nav{
-      max-width:1180px;
+      max-width:1380px;
       margin:0 auto;
-      padding:14px var(--pageX);
+      padding:14px 20px;
       display:flex;
-      align-items:center;
       justify-content:space-between;
-      gap:18px;
+      align-items:center;
+      gap:16px;
     }
+
     .brand{
       display:flex;
       align-items:center;
       gap:12px;
-      font-size:21px;
-      font-weight:1000;
-      letter-spacing:-.06em;
-      color:var(--ink);
+      min-width:0;
     }
+
     .brand-mark{
       width:42px;
       height:42px;
@@ -78,747 +89,421 @@
       display:grid;
       place-items:center;
       color:#fff;
-      background:linear-gradient(135deg,var(--blue),var(--sky) 55%,var(--mint));
+      background:linear-gradient(135deg,var(--builder-primary),var(--builder-secondary),var(--builder-accent));
       box-shadow:0 14px 32px rgba(31,140,255,.22);
       font-size:15px;
       font-weight:1000;
-      animation:pulseMark 3.2s ease-out infinite;
-    }
-    @keyframes pulseMark{
-      0%{box-shadow:0 0 0 0 rgba(31,140,255,.20), 0 14px 32px rgba(31,140,255,.22)}
-      70%{box-shadow:0 0 0 12px rgba(31,140,255,0), 0 14px 32px rgba(31,140,255,.22)}
-      100%{box-shadow:0 0 0 0 rgba(31,140,255,0), 0 14px 32px rgba(31,140,255,.22)}
-    }
-    .nav-links{
-      display:flex;
-      align-items:center;
-      gap:20px;
-      color:#4f627a;
-      font-size:14px;
-      font-weight:850;
       letter-spacing:-.04em;
     }
-    .nav-links a:hover{color:var(--blue)}
-    .nav-cta{
+
+    .brand-text{
+      min-width:0;
+    }
+
+    .brand-text b{
+      display:block;
+      font-size:19px;
+      line-height:1.1;
+      letter-spacing:-.06em;
+      font-weight:1000;
+    }
+
+    .brand-text span{
+      display:block;
+      margin-top:3px;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:750;
+      letter-spacing:-.03em;
+    }
+
+    .top-actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    .top-btn{
       position:relative;
       overflow:hidden;
-      padding:11px 17px;
+      height:42px;
+      padding:0 15px;
+      border:0;
       border-radius:999px;
-      color:#fff!important;
-      background:linear-gradient(135deg,var(--blue),var(--sky) 58%,var(--mint));
+      background:#fff;
+      color:#29415e;
+      border:1px solid rgba(31,140,255,.14);
+      font-size:13px;
+      font-weight:1000;
+      letter-spacing:-.035em;
+      box-shadow:0 10px 24px rgba(31,140,255,.07);
+    }
+
+    .top-btn.primary{
+      color:#fff;
+      background:linear-gradient(135deg,var(--builder-primary),var(--builder-secondary),var(--builder-accent));
+      border:0;
       box-shadow:0 14px 34px rgba(31,140,255,.20);
     }
 
-    .hero{
-      position:relative;
-      overflow:hidden;
-      max-width:1180px;
-      margin:0 auto;
-      padding:64px var(--pageX) 34px;
-    }
-    .hero::before{
-      content:"";
-      position:absolute;
-      right:-90px;
-      top:26px;
-      width:280px;
-      height:280px;
-      border-radius:50%;
-      background:radial-gradient(circle, rgba(117,215,255,.24), transparent 68%);
-      pointer-events:none;
-      animation:floaty 7s ease-in-out infinite;
-    }
-    .hero::after{
-      content:"";
-      position:absolute;
-      left:-100px;
-      bottom:10px;
-      width:260px;
-      height:260px;
-      border-radius:50%;
-      background:radial-gradient(circle, rgba(52,211,153,.16), transparent 68%);
-      pointer-events:none;
-      animation:floaty 8s ease-in-out infinite reverse;
-    }
-    @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-    .eyebrow{
-      position:relative;
-      z-index:1;
-      width:fit-content;
-      display:inline-flex;
-      align-items:center;
-      gap:9px;
-      padding:10px 14px;
-      border-radius:999px;
-      background:rgba(255,255,255,.92);
-      border:1px solid rgba(31,140,255,.14);
-      color:#38516e;
-      font-size:13px;
-      font-weight:900;
-      letter-spacing:-.025em;
-      box-shadow:0 12px 30px rgba(31,140,255,.08);
-      margin-bottom:18px;
-    }
-    .dot{
-      width:8px;
-      height:8px;
-      border-radius:50%;
-      background:var(--mint);
-      box-shadow:0 0 0 8px rgba(52,211,153,.14);
-    }
-    .hero-title{
-      position:relative;
-      z-index:1;
-      margin:0;
-      font-size:clamp(48px,8vw,88px);
-      line-height:.98;
-      letter-spacing:-.105em;
-      font-weight:1000;
-      color:#102033;
-      animation:fadeUp .65s ease both;
-    }
-    .hero-title .grad{
-      background:linear-gradient(90deg,#102033 0%,#1f8cff 34%,#13bfa6 72%,#102033 100%);
-      -webkit-background-clip:text;
-      background-clip:text;
-      color:transparent;
-      background-size:200% 100%;
-      animation:gradFlow 6s linear infinite;
-    }
-    @keyframes gradFlow{0%{background-position:0% 50%}100%{background-position:200% 50%}}
-    .hero-desc{
-      position:relative;
-      z-index:1;
-      margin:20px 0 0;
-      max-width:680px;
-      color:#5b6e86;
-      font-size:18px;
-      line-height:1.72;
-      letter-spacing:-.045em;
-      font-weight:700;
-      animation:fadeUp .65s ease .08s both;
-    }
-    .hero-actions{
-      position:relative;
-      z-index:1;
-      display:flex;
-      flex-wrap:wrap;
-      gap:12px;
-      margin-top:28px;
-      animation:fadeUp .65s ease .14s both;
-    }
-    .btn{
-      position:relative;
-      overflow:hidden;
-      min-height:54px;
-      padding:0 24px;
-      border-radius:999px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      border:0;
-      font-size:15px;
-      font-weight:950;
-      letter-spacing:-.04em;
-      transition:.22s ease;
-    }
-    .btn:hover{transform:translateY(-3px)}
-    .btn-primary{
-      background:linear-gradient(135deg,var(--blue),var(--sky) 58%,var(--mint));
-      color:#fff;
-      box-shadow:0 18px 44px rgba(31,140,255,.20);
-    }
-    .btn-secondary{
-      color:#1f5f9c;
-      background:#fff;
-      border:1px solid rgba(31,140,255,.16);
-      box-shadow:0 14px 34px rgba(31,140,255,.08);
-    }
-    .btn::after,.nav-cta::after,.register-btn::after,.drawer-pill::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:linear-gradient(110deg,transparent 0%,rgba(255,255,255,.55) 45%,transparent 70%);
-      transform:translateX(-120%);
-      transition:transform .55s ease;
-      pointer-events:none;
-    }
-    .btn:hover::after,.nav-cta:hover::after,.register-btn:hover::after,.drawer-pill:hover::after{transform:translateX(120%)}
-
-    .video-section{
-      position:relative;
-      padding:10px 0 50px;
-      overflow:hidden;
-    }
-    .video-frame{
-      position:relative;
+    .builder-layout{
+      flex:1;
+      max-width:1380px;
       width:100%;
-      height:clamp(430px,56vw,740px);
-      overflow:hidden;
-      background:
-        linear-gradient(180deg,rgba(8,22,42,.04),rgba(8,22,42,.58)),
-        url("https://img.youtube.com/vi/7mAUxuMU2WQ/maxresdefault.jpg") center/cover,
-        #dff4ff;
-      box-shadow:0 24px 70px rgba(31,140,255,.14);
-    }
-    .video-frame iframe{
-      position:absolute;
-      top:50%;
-      left:50%;
-      width:100vw;
-      height:56.25vw;
-      min-width:100vw;
-      min-height:100%;
-      transform:translate(-50%,-50%);
-      border:0;
-      pointer-events:none;
-      z-index:0;
-    }
-    .video-frame.local-fallback iframe{display:none}
-    .video-frame.local-fallback::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        linear-gradient(to top, rgba(8,22,42,.72), rgba(8,22,42,.18), rgba(255,255,255,.04)),
-        url("https://img.youtube.com/vi/7mAUxuMU2WQ/maxresdefault.jpg") center/cover;
-      z-index:0;
-    }
-    .video-overlay{
-      position:absolute;
-      inset:0;
-      z-index:1;
-      pointer-events:none;
-      background:
-        linear-gradient(to top,rgba(8,22,42,.70) 0%,rgba(8,22,42,.26) 38%,rgba(8,22,42,.04) 70%),
-        radial-gradient(circle at 12% 14%,rgba(31,140,255,.18),transparent 34%),
-        radial-gradient(circle at 86% 18%,rgba(52,211,153,.14),transparent 32%);
-    }
-    .video-copy{
-      position:absolute;
-      inset:0;
-      z-index:2;
-      display:flex;
-      flex-direction:column;
-      justify-content:flex-end;
-      max-width:1180px;
       margin:0 auto;
-      padding:42px var(--pageX);
-      left:0;
-      right:0;
-      color:#fff;
-    }
-    .video-badge{
-      position:absolute;
-      top:36px;
-      left:var(--pageX);
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding:10px 14px;
-      border-radius:999px;
-      background:rgba(255,255,255,.18);
-      border:1px solid rgba(255,255,255,.22);
-      backdrop-filter:blur(14px);
-      font-size:13px;
-      font-weight:950;
-      letter-spacing:-.035em;
-    }
-    .video-badge span{
-      width:26px;
-      height:26px;
-      border-radius:10px;
+      padding:22px 20px 32px;
       display:grid;
-      place-items:center;
-      color:#fff;
-      background:linear-gradient(135deg,var(--blue),var(--sky),var(--mint));
-      font-weight:1000;
-      font-size:12px;
-    }
-    .video-copy h2{
-      margin:0;
-      color:#fff;
-      font-size:clamp(38px,6.2vw,68px);
-      line-height:1.03;
-      letter-spacing:-.095em;
-      font-weight:1000;
-      text-shadow:0 4px 22px rgba(0,0,0,.38);
-    }
-    .video-copy p{
-      margin:16px 0 0;
-      max-width:660px;
-      color:rgba(255,255,255,.84);
-      font-size:17px;
-      line-height:1.62;
-      letter-spacing:-.04em;
-      font-weight:750;
-      text-shadow:0 2px 12px rgba(0,0,0,.34);
+      grid-template-columns:360px minmax(0,1fr);
+      gap:22px;
+      align-items:start;
     }
 
-    .content{
-      position:relative;
-      z-index:3;
-      margin-top:-28px;
-      background:var(--bg);
-      border-radius:36px 36px 0 0;
-      padding-top:34px;
-      box-shadow:0 -18px 44px rgba(31,140,255,.06);
+    .control-panel{
+      position:sticky;
+      top:86px;
+      height:calc(100vh - 108px);
+      overflow:auto;
+      border-radius:32px;
+      background:rgba(255,255,255,.92);
+      border:1px solid rgba(31,140,255,.12);
+      box-shadow:var(--shadow);
+      padding:18px;
     }
-    .body-section{
-      max-width:1180px;
-      margin:0 auto;
-      padding:58px var(--pageX);
+
+    .panel-head{
+      padding:6px 4px 16px;
     }
-    .section-head{margin-bottom:26px}
-    .kicker{
-      color:var(--blue);
-      font-size:13px;
+
+    .panel-head .kicker{
+      color:var(--builder-primary);
+      font-size:12px;
       font-weight:1000;
       letter-spacing:.02em;
-      margin-bottom:9px;
+      margin-bottom:8px;
     }
-    .section-title{
-      position:relative;
-      display:inline-block;
+
+    .panel-head h1{
       margin:0;
-      color:var(--ink);
-      font-size:clamp(34px,4.2vw,52px);
+      font-size:30px;
       line-height:1.08;
-      letter-spacing:-.095em;
+      letter-spacing:-.09em;
       font-weight:1000;
     }
-    .section-title::after{
-      content:"";
-      position:absolute;
-      left:2px;
-      right:2px;
-      bottom:-8px;
-      height:8px;
-      z-index:-1;
-      border-radius:999px;
-      background:linear-gradient(90deg,rgba(31,140,255,.20),rgba(52,211,153,.18),rgba(255,209,102,.20));
-    }
-    .section-desc{
-      margin:14px 0 0;
-      max-width:680px;
+
+    .panel-head p{
+      margin:10px 0 0;
       color:var(--muted);
-      font-size:17px;
-      line-height:1.72;
-      letter-spacing:-.045em;
+      font-size:14px;
+      line-height:1.55;
+      letter-spacing:-.04em;
       font-weight:650;
     }
 
-    .floor-panel{
-      margin:26px 0 24px;
-      padding:14px;
-      border-radius:28px;
-      background:rgba(255,255,255,.94);
-      border:1px solid rgba(31,140,255,.12);
-      box-shadow:var(--shadow);
+    .tabbar{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:8px;
+      padding:8px;
+      border-radius:22px;
+      background:#f2f8ff;
+      margin-bottom:18px;
     }
-    .floor-title{
+
+    .tab-btn{
+      height:40px;
+      border:0;
+      border-radius:16px;
+      background:transparent;
+      color:#4c627c;
+      font-size:12px;
+      font-weight:1000;
+      letter-spacing:-.035em;
+    }
+
+    .tab-btn.active{
+      color:#fff;
+      background:linear-gradient(135deg,var(--builder-primary),var(--builder-accent));
+      box-shadow:0 10px 20px rgba(31,140,255,.18);
+    }
+
+    .tab-panel{
+      display:none;
+    }
+
+    .tab-panel.active{
+      display:block;
+    }
+
+    .section-label{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:12px;
-      padding:2px 4px 12px;
-    }
-    .floor-title b{
-      color:var(--ink);
-      font-size:16px;
-      letter-spacing:-.055em;
+      gap:8px;
+      margin:18px 0 10px;
+      color:#2d4663;
+      font-size:13px;
       font-weight:1000;
+      letter-spacing:-.04em;
     }
-    .floor-title span{
-      color:var(--muted);
-      font-size:12px;
-      font-weight:800;
-      letter-spacing:-.03em;
+
+    .section-label span{
+      color:#7a8aa0;
+      font-size:11px;
+      font-weight:850;
     }
-    .floor-scroll{
+
+    .h-scroll{
       display:flex;
-      gap:9px;
+      gap:10px;
       overflow-x:auto;
       overflow-y:hidden;
-      padding:2px 2px 4px;
+      padding:2px 2px 10px;
       scrollbar-width:none;
       -webkit-overflow-scrolling:touch;
     }
-    .floor-scroll::-webkit-scrollbar{display:none}
-    .floor-chip{
-      flex:0 0 auto;
-      min-width:68px;
-      height:50px;
-      border:0;
-      border-radius:18px;
-      background:#fff;
-      color:#4b5563;
-      font-size:15px;
-      font-weight:950;
-      letter-spacing:-.04em;
-      cursor:pointer;
-      box-shadow:0 10px 24px rgba(31,140,255,.08);
-      transition:.18s ease;
-    }
-    .floor-chip.active{
-      color:#fff;
-      background:linear-gradient(135deg,var(--blue),var(--sky),var(--mint));
-      box-shadow:0 14px 30px rgba(31,140,255,.28);
-      animation:chipPop .25s ease both;
-    }
-    @keyframes chipPop{0%{transform:scale(.96)}55%{transform:scale(1.045)}100%{transform:scale(1)}}
 
-    .stores-grid,.category-store-grid{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:20px;
-    }
-    .store-card{
-      overflow:hidden;
-      border-radius:30px;
+    .h-scroll::-webkit-scrollbar{display:none}
+
+    .template-card{
+      flex:0 0 154px;
+      height:142px;
+      border:1px solid rgba(31,140,255,.13);
+      border-radius:22px;
       background:#fff;
-      border:1px solid rgba(31,140,255,.10);
-      box-shadow:var(--shadow);
-      opacity:0;
-      animation:cardIn .58s cubic-bezier(.2,.9,.22,1) both;
-      animation-delay:calc(var(--card-i,0) * 70ms);
-      transition:transform .25s ease, box-shadow .25s ease;
+      box-shadow:0 10px 26px rgba(31,140,255,.08);
+      padding:11px;
+      text-align:left;
+      transition:.2s ease;
     }
-    .store-card:hover{
-      transform:translateY(-6px);
-      box-shadow:0 28px 70px rgba(31,140,255,.16);
+
+    .template-card.active{
+      border-color:var(--builder-primary);
+      box-shadow:0 16px 38px rgba(31,140,255,.18);
+      transform:translateY(-3px);
     }
-    @keyframes cardIn{
-      0%{opacity:0;transform:translateY(28px) scale(.985);filter:blur(4px)}
-      100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
-    }
-    .store-photo{
+
+    .template-preview{
+      height:72px;
+      border-radius:16px;
+      margin-bottom:10px;
+      background:
+        linear-gradient(135deg,var(--builder-primary),var(--builder-secondary),var(--builder-accent));
       position:relative;
-      height:220px;
-      background:center/cover;
+      overflow:hidden;
     }
-    .store-photo::after{
+
+    .template-preview::before{
       content:"";
       position:absolute;
-      inset:0;
-      background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.58));
-    }
-    .store-photo.p1{background-image:url("https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=700&q=80")}
-    .store-photo.p2{background-image:url("https://images.unsplash.com/photo-1573497491208-6b1acb260507?auto=format&fit=crop&w=700&q=80")}
-    .store-photo.p3{background-image:url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=700&q=80")}
-    .store-photo.p4{background-image:url("https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=700&q=80")}
-    .store-photo.p5{background-image:url("https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=700&q=80")}
-    .store-photo.p6{background-image:url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=700&q=80")}
-    .store-photo.p7{background-image:url("https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=700&q=80")}
-    .store-photo.p8{background-image:url("https://images.unsplash.com/photo-1580281657521-7a7e0f85e0b9?auto=format&fit=crop&w=700&q=80")}
-    .store-photo.p9{background-image:url("https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=700&q=80")}
-    .store-photo.p10{background-image:url("https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=700&q=80")}
-    .store-photo.p11{background-image:url("https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=700&q=80")}
-    .store-photo.p12{background-image:url("https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=700&q=80")}
-    .store-photo.p13{background-image:url("https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=700&q=80")}
-    .store-photo.p14{background-image:url("https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=700&q=80")}
-    .store-photo.p15{background-image:url("https://images.unsplash.com/photo-1581579186913-45ac3e6efe93?auto=format&fit=crop&w=700&q=80")}
-    .store-photo.p16{background-image:url("https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=700&q=80")}
-    .tag{
-      position:absolute;
-      left:16px;
-      top:16px;
-      z-index:2;
-      padding:8px 12px;
+      left:12px;
+      right:12px;
+      bottom:12px;
+      height:11px;
       border-radius:999px;
-      color:#fff;
-      background:rgba(0,0,0,.38);
-      backdrop-filter:blur(10px);
-      font-size:12px;
-      font-weight:950;
-      letter-spacing:-.035em;
+      background:rgba(255,255,255,.78);
     }
-    .floor-badge{
+
+    .template-preview::after{
+      content:"";
       position:absolute;
-      right:16px;
-      bottom:16px;
-      z-index:2;
-      width:58px;
-      height:58px;
-      border-radius:20px;
-      display:grid;
-      place-items:center;
-      color:var(--ink);
-      background:rgba(255,255,255,.93);
-      font-size:15px;
+      left:12px;
+      bottom:30px;
+      width:50%;
+      height:8px;
+      border-radius:999px;
+      background:rgba(255,255,255,.45);
+    }
+
+    .template-card b{
+      display:block;
+      font-size:13px;
+      line-height:1.2;
       font-weight:1000;
-      letter-spacing:-.06em;
+      letter-spacing:-.045em;
+      color:#203852;
     }
-    .store-body{padding:24px}
-    .store-body h3{
-      margin:0;
-      color:var(--ink);
-      font-size:24px;
-      line-height:1.15;
-      font-weight:1000;
-      letter-spacing:-.075em;
+
+    .template-card span{
+      display:block;
+      margin-top:4px;
+      color:#748299;
+      font-size:11px;
+      line-height:1.3;
+      font-weight:700;
+      letter-spacing:-.02em;
     }
-    .store-body p{
-      margin:12px 0 22px;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.65;
-      font-weight:600;
-      letter-spacing:-.04em;
-    }
-    .store-actions{
+
+    .palette-grid{
       display:grid;
-      grid-template-columns:1fr 1fr;
+      grid-template-columns:repeat(2,1fr);
       gap:10px;
     }
-    .small-btn{
-      min-height:46px;
-      border:0;
-      border-radius:17px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:14px;
-      font-weight:950;
-      letter-spacing:-.04em;
-      background:#f2f7ff;
-      color:var(--ink);
-    }
-    .small-btn.dark{
-      color:#fff;
-      background:linear-gradient(135deg,var(--blue),#1677df);
-    }
-    .empty{
-      display:none;
-      margin-top:18px;
-      padding:30px 22px;
-      border-radius:28px;
+
+    .palette-card{
+      min-height:76px;
+      border:1px solid rgba(31,140,255,.12);
+      border-radius:20px;
       background:#fff;
-      color:var(--muted);
-      text-align:center;
-      font-size:15px;
-      font-weight:850;
-      letter-spacing:-.04em;
-      box-shadow:var(--shadow);
-      border:1px solid rgba(31,140,255,.10);
+      padding:10px;
+      box-shadow:0 10px 24px rgba(31,140,255,.07);
+      text-align:left;
+      transition:.2s ease;
     }
 
-    .category-section{padding-top:34px!important}
-    .category-grid{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:16px;
+    .palette-card.active{
+      border-color:var(--builder-primary);
+      box-shadow:0 14px 34px rgba(31,140,255,.16);
+      transform:translateY(-2px);
     }
-    .cat{
-      position:relative;
-      overflow:hidden;
-      min-height:190px;
-      border-radius:28px;
-      padding:22px;
-      color:#fff;
-      box-shadow:var(--shadow);
-      transition:.25s ease;
-      isolation:isolate;
+
+    .palette-dots{
+      display:flex;
+      gap:6px;
+      margin-bottom:9px;
     }
-    .cat:hover{transform:translateY(-6px)}
-    .cat::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      z-index:-2;
-      background:center/cover;
-      transition:.28s ease;
+
+    .palette-dots i{
+      width:22px;
+      height:22px;
+      border-radius:50%;
+      box-shadow:inset 0 0 0 1px rgba(0,0,0,.06);
     }
-    .cat:hover::before{transform:scale(1.06)}
-    .cat::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      z-index:-1;
-      background:linear-gradient(180deg,rgba(10,28,52,.10),rgba(10,28,52,.68));
-    }
-    .cat.food::before{background-image:url("https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80")}
-    .cat.health::before{background-image:url("https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=600&q=80")}
-    .cat.edu::before{background-image:url("https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=600&q=80")}
-    .cat.office::before{background-image:url("https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=600&q=80")}
-    .cat.beauty::before{background-image:url("https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=600&q=80")}
-    .cat.life::before{background-image:url("https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&q=80")}
-    .cat.shop::before{background-image:url("https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=600&q=80")}
-    .cat.etc::before{background-image:url("https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=600&q=80")}
-    .cat-icon{
-      width:44px;
-      height:44px;
-      border-radius:16px;
-      display:grid;
-      place-items:center;
-      background:rgba(255,255,255,.22);
-      backdrop-filter:blur(10px);
-      font-size:20px;
-      margin-bottom:50px;
-    }
-    .cat h3{
-      margin:0 0 7px;
-      font-size:22px;
-      letter-spacing:-.065em;
+
+    .palette-card b{
+      display:block;
+      color:#223c5b;
+      font-size:12px;
       font-weight:1000;
+      letter-spacing:-.035em;
     }
-    .cat p{
-      margin:0;
-      color:rgba(255,255,255,.84);
+
+    .field-list{
+      display:grid;
+      gap:12px;
+    }
+
+    .field{
+      display:grid;
+      gap:7px;
+    }
+
+    .field label{
+      color:#344054;
       font-size:13px;
-      line-height:1.5;
-      letter-spacing:-.035em;
-      font-weight:650;
-    }
-    .cat.active-category{
-      outline:3px solid rgba(31,140,255,.28);
-      box-shadow:0 24px 70px rgba(31,140,255,.22);
-    }
-    .category-results{
-      margin-top:26px;
-      padding:28px;
-      border-radius:32px;
-      background:rgba(255,255,255,.95);
-      border:1px solid rgba(31,140,255,.12);
-      box-shadow:var(--shadow);
-    }
-    .category-result-head{margin-bottom:20px}
-    .category-result-head h3{
-      margin:0;
-      color:var(--ink);
-      font-size:34px;
-      line-height:1.1;
-      letter-spacing:-.08em;
       font-weight:1000;
-    }
-    .category-result-head p{
-      margin:8px 0 0;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.55;
       letter-spacing:-.035em;
-      font-weight:650;
     }
 
-    .register-section{
-      max-width:1180px;
-      margin:0 auto;
-      padding:0 var(--pageX) 72px;
-    }
-    .register-card{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:22px;
-      padding:26px;
-      border-radius:28px;
-      background:
-        radial-gradient(circle at 12% 18%,rgba(31,140,255,.13),transparent 30%),
-        radial-gradient(circle at 86% 12%,rgba(52,211,153,.14),transparent 30%),
-        #fff;
-      border:1px solid rgba(31,140,255,.12);
-      box-shadow:var(--shadow);
-    }
-    .register-card h2{
-      margin:0;
+    .field input,
+    .field textarea{
+      width:100%;
+      border:1px solid var(--line);
+      background:#f9fbff;
+      border-radius:17px;
+      padding:13px;
+      outline:0;
       color:var(--ink);
-      font-size:28px;
-      line-height:1.16;
-      letter-spacing:-.08em;
-      font-weight:1000;
-    }
-    .register-card p{
-      margin:10px 0 0;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.6;
-      letter-spacing:-.035em;
-      font-weight:650;
-    }
-    .register-btn{
-      position:relative;
-      overflow:hidden;
-      flex:0 0 auto;
-      min-height:52px;
-      padding:0 22px;
-      border-radius:999px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      color:#fff;
-      background:linear-gradient(135deg,var(--blue),var(--sky),var(--mint));
       font-size:14px;
-      font-weight:1000;
-      letter-spacing:-.04em;
-      box-shadow:0 14px 34px rgba(31,140,255,.20);
-      white-space:nowrap;
+      line-height:1.5;
     }
 
-    footer{
-      background:#fff;
-      border-top:1px solid rgba(31,140,255,.10);
-      color:var(--ink);
-      padding:34px var(--pageX);
+    .field textarea{
+      min-height:96px;
+      resize:vertical;
     }
-    .footer-inner{
-      max-width:1180px;
-      margin:0 auto;
+
+    .field input:focus,
+    .field textarea:focus{
+      border-color:var(--builder-primary);
+      background:#fff;
+      box-shadow:0 0 0 4px rgba(31,140,255,.10);
+    }
+
+    .widget-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .widget-toggle{
       display:flex;
       align-items:center;
       justify-content:space-between;
+      gap:12px;
+      min-height:56px;
+      padding:12px 13px;
+      border:1px solid rgba(31,140,255,.10);
+      border-radius:18px;
+      background:#fff;
+      box-shadow:0 10px 24px rgba(31,140,255,.06);
+    }
+
+    .widget-toggle b{
+      display:block;
+      font-size:14px;
+      letter-spacing:-.045em;
+      font-weight:1000;
+      color:#223c5b;
+    }
+
+    .widget-toggle span{
+      display:block;
+      margin-top:3px;
+      color:#7a8aa0;
+      font-size:11px;
+      line-height:1.35;
+      font-weight:700;
+      letter-spacing:-.02em;
+    }
+
+    .switch{
+      width:46px;
+      height:26px;
+      border-radius:999px;
+      background:#d7e4f2;
+      position:relative;
+      flex:0 0 auto;
+      transition:.2s ease;
+    }
+
+    .switch::after{
+      content:"";
+      position:absolute;
+      top:3px;
+      left:3px;
+      width:20px;
+      height:20px;
+      border-radius:50%;
+      background:#fff;
+      box-shadow:0 3px 8px rgba(0,0,0,.15);
+      transition:.2s ease;
+    }
+
+    .widget-toggle.active .switch{
+      background:linear-gradient(135deg,var(--builder-primary),var(--builder-accent));
+    }
+
+    .widget-toggle.active .switch::after{
+      left:23px;
+    }
+
+    .preview-area{
+      min-width:0;
+      display:grid;
+      grid-template-columns:minmax(0,1fr);
       gap:18px;
     }
-    .footer-brand{
-      font-size:21px;
-      font-weight:1000;
-      letter-spacing:-.06em;
-    }
-    .footer-text{
-      margin-top:6px;
-      color:var(--muted);
-      font-size:13px;
-      letter-spacing:-.03em;
-      font-weight:600;
+
+    .preview-frame{
+      min-height:calc(100vh - 108px);
+      border-radius:36px;
+      background:var(--builder-bg);
+      border:1px solid rgba(31,140,255,.12);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
     }
 
-    /* ================= 업체 상세 위젯 / 편집 구조 ================= */
-    .detail-overlay{
-      position:fixed;
-      inset:0;
-      z-index:1000;
-      display:none;
-      background:rgba(9,23,42,.38);
-      backdrop-filter:blur(8px);
-      -webkit-backdrop-filter:blur(8px);
-    }
-    .detail-overlay.open{display:block}
-    .detail-shell{
-      position:absolute;
-      left:50%;
-      top:50%;
-      width:min(1040px, calc(100vw - 36px));
-      height:min(820px, calc(100vh - 42px));
-      transform:translate(-50%,-50%) scale(.98);
-      opacity:0;
-      background:#fff;
-      border:1px solid rgba(31,140,255,.14);
-      border-radius:34px;
-      overflow:hidden;
-      box-shadow:0 34px 100px rgba(12,34,68,.24);
-      display:grid;
-      grid-template-columns:minmax(0,1fr) 320px;
-      transition:.24s ease;
-    }
-    .detail-overlay.open .detail-shell{
-      transform:translate(-50%,-50%) scale(1);
-      opacity:1;
-    }
-    .detail-preview{
-      min-width:0;
-      overflow:auto;
-      background:var(--detail-bg,#f7fbff);
-    }
-    .detail-toolbar{
+    .preview-top{
       position:sticky;
       top:0;
       z-index:20;
@@ -830,79 +515,94 @@
       background:rgba(255,255,255,.86);
       border-bottom:1px solid rgba(31,140,255,.12);
       backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
     }
-    .detail-mode{
+
+    .preview-mode{
       display:flex;
-      gap:8px;
       align-items:center;
-      font-size:13px;
-      font-weight:1000;
+      gap:10px;
       color:#3d5672;
-    }
-    .edit-toggle{
-      border:0;
-      border-radius:999px;
-      padding:10px 13px;
-      background:#f0f7ff;
-      color:#1f5f9c;
       font-size:13px;
       font-weight:1000;
       letter-spacing:-.035em;
     }
-    .edit-toggle.active{
-      color:#fff;
-      background:linear-gradient(135deg,var(--detail-primary,#1f8cff),var(--detail-accent,#34d399));
-    }
-    .detail-close{
-      width:40px;
-      height:40px;
-      border:0;
-      border-radius:15px;
-      display:grid;
-      place-items:center;
-      background:#f4f8ff;
-      color:#19304d;
-      font-size:21px;
-      font-weight:900;
+
+    .preview-dot{
+      width:9px;
+      height:9px;
+      border-radius:50%;
+      background:var(--builder-accent);
+      box-shadow:0 0 0 8px color-mix(in srgb, var(--builder-accent) 22%, transparent);
     }
 
-    .detail-inner{
-      padding:18px;
+    .preview-actions{
+      display:flex;
+      gap:8px;
     }
-    .detail-card{
+
+    .mini-btn{
+      min-height:38px;
+      padding:0 13px;
+      border:0;
+      border-radius:999px;
+      background:#f2f8ff;
+      color:#1f5f9c;
+      font-size:12px;
+      font-weight:1000;
+      letter-spacing:-.035em;
+    }
+
+    .mini-btn.primary{
+      color:#fff;
+      background:linear-gradient(135deg,var(--builder-primary),var(--builder-accent));
+    }
+
+    .store-page{
+      max-width:820px;
+      margin:0 auto;
+      padding:22px;
+    }
+
+    .store-shell{
       overflow:hidden;
-      border-radius:30px;
+      border-radius:34px;
       background:#fff;
       border:1px solid rgba(31,140,255,.10);
       box-shadow:0 18px 48px rgba(31,140,255,.11);
     }
-    .detail-hero{
+
+    .store-hero{
       position:relative;
-      min-height:300px;
+      min-height:360px;
       background:center/cover;
       display:flex;
       align-items:flex-end;
-      padding:24px;
+      padding:28px;
       color:#fff;
     }
-    .detail-hero::after{
+
+    .store-hero::after{
       content:"";
       position:absolute;
       inset:0;
-      background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.68));
+      background:linear-gradient(180deg,rgba(0,0,0,.04),rgba(0,0,0,.72));
     }
-    .detail-hero-content{
+
+    .hero-content{
       position:relative;
       z-index:1;
       width:100%;
     }
-    .detail-badges{
+
+    .badge-row{
       display:flex;
       flex-wrap:wrap;
       gap:8px;
       margin-bottom:14px;
     }
-    .detail-badge{
+
+    .badge{
       display:inline-flex;
       align-items:center;
       min-height:32px;
@@ -915,33 +615,37 @@
       font-weight:1000;
       letter-spacing:-.035em;
     }
-    .detail-title{
+
+    .store-title{
       margin:0;
-      font-size:42px;
-      line-height:1.05;
-      letter-spacing:-.09em;
+      font-size:46px;
+      line-height:1.04;
+      letter-spacing:-.095em;
       font-weight:1000;
       text-shadow:0 4px 20px rgba(0,0,0,.34);
     }
-    .detail-subtitle{
-      margin:10px 0 0;
-      max-width:560px;
-      color:rgba(255,255,255,.84);
+
+    .store-subtitle{
+      margin:11px 0 0;
+      max-width:620px;
+      color:rgba(255,255,255,.86);
       font-size:16px;
-      line-height:1.6;
-      font-weight:700;
+      line-height:1.62;
+      font-weight:750;
       letter-spacing:-.04em;
       text-shadow:0 2px 12px rgba(0,0,0,.32);
     }
-    .detail-actions{
+
+    .quick-actions{
       display:grid;
       grid-template-columns:repeat(3,1fr);
       gap:10px;
       padding:16px;
       background:#fff;
     }
-    .detail-action{
-      min-height:48px;
+
+    .quick-action{
+      min-height:50px;
       border:0;
       border-radius:17px;
       display:flex;
@@ -953,9 +657,10 @@
       font-weight:1000;
       letter-spacing:-.04em;
     }
-    .detail-action.primary{
+
+    .quick-action.primary{
       color:#fff;
-      background:linear-gradient(135deg,var(--detail-primary,#1f8cff),var(--detail-accent,#34d399));
+      background:linear-gradient(135deg,var(--builder-primary),var(--builder-accent));
     }
 
     .widget-stack{
@@ -963,6 +668,7 @@
       display:grid;
       gap:14px;
     }
+
     .store-widget{
       position:relative;
       border-radius:24px;
@@ -971,47 +677,82 @@
       border:1px solid rgba(31,140,255,.10);
       box-shadow:0 12px 32px rgba(31,140,255,.08);
     }
+
     .store-widget h3{
       margin:0 0 12px;
       font-size:20px;
       line-height:1.18;
       letter-spacing:-.065em;
       font-weight:1000;
-      color:var(--ink);
+      color:var(--builder-ink);
     }
+
     .store-widget p{
       margin:0;
-      color:var(--muted);
+      color:#65758c;
       font-size:15px;
       line-height:1.65;
       letter-spacing:-.04em;
       font-weight:650;
     }
+
+    .inline-edit{
+      border-radius:8px;
+    }
+
+    .edit-mode .inline-edit{
+      outline:2px dashed rgba(31,140,255,.35);
+      outline-offset:4px;
+      cursor:text;
+    }
+
+    .widget-handle{
+      display:none;
+      position:absolute;
+      right:12px;
+      top:12px;
+      padding:7px 10px;
+      border-radius:999px;
+      color:#fff;
+      background:rgba(31,140,255,.88);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:-.03em;
+    }
+
+    .edit-mode .widget-handle{
+      display:block;
+    }
+
     .info-grid{
       display:grid;
       grid-template-columns:repeat(2,1fr);
       gap:10px;
     }
+
     .info-chip{
       min-height:58px;
       padding:13px;
       border-radius:18px;
-      background:var(--detail-soft,#eef8ff);
+      background:var(--builder-soft);
       color:#19304d;
       font-size:13px;
       font-weight:900;
       letter-spacing:-.035em;
     }
+
     .info-chip b{
       display:block;
-      color:var(--detail-primary,#1f8cff);
+      color:var(--builder-primary);
       font-size:12px;
       margin-bottom:4px;
     }
+
     .menu-list{
       display:grid;
       gap:9px;
     }
+
     .menu-row{
       display:flex;
       align-items:center;
@@ -1025,231 +766,100 @@
       font-weight:850;
       letter-spacing:-.035em;
     }
+
     .menu-row span:last-child{
-      color:var(--detail-primary,#1f8cff);
+      color:var(--builder-primary);
       font-weight:1000;
     }
+
     .gallery-grid{
       display:grid;
       grid-template-columns:repeat(3,1fr);
       gap:8px;
     }
+
     .gallery-item{
-      min-height:95px;
+      min-height:102px;
       border-radius:18px;
       background:center/cover;
     }
 
-    .editable[contenteditable="true"]{
-      outline:2px dashed rgba(31,140,255,.35);
-      outline-offset:4px;
-      border-radius:8px;
-      cursor:text;
-    }
-    .edit-hint{
-      display:none;
-      position:absolute;
-      top:12px;
-      right:12px;
-      padding:7px 10px;
-      border-radius:999px;
-      color:#fff;
-      background:rgba(31,140,255,.88);
-      font-size:11px;
-      font-weight:900;
-      letter-spacing:-.03em;
-    }
-    .edit-on .edit-hint{display:block}
-
-    .detail-panel{
-      min-width:0;
-      border-left:1px solid rgba(31,140,255,.12);
-      background:#fbfdff;
-      overflow:auto;
-      padding:16px;
-    }
-    .panel-title{
-      margin:0 0 12px;
-      font-size:22px;
-      line-height:1.12;
-      letter-spacing:-.075em;
-      font-weight:1000;
-      color:var(--ink);
-    }
-    .panel-desc{
-      margin:0 0 18px;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.55;
-      letter-spacing:-.035em;
-      font-weight:650;
-    }
-    .panel-section{
-      margin-bottom:20px;
-    }
-    .panel-label{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:9px;
-      color:#304968;
-      font-size:13px;
-      font-weight:1000;
-      letter-spacing:-.035em;
-    }
-    .h-scroll{
-      display:flex;
-      gap:10px;
-      overflow-x:auto;
-      padding:2px 2px 8px;
-      scrollbar-width:none;
-      -webkit-overflow-scrolling:touch;
-    }
-    .h-scroll::-webkit-scrollbar{display:none}
-    .template-card{
-      flex:0 0 132px;
-      height:120px;
-      border:1px solid rgba(31,140,255,.13);
-      border-radius:20px;
-      background:#fff;
-      box-shadow:0 10px 26px rgba(31,140,255,.08);
-      padding:10px;
-      text-align:left;
-    }
-    .template-card.active{
-      border-color:var(--detail-primary,#1f8cff);
-      box-shadow:0 12px 34px rgba(31,140,255,.18);
-    }
-    .template-mini{
-      height:58px;
-      border-radius:14px;
-      margin-bottom:9px;
-      background:linear-gradient(135deg,var(--detail-primary,#1f8cff),var(--detail-accent,#34d399));
-      position:relative;
-      overflow:hidden;
-    }
-    .template-mini::after{
-      content:"";
-      position:absolute;
-      left:10px;
-      right:10px;
-      bottom:10px;
-      height:10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.7);
-    }
-    .template-card b{
-      display:block;
-      color:#18324f;
-      font-size:13px;
-      font-weight:1000;
-      letter-spacing:-.04em;
-    }
-    .template-card span{
-      display:block;
-      margin-top:3px;
-      color:#748299;
-      font-size:11px;
-      font-weight:700;
-      letter-spacing:-.02em;
-    }
-    .palette-card{
-      flex:0 0 106px;
-      height:70px;
-      border:1px solid rgba(31,140,255,.12);
-      border-radius:18px;
-      background:#fff;
-      padding:9px;
-      box-shadow:0 10px 24px rgba(31,140,255,.07);
-    }
-    .palette-card.active{
-      border-color:var(--detail-primary,#1f8cff);
-      box-shadow:0 12px 30px rgba(31,140,255,.16);
-    }
-    .palette-dots{
-      display:flex;
-      gap:5px;
-      margin-bottom:8px;
-    }
-    .palette-dots i{
-      width:19px;
-      height:19px;
-      border-radius:50%;
-    }
-    .palette-card b{
-      display:block;
-      color:#223c5b;
-      font-size:12px;
-      font-weight:1000;
-      letter-spacing:-.035em;
-    }
-    .drawer-pill{
-      position:relative;
-      overflow:hidden;
-      width:100%;
-      min-height:46px;
-      border:0;
-      border-radius:16px;
-      background:linear-gradient(135deg,var(--detail-primary,#1f8cff),var(--detail-accent,#34d399));
-      color:#fff;
-      font-size:14px;
-      font-weight:1000;
-      letter-spacing:-.04em;
-      margin-top:8px;
-    }
-    .panel-note{
-      margin-top:12px;
-      padding:12px;
-      border-radius:16px;
-      background:#f0f8ff;
-      color:#526b86;
-      font-size:12px;
-      line-height:1.5;
-      font-weight:700;
-      letter-spacing:-.03em;
+    .template-clean .store-hero{
+      min-height:240px;
     }
 
-    .mobile-editbar{
+    .template-magazine .store-hero{
+      min-height:430px;
+    }
+
+    .template-compact .store-hero{
+      min-height:210px;
+    }
+
+    .template-menu .widget-menu{
+      order:-1;
+    }
+
+    .template-gallery .widget-gallery{
+      order:-1;
+    }
+
+    .mobile-bottombar{
       display:none;
     }
-
-    @keyframes fadeUp{0%{opacity:0;transform:translateY(20px)}100%{opacity:1;transform:translateY(0)}}
 
     @media(max-width:980px){
-      .stores-grid,.category-store-grid{grid-template-columns:repeat(2,1fr)}
-      .category-grid{grid-template-columns:repeat(4,1fr); gap:10px}
-      .detail-shell{
-        grid-template-columns:1fr;
-        width:calc(100vw - 28px);
-      }
-      .detail-panel{
-        display:none;
-      }
-      .detail-panel.mobile-open{
+      .builder-layout{
         display:block;
-        position:absolute;
-        inset:auto 0 0 0;
-        max-height:56%;
-        border-left:0;
-        border-top:1px solid rgba(31,140,255,.12);
-        border-radius:24px 24px 0 0;
-        box-shadow:0 -18px 44px rgba(10,35,70,.16);
-        z-index:40;
+        padding:16px 14px 86px;
       }
-      .mobile-editbar{
+
+      .control-panel{
+        position:static;
+        height:auto;
+        margin-bottom:16px;
+        border-radius:28px;
+        padding:16px;
+      }
+
+      .panel-head{
+        padding:4px 2px 14px;
+      }
+
+      .panel-head h1{
+        font-size:28px;
+      }
+
+      .desktop-only{
         display:none;
-        position:sticky;
-        bottom:0;
-        z-index:30;
-        grid-template-columns:repeat(4,1fr);
-        gap:8px;
-        padding:10px;
-        background:rgba(255,255,255,.90);
-        border-top:1px solid rgba(31,140,255,.12);
-        backdrop-filter:blur(16px);
       }
-      .edit-on .mobile-editbar{display:grid}
-      .mobile-editbar button{
+
+      .preview-frame{
+        min-height:auto;
+        border-radius:30px;
+      }
+
+      .store-page{
+        padding:12px;
+      }
+
+      .mobile-bottombar{
+        position:fixed;
+        left:0;
+        right:0;
+        bottom:0;
+        z-index:120;
+        display:grid;
+        grid-template-columns:repeat(5,1fr);
+        gap:7px;
+        padding:9px 10px calc(9px + env(safe-area-inset-bottom));
+        background:rgba(255,255,255,.92);
+        border-top:1px solid rgba(31,140,255,.12);
+        backdrop-filter:blur(18px);
+        -webkit-backdrop-filter:blur(18px);
+      }
+
+      .mobile-bottombar button{
         min-height:42px;
         border:0;
         border-radius:14px;
@@ -1259,755 +869,556 @@
         font-weight:1000;
         letter-spacing:-.04em;
       }
+
+      .mobile-bottombar button.primary{
+        color:#fff;
+        background:linear-gradient(135deg,var(--builder-primary),var(--builder-accent));
+      }
+
+      .tab-panel{
+        max-height:0;
+        overflow:hidden;
+        display:block;
+        transition:max-height .22s ease;
+      }
+
+      .tab-panel.mobile-open{
+        max-height:720px;
+      }
     }
 
     @media(max-width:720px){
-      :root{--pageX:16px}
-      .nav{padding:14px var(--pageX)}
-      .brand{font-size:20px}
-      .brand-mark{width:46px;height:46px;border-radius:17px}
-      .nav-links{display:none}
-
-      .hero{padding:36px var(--pageX) 24px}
-      .hero-title{font-size:52px}
-      .hero-desc{font-size:15px;line-height:1.68}
-      .hero-actions{
-        display:flex;
-        flex-direction:row;
-        flex-wrap:nowrap;
-        gap:10px;
-      }
-      .hero-actions .btn{
-        width:auto;
-        flex:0 0 auto;
-        min-height:48px;
-        padding:0 18px;
-        font-size:14px;
+      .nav{
+        padding:13px 14px;
       }
 
-      .video-section{padding:4px 0 40px}
-      .video-frame{
-        height:calc(100vh - 205px);
-        min-height:500px;
-        max-height:760px;
+      .brand-mark{
+        width:38px;
+        height:38px;
+        border-radius:15px;
       }
-      .video-frame iframe{
-        width:177vh;
-        height:100vh;
-        min-width:100vw;
-        min-height:100%;
-      }
-      .video-copy{padding:30px 22px}
-      .video-badge{top:22px;left:22px}
-      .video-copy h2{font-size:40px}
-      .video-copy p{font-size:15px}
 
-      .content{border-radius:30px 30px 0 0;padding-top:22px}
-      .body-section{padding:46px 18px}
-      .section-title{font-size:38px}
-      .section-desc{font-size:16px}
-
-      .floor-panel{margin:22px 0 22px;padding:13px;border-radius:24px}
-      .floor-chip{min-width:58px;height:48px;border-radius:16px}
-
-      .stores-grid,.category-store-grid{grid-template-columns:1fr}
-      .store-photo{height:230px}
-      .store-body{padding:24px}
-      .store-body h3{font-size:28px}
-      .store-body p{font-size:16px}
-
-      .category-grid{
-        grid-template-columns:repeat(4,1fr);
-        gap:8px;
+      .brand-text b{
+        font-size:17px;
       }
-      .cat{
-        min-height:88px;
-        border-radius:17px;
-        padding:10px 7px;
+
+      .brand-text span{
+        display:none;
       }
-      .cat-icon{
-        width:29px;
-        height:29px;
-        border-radius:11px;
-        font-size:14px;
-        margin-bottom:14px;
+
+      .top-actions .top-btn:not(.primary){
+        display:none;
       }
-      .cat h3{
+
+      .top-btn{
+        height:40px;
+        padding:0 13px;
         font-size:12px;
-        line-height:1.15;
-        letter-spacing:-.055em;
-        margin-bottom:0;
       }
-      .cat p{display:none}
 
-      .category-results{
-        margin-top:22px;
-        padding:18px;
+      .builder-layout{
+        padding:14px 10px 84px;
+      }
+
+      .control-panel{
         border-radius:26px;
       }
-      .category-result-head h3{font-size:30px}
 
-      .register-section{padding:0 18px 58px}
-      .register-card{display:block;padding:24px 20px;border-radius:26px}
-      .register-card h2{font-size:28px}
-      .register-btn{width:100%;margin-top:20px}
+      .tabbar{
+        grid-template-columns:repeat(4,1fr);
+        gap:6px;
+        padding:6px;
+      }
 
-      .footer-inner{display:block}
+      .tab-btn{
+        height:38px;
+        border-radius:14px;
+        font-size:11px;
+      }
 
-      .detail-overlay{
-        background:rgba(9,23,42,.30);
-        backdrop-filter:blur(6px);
+      .template-card{
+        flex-basis:138px;
+        height:130px;
       }
-      .detail-shell{
-        left:0;
-        right:0;
-        bottom:0;
-        top:auto;
-        width:100%;
-        height:92vh;
-        transform:translateY(100%);
-        border-radius:28px 28px 0 0;
-        display:block;
+
+      .palette-grid{
+        grid-template-columns:repeat(2,1fr);
       }
-      .detail-overlay.open .detail-shell{
-        transform:translateY(0);
+
+      .store-shell{
+        border-radius:28px;
       }
-      .detail-preview{
-        height:100%;
+
+      .store-hero{
+        min-height:330px;
+        padding:22px;
       }
-      .detail-toolbar{
-        padding:12px 14px;
+
+      .store-title{
+        font-size:36px;
       }
-      .detail-inner{
-        padding:12px;
-        padding-bottom:86px;
-      }
-      .detail-card{
-        border-radius:26px;
-      }
-      .detail-hero{
-        min-height:300px;
-        padding:20px;
-      }
-      .detail-title{
-        font-size:34px;
-      }
-      .detail-subtitle{
+
+      .store-subtitle{
         font-size:15px;
       }
-      .detail-actions{
+
+      .quick-actions{
         grid-template-columns:1fr 1fr;
       }
-      .detail-actions .detail-action:nth-child(3){
+
+      .quick-actions .quick-action:nth-child(3){
         grid-column:1/-1;
       }
-      .widget-stack{
-        padding:12px;
-      }
+
       .info-grid{
         grid-template-columns:1fr;
       }
-      .gallery-grid{
-        grid-template-columns:repeat(3,1fr);
-      }
-      .gallery-item{
-        min-height:80px;
-      }
-    }
 
-    @media(max-width:420px){
-      .hero-actions{gap:8px}
-      .hero-actions .btn{
-        min-height:46px;
-        padding:0 14px;
-        font-size:13px;
+      .gallery-item{
+        min-height:82px;
+      }
+
+      .preview-top{
+        padding:12px;
+      }
+
+      .preview-actions{
+        gap:6px;
+      }
+
+      .mini-btn{
+        min-height:36px;
+        padding:0 10px;
+        font-size:11px;
       }
     }
 
     @media(prefers-reduced-motion:reduce){
-      *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+      *,*::before,*::after{
+        animation:none!important;
+        transition:none!important;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="page">
+  <div class="builder-page">
     <header class="topbar">
       <nav class="nav">
-        <a href="#top" class="brand">
+        <a href="#" class="brand">
           <span class="brand-mark">26</span>
-          <span>26빌딩 온라인</span>
+          <span class="brand-text">
+            <b>업체 상세 빌더</b>
+            <span>입점업체 미니페이지를 직접 꾸미는 공간</span>
+          </span>
         </a>
-        <div class="nav-links">
-          <a href="#stores">가게·사무실</a>
-          <a href="#categories">업종별 보기</a>
-          <a class="nav-cta" href="/register">업체등록</a>
+
+        <div class="top-actions">
+          <button class="top-btn" type="button" id="previewBtn">미리보기</button>
+          <button class="top-btn primary" type="button" id="saveBtnTop">저장하기</button>
         </div>
       </nav>
     </header>
 
-    <main id="top">
-      <section class="hero">
-        <div class="eyebrow"><span class="dot"></span> 군산 나운동 · 동아26빌딩</div>
-        <h1 class="hero-title"><span class="grad">나운동의 중심,</span><br>26빌딩을 한눈에</h1>
-        <p class="hero-desc">층마다 흩어져 있던 가게와 사무실 정보를 이제 한곳에서 확인할 수 있습니다.</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#stores">가게·사무실 보기</a>
-          <a class="btn btn-secondary" href="#categories">업종별 보기</a>
+    <main class="builder-layout">
+      <aside class="control-panel">
+        <div class="panel-head">
+          <div class="kicker">STORE PAGE BUILDER</div>
+          <h1>상세화면을<br />직접 꾸미세요</h1>
+          <p>
+            템플릿, 색상, 위젯을 고르고 텍스트는 화면에서 바로 수정합니다.
+          </p>
+        </div>
+
+        <div class="tabbar">
+          <button class="tab-btn active" type="button" data-tab="template">템플릿</button>
+          <button class="tab-btn" type="button" data-tab="palette">색상</button>
+          <button class="tab-btn" type="button" data-tab="content">글수정</button>
+          <button class="tab-btn" type="button" data-tab="widget">위젯</button>
+        </div>
+
+        <section class="tab-panel active mobile-open" data-panel="template">
+          <div class="section-label">사진·글 구성 템플릿 <span>20개</span></div>
+          <div class="h-scroll" id="templateList"></div>
+        </section>
+
+        <section class="tab-panel" data-panel="palette">
+          <div class="section-label">색상 팔레트 <span>50개</span></div>
+          <div class="palette-grid" id="paletteList"></div>
+        </section>
+
+        <section class="tab-panel" data-panel="content">
+          <div class="section-label">기본 정보 <span>입력 즉시 반영</span></div>
+          <div class="field-list">
+            <div class="field">
+              <label>업체명</label>
+              <input id="fieldName" value="26 커피라운지" />
+            </div>
+            <div class="field">
+              <label>한 줄 소개</label>
+              <textarea id="fieldSummary">나운동 26빌딩 안의 조용한 커피 휴식 공간입니다.</textarea>
+            </div>
+            <div class="field">
+              <label>층/호실</label>
+              <input id="fieldRoom" value="1F 101호" />
+            </div>
+            <div class="field">
+              <label>전화번호</label>
+              <input id="fieldPhone" value="063-000-0000" />
+            </div>
+            <div class="field">
+              <label>운영시간</label>
+              <input id="fieldHours" value="매일 10:00 - 20:00" />
+            </div>
+            <div class="field">
+              <label>주요 서비스</label>
+              <input id="fieldService" value="커피 · 디저트 · 포장 가능" />
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel" data-panel="widget">
+          <div class="section-label">위젯 선택 <span>보이기/숨기기</span></div>
+          <div class="widget-list" id="widgetList"></div>
+        </section>
+      </aside>
+
+      <section class="preview-area">
+        <div class="preview-frame">
+          <div class="preview-top">
+            <div class="preview-mode">
+              <span class="preview-dot"></span>
+              <span id="modeText">편집 모드</span>
+            </div>
+            <div class="preview-actions">
+              <button class="mini-btn" type="button" id="editModeBtn">편집 ON</button>
+              <button class="mini-btn primary" type="button" id="saveBtnPreview">저장</button>
+            </div>
+          </div>
+
+          <div class="store-page" id="storePage">
+            <article class="store-shell" id="storeShell">
+              <section class="store-hero" id="storeHero">
+                <div class="hero-content">
+                  <div class="badge-row">
+                    <span class="badge" id="storeCategory">음식·카페</span>
+                    <span class="badge" id="storeRoom">1F 101호</span>
+                  </div>
+                  <h2 class="store-title inline-edit" id="storeName" contenteditable="true">26 커피라운지</h2>
+                  <p class="store-subtitle inline-edit" id="storeSummary" contenteditable="true">나운동 26빌딩 안의 조용한 커피 휴식 공간입니다.</p>
+                </div>
+              </section>
+
+              <section class="quick-actions">
+                <a class="quick-action primary" id="callLink" href="tel:063-000-0000">전화하기</a>
+                <button class="quick-action" type="button">위치보기</button>
+                <button class="quick-action" type="button">공유하기</button>
+              </section>
+
+              <div class="widget-stack" id="widgetStack">
+                <section class="store-widget widget-info" data-widget="info">
+                  <span class="widget-handle">편집 가능</span>
+                  <h3>방문 전 확인</h3>
+                  <div class="info-grid">
+                    <div class="info-chip"><b>운영시간</b><span class="inline-edit" id="storeHours" contenteditable="true">매일 10:00 - 20:00</span></div>
+                    <div class="info-chip"><b>층/호실</b><span class="inline-edit" id="storeRoomInfo" contenteditable="true">1F 101호</span></div>
+                    <div class="info-chip"><b>문의전화</b><span class="inline-edit" id="storePhone" contenteditable="true">063-000-0000</span></div>
+                    <div class="info-chip"><b>주요서비스</b><span class="inline-edit" id="storeService" contenteditable="true">커피 · 디저트 · 포장 가능</span></div>
+                  </div>
+                </section>
+
+                <section class="store-widget widget-menu" data-widget="menu">
+                  <span class="widget-handle">편집 가능</span>
+                  <h3>대표 메뉴·서비스</h3>
+                  <div class="menu-list">
+                    <div class="menu-row"><span class="inline-edit" contenteditable="true">아메리카노</span><span class="inline-edit" contenteditable="true">3,500원</span></div>
+                    <div class="menu-row"><span class="inline-edit" contenteditable="true">카페라떼</span><span class="inline-edit" contenteditable="true">4,000원</span></div>
+                    <div class="menu-row"><span class="inline-edit" contenteditable="true">디저트 세트</span><span class="inline-edit" contenteditable="true">7,000원</span></div>
+                  </div>
+                </section>
+
+                <section class="store-widget widget-notice" data-widget="notice">
+                  <span class="widget-handle">편집 가능</span>
+                  <h3>공지사항</h3>
+                  <p class="inline-edit" contenteditable="true">평일 오전 방문 시 비교적 여유롭게 이용하실 수 있습니다.</p>
+                </section>
+
+                <section class="store-widget widget-intro" data-widget="intro">
+                  <span class="widget-handle">편집 가능</span>
+                  <h3>업체 소개</h3>
+                  <p class="inline-edit" contenteditable="true">26 커피라운지는 26빌딩 안에서 편하게 들를 수 있는 작은 휴식 공간입니다. 커피와 디저트, 간단한 포장 주문을 이용할 수 있습니다.</p>
+                </section>
+
+                <section class="store-widget widget-gallery" data-widget="gallery">
+                  <span class="widget-handle">사진 교체 예정</span>
+                  <h3>사진</h3>
+                  <div class="gallery-grid">
+                    <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=700&q=80')"></div>
+                    <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=700&q=80')"></div>
+                    <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1580281657521-7a7e0f85e0b9?auto=format&fit=crop&w=700&q=80')"></div>
+                  </div>
+                </section>
+              </div>
+            </article>
+          </div>
         </div>
       </section>
-
-      <section class="video-section" aria-label="26빌딩 드론 영상">
-        <div class="video-frame" id="videoFrame">
-          <iframe
-            src="https://www.youtube.com/embed/7mAUxuMU2WQ?autoplay=1&mute=1&loop=1&playlist=7mAUxuMU2WQ&controls=0&playsinline=1&rel=0&modestbranding=1"
-            allow="autoplay; fullscreen"
-            frameborder="0">
-          </iframe>
-          <div class="video-overlay"></div>
-          <div class="video-copy">
-            <div class="video-badge"><span>26</span> Drone View</div>
-            <h2>나운동을 오래 지켜온<br>동아26빌딩</h2>
-            <p>드론으로 본 26빌딩 위에 층별 안내와 업체 정보를 더합니다.</p>
-          </div>
-        </div>
-      </section>
-
-      <div class="content">
-        <section id="stores" class="body-section">
-          <div class="section-head">
-            <div class="kicker">STORES & OFFICES</div>
-            <h2 class="section-title">가게·사무실 보기</h2>
-            <p class="section-desc">층별로 26빌딩 안의 가게와 사무실 정보를 확인할 수 있습니다.</p>
-          </div>
-
-          <div class="floor-panel">
-            <div class="floor-title">
-              <b>층 선택</b>
-              <span>옆으로 밀어서 층을 선택하세요</span>
-            </div>
-            <div class="floor-scroll">
-              <button class="floor-chip active" type="button" data-floor="all">전체</button>
-              <button class="floor-chip" type="button" data-floor="B1">B1</button>
-              <button class="floor-chip" type="button" data-floor="1F">1F</button>
-              <button class="floor-chip" type="button" data-floor="2F">2F</button>
-              <button class="floor-chip" type="button" data-floor="3F">3F</button>
-              <button class="floor-chip" type="button" data-floor="4F">4F</button>
-              <button class="floor-chip" type="button" data-floor="5F">5F</button>
-              <button class="floor-chip" type="button" data-floor="6F">6F</button>
-              <button class="floor-chip" type="button" data-floor="7F">7F</button>
-              <button class="floor-chip" type="button" data-floor="8F">8F</button>
-              <button class="floor-chip" type="button" data-floor="9F">9F</button>
-              <button class="floor-chip" type="button" data-floor="10F">10F</button>
-              <button class="floor-chip" type="button" data-floor="11F">11F</button>
-              <button class="floor-chip" type="button" data-floor="12F">12F</button>
-              <button class="floor-chip" type="button" data-floor="13F">13F</button>
-              <button class="floor-chip" type="button" data-floor="14F">14F</button>
-              <button class="floor-chip" type="button" data-floor="15F">15F</button>
-              <button class="floor-chip" type="button" data-floor="16F">16F</button>
-              <button class="floor-chip" type="button" data-floor="17F">17F</button>
-              <button class="floor-chip" type="button" data-floor="18F">18F</button>
-              <button class="floor-chip" type="button" data-floor="19F">19F</button>
-              <button class="floor-chip" type="button" data-floor="20F">20F</button>
-            </div>
-          </div>
-
-          <div class="stores-grid" id="storeGrid"></div>
-          <div class="empty" id="emptyMessage">선택한 층에 표시할 업체 정보를 준비하고 있습니다.</div>
-        </section>
-
-        <section id="categories" class="body-section category-section">
-          <div class="section-head">
-            <div class="kicker">CATEGORY</div>
-            <h2 class="section-title">업종별 보기</h2>
-            <p class="section-desc">업종을 선택하면 해당 업체가 아래에 표시됩니다.</p>
-          </div>
-
-          <div class="category-grid">
-            <a class="cat food category-card" href="#categoryResults" data-category="food"><div class="cat-icon">🍽️</div><h3>음식·카페</h3><p>식사, 커피, 간식</p></a>
-            <a class="cat health category-card" href="#categoryResults" data-category="health"><div class="cat-icon">🏥</div><h3>병원·건강</h3><p>병원, 약국, 건강관리</p></a>
-            <a class="cat edu category-card" href="#categoryResults" data-category="edu"><div class="cat-icon">📚</div><h3>학원·교육</h3><p>학원, 교육 서비스</p></a>
-            <a class="cat office category-card" href="#categoryResults" data-category="office"><div class="cat-icon">💼</div><h3>사무실</h3><p>전문서비스, 사무실</p></a>
-            <a class="cat beauty category-card" href="#categoryResults" data-category="beauty"><div class="cat-icon">✨</div><h3>미용·뷰티</h3><p>미용, 피부, 네일</p></a>
-            <a class="cat life category-card" href="#categoryResults" data-category="life"><div class="cat-icon">🛠️</div><h3>생활서비스</h3><p>수리, 생활 편의</p></a>
-            <a class="cat shop category-card" href="#categoryResults" data-category="shop"><div class="cat-icon">🛍️</div><h3>판매·소매</h3><p>상품 판매, 쇼핑</p></a>
-            <a class="cat etc category-card" href="#categoryResults" data-category="etc"><div class="cat-icon">➕</div><h3>기타</h3><p>기타 업체</p></a>
-          </div>
-
-          <div class="category-results" id="categoryResults">
-            <div class="category-result-head">
-              <div class="kicker">CATEGORY RESULT</div>
-              <h3 id="categoryResultTitle">음식·카페</h3>
-              <p id="categoryResultDesc">음식·카페 업종의 업체를 확인할 수 있습니다.</p>
-            </div>
-            <div class="category-store-grid" id="categoryStoreGrid"></div>
-          </div>
-        </section>
-
-        <section class="register-section">
-          <div class="register-card">
-            <div>
-              <h2>26빌딩 입점업체이신가요?</h2>
-              <p>업체 정보 등록·수정은 전용 페이지에서 신청할 수 있습니다.</p>
-            </div>
-            <a class="register-btn" href="/register">업체등록</a>
-          </div>
-        </section>
-      </div>
     </main>
-
-    <footer>
-      <div class="footer-inner">
-        <div>
-          <div class="footer-brand">26빌딩 온라인</div>
-          <div class="footer-text">군산 나운동 동아26빌딩의 층별 업체 안내.</div>
-        </div>
-        <div class="footer-text">26 Building Online</div>
-      </div>
-    </footer>
   </div>
 
-  <div class="detail-overlay" id="detailOverlay" aria-hidden="true">
-    <div class="detail-shell" role="dialog" aria-modal="true" aria-label="업체 상세보기">
-      <div class="detail-preview" id="detailPreview">
-        <div class="detail-toolbar">
-          <div class="detail-mode">
-            <span id="detailModeText">보기 모드</span>
-            <button class="edit-toggle" id="editToggle" type="button">편집</button>
-          </div>
-          <button class="detail-close" id="detailClose" type="button" aria-label="닫기">×</button>
-        </div>
-
-        <div class="detail-inner">
-          <div class="detail-card" id="detailCard">
-            <div class="detail-hero" id="detailHero">
-              <div class="detail-hero-content">
-                <div class="detail-badges">
-                  <span class="detail-badge" id="detailCategory">음식·카페</span>
-                  <span class="detail-badge" id="detailFloor">1F</span>
-                </div>
-                <h2 class="detail-title editable" id="detailName">26 커피라운지</h2>
-                <p class="detail-subtitle editable" id="detailSummary">나운동 26빌딩 안의 조용한 커피 공간입니다.</p>
-              </div>
-            </div>
-
-            <div class="detail-actions">
-              <a class="detail-action primary" id="detailCall" href="tel:01000000000">전화하기</a>
-              <button class="detail-action" type="button">위치보기</button>
-              <button class="detail-action" type="button">공유하기</button>
-            </div>
-
-            <div class="widget-stack" id="widgetStack">
-              <section class="store-widget" data-widget="info">
-                <span class="edit-hint">인라인 편집 가능</span>
-                <h3>방문 전 확인</h3>
-                <div class="info-grid">
-                  <div class="info-chip"><b>운영시간</b><span class="editable" id="detailHours">매일 10:00 - 20:00</span></div>
-                  <div class="info-chip"><b>층/호실</b><span class="editable" id="detailRoom">1F 101호</span></div>
-                  <div class="info-chip"><b>문의전화</b><span class="editable" id="detailPhone">063-000-0000</span></div>
-                  <div class="info-chip"><b>주요서비스</b><span class="editable" id="detailService">커피 · 디저트 · 포장</span></div>
-                </div>
-              </section>
-
-              <section class="store-widget" data-widget="menu">
-                <span class="edit-hint">인라인 편집 가능</span>
-                <h3>대표 메뉴·서비스</h3>
-                <div class="menu-list" id="detailMenu"></div>
-              </section>
-
-              <section class="store-widget" data-widget="intro">
-                <span class="edit-hint">인라인 편집 가능</span>
-                <h3>업체 소개</h3>
-                <p class="editable" id="detailDescription">편하게 들를 수 있는 26빌딩 안의 공간입니다. 방문 전 운영시간과 위치를 확인해 주세요.</p>
-              </section>
-
-              <section class="store-widget" data-widget="gallery">
-                <h3>사진</h3>
-                <div class="gallery-grid" id="detailGallery"></div>
-              </section>
-            </div>
-
-            <div class="mobile-editbar" id="mobileEditbar">
-              <button type="button" data-open-panel="template">템플릿</button>
-              <button type="button" data-open-panel="palette">색상</button>
-              <button type="button" data-open-panel="widget">위젯</button>
-              <button type="button" id="mobileSaveBtn">저장</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <aside class="detail-panel" id="detailPanel">
-        <h3 class="panel-title">상세 위젯 편집</h3>
-        <p class="panel-desc">템플릿과 색상을 고르고, 업체명·소개·운영시간은 화면에서 바로 수정합니다.</p>
-
-        <div class="panel-section" data-panel-section="template">
-          <div class="panel-label">템플릿 <span>5개</span></div>
-          <div class="h-scroll" id="templateScroll"></div>
-        </div>
-
-        <div class="panel-section" data-panel-section="palette">
-          <div class="panel-label">색상 팔레트 <span>10개</span></div>
-          <div class="h-scroll" id="paletteScroll"></div>
-        </div>
-
-        <div class="panel-section" data-panel-section="widget">
-          <div class="panel-label">위젯 구성</div>
-          <button class="drawer-pill" type="button" data-toggle-widget="menu">메뉴 위젯 보이기/숨기기</button>
-          <button class="drawer-pill" type="button" data-toggle-widget="gallery">사진 위젯 보이기/숨기기</button>
-          <div class="panel-note">
-            1차 구조용입니다. 위젯 추가/삭제/순서변경은 다음 단계에서 확장하면 됩니다.
-          </div>
-        </div>
-
-        <button class="drawer-pill" type="button" id="saveDetailBtn">저장</button>
-      </aside>
-    </div>
+  <div class="mobile-bottombar">
+    <button type="button" data-mobile-tab="template">템플릿</button>
+    <button type="button" data-mobile-tab="palette">색상</button>
+    <button type="button" data-mobile-tab="content">글수정</button>
+    <button type="button" data-mobile-tab="widget">위젯</button>
+    <button type="button" class="primary" id="saveBtnMobile">저장</button>
   </div>
 
   <script>
-    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
-    window.addEventListener("load", function(){
-      if (!location.hash) window.scrollTo(0, 0);
-      var vf = document.getElementById("videoFrame");
-      if (vf && (location.protocol === "file:" || location.protocol === "content:")) {
-        vf.classList.add("local-fallback");
-      }
-    });
-
-    const stores = [
-      {id:"coffee-lounge", name:"26 커피라운지", floor:"1F", room:"101호", cat:"food", category:"음식·카페", tag:"음식·카페", photo:"p1", desc:"커피와 간단한 디저트를 즐길 수 있는 편안한 휴식 공간입니다.", phone:"063-000-0000", hours:"매일 10:00 - 20:00", service:"커피 · 디저트 · 포장", menu:[["아메리카노","3,500원"],["카페라떼","4,000원"],["디저트 세트","7,000원"]]},
-      {id:"dining", name:"26 다이닝", floor:"B1", room:"B101호", cat:"food", category:"음식·카페", tag:"음식점", photo:"p5", desc:"건물 이용객과 주변 직장인을 위한 식사 공간입니다.", phone:"063-000-0000", hours:"평일 11:00 - 20:00", service:"식사 · 포장 · 단체문의", menu:[["오늘의 식사","9,000원"],["정식 메뉴","12,000원"],["포장 도시락","8,000원"]]},
-      {id:"snack", name:"나운 스낵바", floor:"1F", room:"102호", cat:"food", category:"음식·카페", tag:"간식·분식", photo:"p7", desc:"가볍게 들러 간식과 분식을 즐길 수 있는 점포 예시입니다.", phone:"063-000-0000", hours:"10:30 - 19:30", service:"분식 · 간식 · 음료", menu:[["떡볶이","4,000원"],["김밥","3,500원"],["튀김 세트","5,000원"]]},
-      {id:"sweet", name:"달콤한 오후", floor:"2F", room:"203호", cat:"food", category:"음식·카페", tag:"디저트", photo:"p8", desc:"케이크, 음료, 작은 모임을 소개하는 디저트 카페입니다.", phone:"063-000-0000", hours:"12:00 - 21:00", service:"케이크 · 음료 · 예약", menu:[["조각케이크","6,000원"],["시그니처 티","5,500원"],["예약 케이크","문의"]]},
-      {id:"clinic", name:"26 메디컬클리닉", floor:"4F", room:"401호", cat:"health", category:"병원·건강", tag:"병원·건강", photo:"p7", desc:"방문 전 진료시간과 위치를 확인할 수 있는 병원 카드 예시입니다.", phone:"063-000-0000", hours:"평일 09:00 - 18:00", service:"진료 · 상담 · 예약", menu:[["일반 진료","문의"],["건강 상담","문의"],["예약 문의","전화"]]},
-      {id:"pharmacy", name:"나운 건강약국", floor:"1F", room:"104호", cat:"health", category:"병원·건강", tag:"약국·상담", photo:"p8", desc:"처방, 상담, 생활 건강용품 정보를 보여주는 카드 예시입니다.", phone:"063-000-0000", hours:"09:00 - 20:00", service:"처방 · 상담 · 건강용품", menu:[["처방 조제","문의"],["건강 상담","문의"],["상비약","매장문의"]]},
-      {id:"care", name:"바른몸 케어센터", floor:"6F", room:"602호", cat:"health", category:"병원·건강", tag:"운동·관리", photo:"p15", desc:"체형 관리와 운동 상담 서비스를 소개하는 더미 업체입니다.", phone:"063-000-0000", hours:"10:00 - 21:00", service:"체형관리 · 운동상담", menu:[["1회 체험","문의"],["관리 프로그램","문의"],["상담 예약","전화"]]},
-      {id:"study", name:"26 스터디랩", floor:"7F", room:"701호", cat:"edu", category:"학원·교육", tag:"학원·교육", photo:"p3", desc:"학생과 직장인을 위한 학습공간, 교육 프로그램을 소개합니다.", phone:"063-000-0000", hours:"13:00 - 22:00", service:"학습공간 · 교육상담", menu:[["학습 상담","무료"],["월 이용권","문의"],["집중반","문의"]]},
-      {id:"english", name:"나운 잉글리시", floor:"8F", room:"803호", cat:"edu", category:"학원·교육", tag:"어학·학습", photo:"p12", desc:"어학 수업과 학습 상담 정보를 보여주는 학원 카드 예시입니다.", phone:"063-000-0000", hours:"14:00 - 21:00", service:"어학수업 · 상담", menu:[["초등 영어","문의"],["중등 영어","문의"],["레벨테스트","예약"]]},
-      {id:"exam", name:"대학로 입시센터", floor:"10F", room:"1001호", cat:"edu", category:"학원·교육", tag:"입시·상담", photo:"p16", desc:"상담 예약과 교육 프로그램을 안내하는 더미 업체입니다.", phone:"063-000-0000", hours:"15:00 - 22:00", service:"입시상담 · 교육", menu:[["입시 상담","예약"],["자기소개서","문의"],["진학 컨설팅","문의"]]},
-      {id:"office-consult", name:"나운 상담오피스", floor:"5F", room:"501호", cat:"office", category:"사무실·전문서비스", tag:"전문서비스", photo:"p2", desc:"상담, 문서, 업무 지원 서비스를 제공하는 사무실 소개 예시입니다.", phone:"063-000-0000", hours:"평일 10:00 - 18:00", service:"상담 · 문서 · 업무지원", menu:[["기본 상담","문의"],["문서 지원","문의"],["예약 상담","전화"]]},
-      {id:"biz-studio", name:"비즈니스 스튜디오", floor:"9F", room:"902호", cat:"office", category:"사무실·전문서비스", tag:"사무실", photo:"p4", desc:"소규모 사무실, 회의, 상담 업무에 적합한 공간입니다.", phone:"063-000-0000", hours:"예약제", service:"회의실 · 상담실", menu:[["회의실 대관","문의"],["상담실 예약","문의"],["월 이용","문의"]]},
-      {id:"tax", name:"26 세무회계", floor:"11F", room:"1102호", cat:"office", category:"사무실·전문서비스", tag:"세무·회계", photo:"p9", desc:"세무, 회계, 사업자 상담 정보를 보여주는 전문서비스 카드입니다.", phone:"063-000-0000", hours:"평일 09:30 - 18:00", service:"세무 · 회계 · 상담", menu:[["사업자 상담","문의"],["기장 상담","문의"],["세무 신고","문의"]]},
-      {id:"work-lounge", name:"나운 워크라운지", floor:"12F", room:"1201호", cat:"office", category:"사무실·전문서비스", tag:"공유오피스", photo:"p14", desc:"업무공간과 회의실 정보를 소개하는 사무공간 예시입니다.", phone:"063-000-0000", hours:"08:00 - 22:00", service:"공유오피스 · 회의실", menu:[["데이패스","문의"],["회의실","문의"],["월 멤버십","문의"]]},
-      {id:"hair", name:"라온헤어", floor:"2F", room:"205호", cat:"beauty", category:"미용·뷰티", tag:"미용·뷰티", photo:"p10", desc:"헤어 시술과 예약 정보를 보여주는 미용실 카드 예시입니다.", phone:"063-000-0000", hours:"10:00 - 20:00", service:"컷 · 펌 · 염색", menu:[["커트","문의"],["펌","문의"],["염색","문의"]]},
-      {id:"beauty-room", name:"글로우 뷰티룸", floor:"3F", room:"305호", cat:"beauty", category:"미용·뷰티", tag:"네일·피부", photo:"p11", desc:"네일, 피부관리, 예약 상담을 소개하는 뷰티 업체입니다.", phone:"063-000-0000", hours:"예약제", service:"네일 · 피부관리", menu:[["기본 네일","문의"],["피부관리","문의"],["예약 상담","전화"]]},
-      {id:"body", name:"바디케어 스튜디오", floor:"6F", room:"603호", cat:"beauty", category:"미용·뷰티", tag:"관리·케어", photo:"p15", desc:"관리 프로그램과 상담 정보를 보여주는 더미 카드입니다.", phone:"063-000-0000", hours:"11:00 - 21:00", service:"바디케어 · 상담", menu:[["1회 관리","문의"],["패키지","문의"],["상담 예약","전화"]]},
-      {id:"life-center", name:"생활편의 센터", floor:"3F", room:"301호", cat:"life", category:"생활서비스", tag:"생활서비스", photo:"p6", desc:"예약, 문의, 운영시간 등 방문자에게 필요한 정보를 보여줍니다.", phone:"063-000-0000", hours:"10:00 - 19:00", service:"생활편의 · 예약", menu:[["일반 문의","전화"],["예약 대행","문의"],["방문 서비스","문의"]]},
-      {id:"repair", name:"26 수리센터", floor:"B1", room:"B103호", cat:"life", category:"생활서비스", tag:"수리·관리", photo:"p15", desc:"간단한 수리와 생활 편의 서비스를 안내하는 카드 예시입니다.", phone:"063-000-0000", hours:"10:00 - 18:00", service:"수리 · 점검", menu:[["간단 수리","문의"],["점검","문의"],["예약","전화"]]},
-      {id:"support", name:"나운 생활지원", floor:"4F", room:"403호", cat:"life", category:"생활서비스", tag:"예약·대행", photo:"p13", desc:"방문 예약, 대행, 문의 서비스를 보여주는 생활서비스 업체입니다.", phone:"063-000-0000", hours:"평일 10:00 - 18:00", service:"예약 · 대행 · 문의", menu:[["예약 대행","문의"],["생활 지원","문의"],["상담","전화"]]},
-      {id:"select", name:"26 셀렉트샵", floor:"1F", room:"105호", cat:"shop", category:"판매·소매", tag:"판매·소매", photo:"p13", desc:"생활용품과 소형 상품을 판매하는 매장 카드 예시입니다.", phone:"063-000-0000", hours:"10:00 - 20:00", service:"생활용품 · 소형상품", menu:[["생활용품","매장문의"],["선물상품","매장문의"],["주문문의","전화"]]},
-      {id:"flower", name:"나운 플라워", floor:"1F", room:"106호", cat:"shop", category:"판매·소매", tag:"꽃·선물", photo:"p8", desc:"꽃다발, 선물, 예약 주문 정보를 보여주는 더미 업체입니다.", phone:"063-000-0000", hours:"10:00 - 19:00", service:"꽃다발 · 선물 · 예약", menu:[["꽃다발","문의"],["화분","문의"],["예약 주문","전화"]]},
-      {id:"office-store", name:"오피스 스토어", floor:"5F", room:"503호", cat:"shop", category:"판매·소매", tag:"문구·사무", photo:"p14", desc:"문구, 사무용품, 소모품 판매 정보를 소개합니다.", phone:"063-000-0000", hours:"09:30 - 18:30", service:"문구 · 사무용품", menu:[["문구류","매장문의"],["소모품","매장문의"],["대량구매","문의"]]},
-      {id:"project-room", name:"26 프로젝트룸", floor:"13F", room:"1301호", cat:"etc", category:"기타", tag:"기타", photo:"p16", desc:"행사, 모임, 프로젝트 공간 정보를 보여주는 더미 카드입니다.", phone:"063-000-0000", hours:"예약제", service:"행사 · 모임 · 프로젝트", menu:[["공간 대관","문의"],["모임 예약","문의"],["프로젝트룸","문의"]]},
-      {id:"lounge", name:"나운 라운지", floor:"15F", room:"1502호", cat:"etc", category:"기타", tag:"상담공간", photo:"p14", desc:"예약제 상담과 소규모 모임을 위한 공간 예시입니다.", phone:"063-000-0000", hours:"예약제", service:"상담 · 모임", menu:[["상담 공간","문의"],["소모임","문의"],["예약","전화"]]},
-      {id:"content-room", name:"26 콘텐츠룸", floor:"16F", room:"1601호", cat:"etc", category:"기타", tag:"스튜디오", photo:"p9", desc:"촬영, 콘텐츠 제작, 소규모 작업실 정보를 보여주는 더미 업체입니다.", phone:"063-000-0000", hours:"예약제", service:"촬영 · 콘텐츠 제작", menu:[["촬영 공간","문의"],["콘텐츠룸","문의"],["예약","전화"]]}
-    ];
-
-    const catText = {
-      food:["음식·카페","음식·카페 업종의 업체를 확인할 수 있습니다."],
-      health:["병원·건강","병원·건강 업종의 업체를 확인할 수 있습니다."],
-      edu:["학원·교육","학원·교육 업종의 업체를 확인할 수 있습니다."],
-      office:["사무실·전문서비스","사무실·전문서비스 업종의 업체를 확인할 수 있습니다."],
-      beauty:["미용·뷰티","미용·뷰티 업종의 업체를 확인할 수 있습니다."],
-      life:["생활서비스","생활서비스 업종의 업체를 확인할 수 있습니다."],
-      shop:["판매·소매","판매·소매 업종의 업체를 확인할 수 있습니다."],
-      etc:["기타","기타 업종의 업체를 확인할 수 있습니다."]
-    };
-
     const templates = [
-      {id:"cover", name:"커버형", desc:"대표사진 크게"},
-      {id:"clean", name:"클린형", desc:"정보 우선"},
-      {id:"magazine", name:"매거진형", desc:"사진+스토리"},
-      {id:"menu", name:"메뉴강조", desc:"메뉴 먼저"},
-      {id:"compact", name:"명함형", desc:"짧고 빠르게"}
+      ["cover","큰 대표사진형","대표사진과 소개를 크게 보여줍니다."],
+      ["clean","클린 정보형","정보를 먼저 정리해 보여줍니다."],
+      ["magazine","매거진 커버형","브랜드 느낌을 크게 보여줍니다."],
+      ["menu","메뉴 강조형","대표 메뉴를 위로 올립니다."],
+      ["gallery","사진 갤러리형","사진을 먼저 보여줍니다."],
+      ["compact","명함형","짧고 빠르게 보여줍니다."],
+      ["story","스토리형","소개글을 중심으로 구성합니다."],
+      ["notice","공지 먼저형","공지와 안내를 먼저 보여줍니다."],
+      ["coupon","이벤트형","쿠폰/이벤트 확장용입니다."],
+      ["premium","프리미엄형","여백을 크게 쓰는 구성입니다."],
+      ["cafe","카페형","메뉴와 사진 중심입니다."],
+      ["academy","학원형","수업/상담 안내 중심입니다."],
+      ["clinic","병원형","진료시간과 전화 중심입니다."],
+      ["beauty","뷰티형","가격표와 갤러리 중심입니다."],
+      ["office","사무실형","상담/전문서비스 중심입니다."],
+      ["shop","판매형","상품/문의 중심입니다."],
+      ["simple","초간단형","핵심 정보만 보여줍니다."],
+      ["visual","비주얼형","사진을 크게 배치합니다."],
+      ["local","동네가게형","친근한 정보 중심입니다."],
+      ["landing","랜딩형","문의 전환 중심입니다."]
     ];
 
-    const palettes = [
-      {id:"blue-mint", name:"Blue Mint", primary:"#1f8cff", accent:"#34d399", soft:"#eef8ff", bg:"#f7fbff"},
-      {id:"sky", name:"Sky Clean", primary:"#0ea5e9", accent:"#75d7ff", soft:"#effbff", bg:"#f8fdff"},
-      {id:"green", name:"Fresh", primary:"#10b981", accent:"#84cc16", soft:"#f0fdf4", bg:"#fbfffb"},
-      {id:"orange", name:"Warm", primary:"#f59e0b", accent:"#fb7185", soft:"#fff7ed", bg:"#fffaf4"},
-      {id:"navy", name:"Navy", primary:"#1e3a8a", accent:"#38bdf8", soft:"#eff6ff", bg:"#f8fbff"},
-      {id:"mono", name:"Mono", primary:"#111827", accent:"#6b7280", soft:"#f3f4f6", bg:"#ffffff"},
-      {id:"lemon", name:"Lemon", primary:"#eab308", accent:"#22c55e", soft:"#fefce8", bg:"#fffffb"},
-      {id:"coral", name:"Coral", primary:"#f97316", accent:"#06b6d4", soft:"#fff7ed", bg:"#fffdfb"},
-      {id:"rose", name:"Rose", primary:"#e11d48", accent:"#fb7185", soft:"#fff1f2", bg:"#fffafa"},
-      {id:"deep", name:"Deep Blue", primary:"#2563eb", accent:"#14b8a6", soft:"#eff6ff", bg:"#f8fbff"}
+    const basePalettes = [
+      ["blue-mint","Blue Mint","#1f8cff","#75d7ff","#34d399","#eef8ff","#f7fbff"],
+      ["sky","Sky Clean","#0ea5e9","#75d7ff","#38bdf8","#effbff","#f8fdff"],
+      ["fresh","Fresh Green","#10b981","#86efac","#84cc16","#f0fdf4","#fbfffb"],
+      ["warm","Warm Orange","#f59e0b","#fb7185","#f97316","#fff7ed","#fffaf4"],
+      ["navy","Navy Clean","#1e3a8a","#38bdf8","#14b8a6","#eff6ff","#f8fbff"],
+      ["mono","Mono Clean","#111827","#6b7280","#374151","#f3f4f6","#ffffff"],
+      ["lemon","Lemon Pop","#eab308","#fde047","#22c55e","#fefce8","#fffffb"],
+      ["coral","Coral Sky","#f97316","#fb7185","#06b6d4","#fff7ed","#fffdfb"],
+      ["rose","Rose Soft","#e11d48","#fb7185","#fda4af","#fff1f2","#fffafa"],
+      ["deep","Deep Blue","#2563eb","#60a5fa","#14b8a6","#eff6ff","#f8fbff"]
     ];
 
-    let currentStore = null;
-    let editMode = false;
+    const palettes = [];
+    for(let i=0; i<50; i++){
+      const base = basePalettes[i % basePalettes.length];
+      palettes.push({
+        id: base[0] + "-" + (Math.floor(i / basePalettes.length) + 1),
+        name: base[1] + " " + (Math.floor(i / basePalettes.length) + 1),
+        primary: base[2],
+        secondary: base[3],
+        accent: base[4],
+        soft: base[5],
+        bg: base[6]
+      });
+    }
+
+    const widgets = [
+      ["info","방문 전 확인","운영시간, 층/호실, 전화번호"],
+      ["menu","메뉴·서비스","대표 메뉴와 가격"],
+      ["notice","공지사항","이벤트, 휴무, 안내"],
+      ["intro","업체 소개","자유 소개글"],
+      ["gallery","사진 갤러리","매장/상품 사진"]
+    ];
+
     let currentTemplate = "cover";
     let currentPalette = palettes[0];
+    let editMode = true;
 
-    function cardHTML(s, i){
-      return `<article class="store-card" data-floor="${s.floor}" data-category="${s.cat}" style="--card-i:${i+1}">
-        <div class="store-photo ${s.photo}">
-          <span class="tag">${s.tag}</span>
-          <span class="floor-badge">${s.floor}</span>
-        </div>
-        <div class="store-body">
-          <h3>${s.name}</h3>
-          <p>${s.desc}</p>
-          <div class="store-actions">
-            <a class="small-btn dark" href="tel:${s.phone}">전화하기</a>
-            <button class="small-btn detail-btn" type="button" data-store-id="${s.id}">상세보기</button>
+    const storeShell = document.getElementById("storeShell");
+    const storePage = document.getElementById("storePage");
+
+    function renderTemplates(){
+      const list = document.getElementById("templateList");
+      list.innerHTML = templates.map(t => `
+        <button class="template-card ${t[0] === currentTemplate ? "active" : ""}" type="button" data-template="${t[0]}">
+          <div class="template-preview"></div>
+          <b>${t[1]}</b>
+          <span>${t[2]}</span>
+        </button>
+      `).join("");
+
+      list.querySelectorAll(".template-card").forEach(btn => {
+        btn.addEventListener("click", () => {
+          applyTemplate(btn.dataset.template);
+        });
+      });
+    }
+
+    function renderPalettes(){
+      const list = document.getElementById("paletteList");
+      list.innerHTML = palettes.map(p => `
+        <button class="palette-card ${p.id === currentPalette.id ? "active" : ""}" type="button" data-palette="${p.id}">
+          <div class="palette-dots">
+            <i style="background:${p.primary}"></i>
+            <i style="background:${p.secondary}"></i>
+            <i style="background:${p.accent}"></i>
           </div>
-        </div>
-      </article>`;
-    }
+          <b>${p.name}</b>
+        </button>
+      `).join("");
 
-    const storeGrid = document.getElementById("storeGrid");
-    const emptyMessage = document.getElementById("emptyMessage");
-    const categoryStoreGrid = document.getElementById("categoryStoreGrid");
-    const resultTitle = document.getElementById("categoryResultTitle");
-    const resultDesc = document.getElementById("categoryResultDesc");
-
-    function renderStores(list){
-      storeGrid.innerHTML = list.map(cardHTML).join("");
-      emptyMessage.style.display = list.length ? "none" : "block";
-      bindDetailButtons();
-    }
-
-    function renderCategory(cat, shouldScroll){
-      document.querySelectorAll(".category-card").forEach(c=>{
-        c.classList.toggle("active-category", c.dataset.category === cat);
-      });
-      const list = stores.filter(s=>s.cat === cat);
-      categoryStoreGrid.innerHTML = list.map(cardHTML).join("");
-      resultTitle.textContent = catText[cat][0];
-      resultDesc.textContent = catText[cat][1];
-      bindDetailButtons();
-      if(shouldScroll){
-        document.getElementById("categoryResults").scrollIntoView({behavior:"smooth", block:"start"});
-      }
-    }
-
-    document.querySelectorAll(".floor-chip").forEach(chip=>{
-      chip.addEventListener("click", ()=>{
-        document.querySelectorAll(".floor-chip").forEach(c=>c.classList.remove("active"));
-        chip.classList.add("active");
-        chip.scrollIntoView({behavior:"smooth", inline:"center", block:"nearest"});
-        const floor = chip.dataset.floor;
-        renderStores(floor === "all" ? stores : stores.filter(s=>s.floor === floor));
-      });
-    });
-
-    document.querySelectorAll(".category-card").forEach(card=>{
-      card.addEventListener("click", e=>{
-        e.preventDefault();
-        renderCategory(card.dataset.category, true);
-      });
-    });
-
-    function bindDetailButtons(){
-      document.querySelectorAll(".detail-btn").forEach(btn=>{
-        btn.onclick = () => openDetail(btn.dataset.storeId);
+      list.querySelectorAll(".palette-card").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const p = palettes.find(x => x.id === btn.dataset.palette);
+          applyPalette(p);
+        });
       });
     }
 
-    function loadSavedStore(store){
-      const saved = localStorage.getItem("store-widget-" + store.id);
-      if(!saved) return {...store};
-      try{
-        return {...store, ...JSON.parse(saved)};
-      }catch(e){
-        return {...store};
-      }
-    }
+    function renderWidgets(){
+      const list = document.getElementById("widgetList");
+      list.innerHTML = widgets.map(w => `
+        <button class="widget-toggle active" type="button" data-widget-target="${w[0]}">
+          <span>
+            <b>${w[1]}</b>
+            <span>${w[2]}</span>
+          </span>
+          <i class="switch"></i>
+        </button>
+      `).join("");
 
-    function saveCurrentStore(){
-      if(!currentStore) return;
-      currentStore.name = document.getElementById("detailName").textContent.trim();
-      currentStore.desc = document.getElementById("detailSummary").textContent.trim();
-      currentStore.hours = document.getElementById("detailHours").textContent.trim();
-      currentStore.room = document.getElementById("detailRoom").textContent.replace(currentStore.floor, "").trim() || currentStore.room;
-      currentStore.phone = document.getElementById("detailPhone").textContent.trim();
-      currentStore.service = document.getElementById("detailService").textContent.trim();
-      currentStore.description = document.getElementById("detailDescription").textContent.trim();
-      currentStore.templateId = currentTemplate;
-      currentStore.paletteId = currentPalette.id;
-      currentStore.menuHidden = document.querySelector('[data-widget="menu"]').style.display === "none";
-      currentStore.galleryHidden = document.querySelector('[data-widget="gallery"]').style.display === "none";
-      localStorage.setItem("store-widget-" + currentStore.id, JSON.stringify(currentStore));
-      alert("저장되었습니다. 현재는 브라우저 localStorage 저장입니다.");
-    }
-
-    function openDetail(storeId){
-      const base = stores.find(s=>s.id === storeId);
-      if(!base) return;
-      currentStore = loadSavedStore(base);
-      currentTemplate = currentStore.templateId || "cover";
-      currentPalette = palettes.find(p=>p.id === currentStore.paletteId) || palettes[0];
-
-      applyPalette(currentPalette);
-      renderDetail(currentStore);
-      renderTemplatePanel();
-      renderPalettePanel();
-
-      document.getElementById("detailOverlay").classList.add("open");
-      document.getElementById("detailOverlay").setAttribute("aria-hidden","false");
-      document.body.classList.add("detail-open");
-      setEditMode(false);
-    }
-
-    function closeDetail(){
-      document.getElementById("detailOverlay").classList.remove("open");
-      document.getElementById("detailOverlay").setAttribute("aria-hidden","true");
-      document.body.classList.remove("detail-open");
-      document.getElementById("detailPanel").classList.remove("mobile-open");
-      setEditMode(false);
-    }
-
-    function renderDetail(s){
-      document.getElementById("detailHero").className = "detail-hero";
-      document.getElementById("detailHero").style.backgroundImage = `url("${getPhotoUrl(s.photo)}")`;
-      document.getElementById("detailName").textContent = s.name;
-      document.getElementById("detailSummary").textContent = s.desc;
-      document.getElementById("detailCategory").textContent = s.category;
-      document.getElementById("detailFloor").textContent = `${s.floor} ${s.room || ""}`.trim();
-      document.getElementById("detailHours").textContent = s.hours;
-      document.getElementById("detailRoom").textContent = `${s.floor} ${s.room || ""}`.trim();
-      document.getElementById("detailPhone").textContent = s.phone;
-      document.getElementById("detailService").textContent = s.service;
-      document.getElementById("detailCall").href = "tel:" + s.phone;
-      document.getElementById("detailDescription").textContent = s.description || `${s.name}은 26빌딩 안에서 편하게 이용할 수 있는 공간입니다. 방문 전 운영시간과 위치를 확인해 주세요.`;
-
-      document.getElementById("detailMenu").innerHTML = (s.menu || []).map(item=>`<div class="menu-row"><span class="editable">${item[0]}</span><span class="editable">${item[1]}</span></div>`).join("");
-      const galleryPhotos = [s.photo, "p1", "p4"].filter(Boolean);
-      document.getElementById("detailGallery").innerHTML = galleryPhotos.map(p=>`<div class="gallery-item" style="background-image:url('${getPhotoUrl(p)}')"></div>`).join("");
-
-      document.querySelector('[data-widget="menu"]').style.display = s.menuHidden ? "none" : "";
-      document.querySelector('[data-widget="gallery"]').style.display = s.galleryHidden ? "none" : "";
-
-      applyTemplate(currentTemplate);
-    }
-
-    function getPhotoUrl(cls){
-      const map = {
-        p1:"https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=900&q=80",
-        p2:"https://images.unsplash.com/photo-1573497491208-6b1acb260507?auto=format&fit=crop&w=900&q=80",
-        p3:"https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80",
-        p4:"https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=900&q=80",
-        p5:"https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80",
-        p6:"https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80",
-        p7:"https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=900&q=80",
-        p8:"https://images.unsplash.com/photo-1580281657521-7a7e0f85e0b9?auto=format&fit=crop&w=900&q=80",
-        p9:"https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=900&q=80",
-        p10:"https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80",
-        p11:"https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=900&q=80",
-        p12:"https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=900&q=80",
-        p13:"https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=900&q=80",
-        p14:"https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=900&q=80",
-        p15:"https://images.unsplash.com/photo-1581579186913-45ac3e6efe93?auto=format&fit=crop&w=900&q=80",
-        p16:"https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=900&q=80"
-      };
-      return map[cls] || map.p1;
-    }
-
-    function setEditMode(on){
-      editMode = on;
-      document.getElementById("detailCard").classList.toggle("edit-on", on);
-      document.getElementById("editToggle").classList.toggle("active", on);
-      document.getElementById("detailModeText").textContent = on ? "편집 모드" : "보기 모드";
-      document.querySelectorAll(".editable").forEach(el=>{
-        el.contentEditable = on ? "true" : "false";
-      });
-      if(!on) document.getElementById("detailPanel").classList.remove("mobile-open");
-    }
-
-    function applyPalette(p){
-      currentPalette = p;
-      const root = document.getElementById("detailOverlay");
-      root.style.setProperty("--detail-primary", p.primary);
-      root.style.setProperty("--detail-accent", p.accent);
-      root.style.setProperty("--detail-soft", p.soft);
-      root.style.setProperty("--detail-bg", p.bg);
-      document.querySelectorAll(".palette-card").forEach(card=>{
-        card.classList.toggle("active", card.dataset.palette === p.id);
+      list.querySelectorAll(".widget-toggle").forEach(btn => {
+        btn.addEventListener("click", () => {
+          btn.classList.toggle("active");
+          const target = document.querySelector(`[data-widget="${btn.dataset.widgetTarget}"]`);
+          if(target){
+            target.style.display = btn.classList.contains("active") ? "" : "none";
+          }
+        });
       });
     }
 
     function applyTemplate(id){
       currentTemplate = id;
-      const hero = document.getElementById("detailHero");
-      const stack = document.getElementById("widgetStack");
-      hero.style.minHeight = "300px";
-      stack.style.gridTemplateColumns = "1fr";
+      storeShell.className = "store-shell template-" + id;
 
-      if(id === "clean"){
-        hero.style.minHeight = "220px";
-      }
-      if(id === "magazine"){
-        hero.style.minHeight = "380px";
-      }
-      if(id === "menu"){
-        const menu = document.querySelector('[data-widget="menu"]');
-        stack.prepend(menu);
-      }
-      if(id === "compact"){
-        hero.style.minHeight = "190px";
-      }
-      document.querySelectorAll(".template-card").forEach(card=>{
-        card.classList.toggle("active", card.dataset.template === id);
+      document.getElementById("storeHero").style.minHeight = "";
+      if(id === "clean") document.getElementById("storeHero").style.minHeight = "250px";
+      if(id === "magazine") document.getElementById("storeHero").style.minHeight = "440px";
+      if(id === "compact") document.getElementById("storeHero").style.minHeight = "210px";
+      if(id === "premium") document.getElementById("storeHero").style.minHeight = "410px";
+      if(id === "visual") document.getElementById("storeHero").style.minHeight = "470px";
+
+      renderTemplates();
+    }
+
+    function applyPalette(p){
+      currentPalette = p;
+      document.body.style.setProperty("--builder-primary", p.primary);
+      document.body.style.setProperty("--builder-secondary", p.secondary);
+      document.body.style.setProperty("--builder-accent", p.accent);
+      document.body.style.setProperty("--builder-soft", p.soft);
+      document.body.style.setProperty("--builder-bg", p.bg);
+      renderPalettes();
+    }
+
+    function bindTabs(){
+      document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.addEventListener("click", () => openTab(btn.dataset.tab));
+      });
+
+      document.querySelectorAll("[data-mobile-tab]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          openTab(btn.dataset.mobileTab);
+          document.querySelector(".control-panel").scrollIntoView({ behavior:"smooth", block:"start" });
+        });
       });
     }
 
-    function renderTemplatePanel(){
-      document.getElementById("templateScroll").innerHTML = templates.map(t=>`
-        <button class="template-card ${t.id===currentTemplate ? "active":""}" type="button" data-template="${t.id}">
-          <div class="template-mini"></div>
-          <b>${t.name}</b>
-          <span>${t.desc}</span>
-        </button>`).join("");
-      document.querySelectorAll(".template-card").forEach(btn=>{
-        btn.onclick = () => applyTemplate(btn.dataset.template);
+    function openTab(tab){
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
+      document.querySelectorAll(".tab-panel").forEach(p => {
+        p.classList.toggle("active", p.dataset.panel === tab);
+        p.classList.toggle("mobile-open", p.dataset.panel === tab);
       });
     }
 
-    function renderPalettePanel(){
-      document.getElementById("paletteScroll").innerHTML = palettes.map(p=>`
-        <button class="palette-card ${p.id===currentPalette.id ? "active":""}" type="button" data-palette="${p.id}">
-          <div class="palette-dots">
-            <i style="background:${p.primary}"></i>
-            <i style="background:${p.accent}"></i>
-            <i style="background:${p.soft}"></i>
-          </div>
-          <b>${p.name}</b>
-        </button>`).join("");
-      document.querySelectorAll(".palette-card").forEach(btn=>{
-        btn.onclick = () => applyPalette(palettes.find(p=>p.id === btn.dataset.palette));
+    function bindFields(){
+      const pairs = [
+        ["fieldName","storeName"],
+        ["fieldSummary","storeSummary"],
+        ["fieldRoom","storeRoom"],
+        ["fieldRoom","storeRoomInfo"],
+        ["fieldPhone","storePhone"],
+        ["fieldHours","storeHours"],
+        ["fieldService","storeService"]
+      ];
+
+      pairs.forEach(([fieldId, targetId]) => {
+        const field = document.getElementById(fieldId);
+        const target = document.getElementById(targetId);
+        if(!field || !target) return;
+        field.addEventListener("input", () => {
+          target.textContent = field.value;
+          if(fieldId === "fieldPhone") document.getElementById("callLink").href = "tel:" + field.value;
+        });
+      });
+
+      document.querySelectorAll(".inline-edit").forEach(el => {
+        el.addEventListener("input", () => {
+          if(el.id === "storeName") document.getElementById("fieldName").value = el.textContent;
+          if(el.id === "storeSummary") document.getElementById("fieldSummary").value = el.textContent;
+          if(el.id === "storeRoom" || el.id === "storeRoomInfo") document.getElementById("fieldRoom").value = el.textContent;
+          if(el.id === "storePhone") document.getElementById("fieldPhone").value = el.textContent;
+          if(el.id === "storeHours") document.getElementById("fieldHours").value = el.textContent;
+          if(el.id === "storeService") document.getElementById("fieldService").value = el.textContent;
+        });
       });
     }
 
-    document.getElementById("detailClose").onclick = closeDetail;
-    document.getElementById("detailOverlay").addEventListener("click", e=>{
-      if(e.target.id === "detailOverlay") closeDetail();
-    });
-    document.addEventListener("keydown", e=>{
-      if(e.key === "Escape") closeDetail();
-    });
-    document.getElementById("editToggle").onclick = () => setEditMode(!editMode);
-    document.getElementById("saveDetailBtn").onclick = saveCurrentStore;
-    document.getElementById("mobileSaveBtn").onclick = saveCurrentStore;
-
-    document.querySelectorAll("[data-toggle-widget]").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
-        const w = document.querySelector(`[data-widget="${btn.dataset.toggleWidget}"]`);
-        if(w) w.style.display = w.style.display === "none" ? "" : "none";
+    function setEditMode(on){
+      editMode = on;
+      storePage.classList.toggle("edit-mode", editMode);
+      document.querySelectorAll(".inline-edit").forEach(el => {
+        el.contentEditable = editMode ? "true" : "false";
       });
-    });
+      document.getElementById("modeText").textContent = editMode ? "편집 모드" : "미리보기 모드";
+      document.getElementById("editModeBtn").textContent = editMode ? "편집 ON" : "편집 OFF";
+    }
 
-    document.querySelectorAll("[data-open-panel]").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
-        document.getElementById("detailPanel").classList.add("mobile-open");
-        const target = document.querySelector(`[data-panel-section="${btn.dataset.openPanel}"]`);
-        if(target) target.scrollIntoView({behavior:"smooth", block:"start"});
-      });
-    });
+    function saveBuilder(){
+      const data = {
+        templateId: currentTemplate,
+        paletteId: currentPalette.id,
+        name: document.getElementById("storeName").textContent,
+        summary: document.getElementById("storeSummary").textContent,
+        room: document.getElementById("storeRoomInfo").textContent,
+        phone: document.getElementById("storePhone").textContent,
+        hours: document.getElementById("storeHours").textContent,
+        service: document.getElementById("storeService").textContent,
+        html: document.getElementById("storeShell").innerHTML
+      };
+      localStorage.setItem("26building-builder-draft", JSON.stringify(data));
+      alert("저장되었습니다. 현재는 브라우저 localStorage 임시저장입니다.");
+    }
 
-    renderStores(stores);
-    renderCategory("food", false);
+    document.getElementById("editModeBtn").addEventListener("click", () => setEditMode(!editMode));
+    document.getElementById("previewBtn").addEventListener("click", () => setEditMode(false));
+    document.getElementById("saveBtnTop").addEventListener("click", saveBuilder);
+    document.getElementById("saveBtnPreview").addEventListener("click", saveBuilder);
+    document.getElementById("saveBtnMobile").addEventListener("click", saveBuilder);
+
+    renderTemplates();
+    renderPalettes();
+    renderWidgets();
+    bindTabs();
+    bindFields();
+    applyPalette(currentPalette);
+    applyTemplate(currentTemplate);
+    setEditMode(true);
   </script>
 </body>
 </html>
