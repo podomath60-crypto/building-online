@@ -1,1569 +1,908 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <title>입점자 미니홈 편집기 MVP v2</title>
-  <style>
-    :root{
-      --app-bg:#f3f4f6;
-      --panel:#ffffff;
-      --line:#e5e7eb;
-      --ink:#111827;
-      --muted:#6b7280;
-      --brand:#2563eb;
-      --danger:#ef4444;
-      --shadow:0 18px 45px rgba(15,23,42,.12);
-      --radius:18px;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
-      background:var(--app-bg);
-      color:var(--ink);
-      overflow-x:hidden;
-    }
-    button,input,textarea,select{font:inherit}
-    button{border:0;background:none;color:inherit;cursor:pointer}
-    .app{
-      min-height:100vh;
-      display:flex;
-      flex-direction:column;
-    }
-    .topbar{
-      position:sticky;
-      top:0;
-      z-index:1000;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding:10px 12px;
-      background:rgba(255,255,255,.94);
-      backdrop-filter:blur(14px);
-      border-bottom:1px solid var(--line);
-    }
-    .top-left,.top-right{display:flex;align-items:center;gap:8px;min-width:0}
-    .brand-title{
-      font-weight:900;
-      letter-spacing:-.04em;
-      white-space:nowrap;
-      font-size:16px;
-    }
-    .viewport-tabs{
-      display:none;
-      align-items:center;
-      gap:4px;
-      padding:3px;
-      background:#eef2ff;
-      border-radius:999px;
-      border:1px solid #dbeafe;
-    }
-    .viewport-tab{
-      padding:7px 12px;
-      border-radius:999px;
-      font-size:13px;
-      font-weight:800;
-      color:#334155;
-    }
-    .viewport-tab.active{
-      background:#fff;
-      box-shadow:0 4px 12px rgba(37,99,235,.18);
-      color:#1d4ed8;
-    }
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:5px;
-      height:34px;
-      padding:0 11px;
-      border-radius:999px;
-      background:#fff;
-      border:1px solid var(--line);
-      font-size:13px;
-      font-weight:800;
-      white-space:nowrap;
-      box-shadow:0 2px 8px rgba(15,23,42,.04);
-    }
-    .btn.primary{background:#111827;color:#fff;border-color:#111827}
-    .btn.blue{background:#2563eb;color:#fff;border-color:#2563eb}
-    .btn.danger{background:#fff;color:var(--danger);border-color:#fecaca}
-    .btn:disabled{opacity:.45;cursor:not-allowed}
-    .main{
-      display:grid;
-      grid-template-columns:1fr;
-      flex:1;
-      min-height:0;
-    }
-    .side{
-      display:none;
-      background:#fff;
-      border-right:1px solid var(--line);
-      padding:14px;
-      overflow:auto;
-    }
-    .stage-wrap{
-      position:relative;
-      padding:14px 0 92px;
-      overflow:auto;
-      min-height:calc(100vh - 56px);
-    }
-    .stage-label{
-      text-align:center;
-      color:#64748b;
-      font-size:12px;
-      font-weight:800;
-      margin:4px 0 10px;
-    }
-    .canvas-shell{
-      width:max-content;
-      margin:0 auto;
-      padding:0;
-      transform-origin:top center;
-    }
-    .editor-canvas{
-      position:relative;
-      width:390px;
-      min-height:1500px;
-      margin:0 auto;
-      overflow:visible;
-      background:var(--page-bg,#fff8f1);
-      box-shadow:var(--shadow);
-      border-radius:22px;
-      --page-bg:#FFF8F1;
-      --section-bg:#FFFFFF;
-      --card-bg:#FFFDF9;
-      --text-main:#2B2118;
-      --text-sub:#7A6654;
-      --primary:#8B5E3C;
-      --primary-text:#FFFFFF;
-      --accent:#F4A261;
-      --border:#E8D8C8;
-    }
-    .editor-canvas.preview .edit-ui{display:none!important}
-    .editor-canvas.preview [contenteditable]{outline:0!important}
-    .editor-widget{
-      position:absolute;
-      box-sizing:border-box;
-      touch-action:none;
-      outline:0;
-    }
-    .editor-widget.selected{
-      outline:2px solid #2563eb;
-      outline-offset:3px;
-    }
-    .widget-move{
-      position:absolute;
-      left:-10px;
-      top:-26px;
-      display:none;
-      height:23px;
-      padding:0 8px;
-      border-radius:999px;
-      background:#2563eb;
-      color:#fff;
-      font-size:12px;
-      font-weight:900;
-      align-items:center;
-      justify-content:center;
-      box-shadow:0 8px 18px rgba(37,99,235,.26);
-      cursor:grab;
-      user-select:none;
-      z-index:50;
-    }
-    .selected .widget-move{display:flex}
-    .resize-handle{
-      position:absolute;
-      right:-10px;
-      bottom:-10px;
-      width:20px;
-      height:20px;
-      border-radius:50%;
-      display:none;
-      background:#fff;
-      border:3px solid #2563eb;
-      box-shadow:0 4px 12px rgba(15,23,42,.22);
-      z-index:60;
-      cursor:nwse-resize;
-    }
-    .selected .resize-handle{display:block}
-    .mini-toolbar{
-      position:absolute;
-      right:-4px;
-      top:-34px;
-      display:none;
-      align-items:center;
-      gap:4px;
-      z-index:70;
-    }
-    .selected .mini-toolbar{display:flex}
-    .mini-btn{
-      width:28px;
-      height:28px;
-      border-radius:999px;
-      background:#fff;
-      border:1px solid #dbeafe;
-      box-shadow:0 7px 16px rgba(15,23,42,.12);
-      font-size:13px;
-      font-weight:900;
-      color:#1e40af;
-    }
-    .mini-btn.danger{color:#dc2626;border-color:#fecaca}
-    .editable{
-      width:100%;
-      height:100%;
-      outline:0;
-      white-space:pre-wrap;
-      overflow:hidden;
-      cursor:text;
-    }
-    .widget-text .editable:empty:before,
-    .widget-button .editable:empty:before{
-      content:attr(data-placeholder);
-      color:rgba(100,116,139,.65);
-    }
-    .widget-image .image-box{
-      width:100%;
-      height:100%;
-      border-radius:inherit;
-      background:linear-gradient(135deg,#e5e7eb,#f8fafc);
-      overflow:hidden;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#94a3b8;
-      font-weight:900;
-      font-size:14px;
-      text-align:center;
-      border:1px dashed rgba(100,116,139,.35);
-    }
-    .widget-image img{
-      width:100%;
-      height:100%;
-      display:block;
-      object-fit:cover;
-    }
-    .widget-button .button-box{
-      width:100%;
-      height:100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      overflow:hidden;
-      text-align:center;
-    }
-    .widget-box .box-inner{
-      width:100%;
-      height:100%;
-      background:var(--card-bg);
-      border:1px solid var(--border);
-      border-radius:inherit;
-    }
-    .widget-divider .divider-inner{
-      width:100%;
-      height:100%;
-      display:flex;
-      align-items:center;
-    }
-    .widget-divider .divider-line{
-      width:100%;
-      height:2px;
-      background:var(--border);
-      border-radius:99px;
-    }
-    .widget-menu .menu-card,
-    .widget-gallery .gallery-card,
-    .widget-hours .hours-card,
-    .widget-map .map-card,
-    .widget-contact .contact-card,
-    .widget-coupon .coupon-card,
-    .widget-video .video-card{
-      width:100%;
-      height:100%;
-      background:var(--card-bg);
-      border:1px solid var(--border);
-      border-radius:inherit;
-      padding:14px;
-      overflow:hidden;
-      color:var(--text-main);
-    }
-    .card-title{
-      font-weight:900;
-      letter-spacing:-.04em;
-      margin-bottom:10px;
-      outline:0;
-    }
-    .menu-list{display:flex;flex-direction:column;gap:8px}
-    .menu-item{
-      display:grid;
-      grid-template-columns:52px 1fr auto;
-      gap:10px;
-      align-items:center;
-      padding:8px;
-      border-radius:14px;
-      background:rgba(255,255,255,.58);
-      border:1px solid rgba(148,163,184,.16);
-    }
-    .menu-thumb{
-      width:52px;height:52px;border-radius:12px;background:#e5e7eb;
-      display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:11px;font-weight:900;overflow:hidden;
-    }
-    .menu-name{font-weight:900;outline:0}
-    .menu-desc{font-size:12px;color:var(--text-sub);outline:0;margin-top:2px}
-    .menu-price{font-weight:900;color:var(--primary);outline:0;white-space:nowrap}
-    .gallery-grid{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:8px;
-      height:calc(100% - 34px);
-    }
-    .gallery-cell{
-      border-radius:14px;
-      background:#e5e7eb;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#94a3b8;
-      font-weight:900;
-      font-size:12px;
-      overflow:hidden;
-    }
-    .gallery-cell img{width:100%;height:100%;object-fit:cover}
-    .hours-row,.map-row{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      padding:7px 0;
-      border-bottom:1px solid rgba(148,163,184,.2);
-      font-size:14px;
-    }
-    .hours-row span,.map-row span{outline:0}
-    .contact-actions{display:flex;gap:8px;flex-wrap:wrap}
-    .contact-pill{
-      flex:1 1 120px;
-      min-height:42px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      border-radius:999px;
-      background:var(--primary);
-      color:var(--primary-text);
-      font-weight:900;
-      outline:0;
-    }
-    .coupon-card{
-      background:linear-gradient(135deg,var(--primary),var(--accent))!important;
-      color:var(--primary-text)!important;
-      border:0!important;
-    }
-    .coupon-big{font-size:25px;font-weight:950;letter-spacing:-.05em;outline:0}
-    .coupon-small{margin-top:8px;font-size:14px;font-weight:700;opacity:.88;outline:0}
-    .video-frame{
-      width:100%;
-      height:calc(100% - 36px);
-      border:0;
-      border-radius:14px;
-      background:#111827;
-      overflow:hidden;
-      color:white;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      padding:12px;
-      font-weight:900;
-      line-height:1.35;
-    }
-    .video-frame iframe{width:100%;height:100%;border:0;border-radius:14px}
-    .video-url{
-      margin-top:8px;
-      width:100%;
-      border:1px solid var(--border);
-      border-radius:12px;
-      padding:9px 10px;
-      outline:0;
-      font-size:12px;
-    }
-    .panel-title{
-      font-weight:950;
-      letter-spacing:-.05em;
-      margin:4px 0 12px;
-      font-size:18px;
-    }
-    .panel-section{
-      margin-bottom:18px;
-      padding-bottom:16px;
-      border-bottom:1px solid var(--line);
-    }
-    .tool-grid{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:8px;
-    }
-    .tool-card{
-      min-height:52px;
-      border:1px solid #e5e7eb;
-      border-radius:15px;
-      background:#fff;
-      font-size:13px;
-      font-weight:900;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      padding:8px;
-    }
-    .tool-card:active{transform:scale(.98)}
-    .palette-list{display:flex;flex-direction:column;gap:8px}
-    .palette-card{
-      padding:10px;
-      border:1px solid #e5e7eb;
-      border-radius:15px;
-      background:#fff;
-      text-align:left;
-    }
-    .palette-card.active{border-color:#2563eb;box-shadow:0 0 0 2px rgba(37,99,235,.12)}
-    .palette-name{font-size:13px;font-weight:950;margin-bottom:7px}
-    .palette-sub{font-size:11px;color:#64748b;font-weight:800;margin-top:-4px;margin-bottom:7px}
-    .swatches{display:flex;gap:5px}
-    .swatches span{width:22px;height:22px;border-radius:999px;border:1px solid rgba(0,0,0,.08)}
-    .template-card{
-      width:100%;
-      text-align:left;
-      padding:12px;
-      border-radius:15px;
-      border:1px solid var(--line);
-      background:#fff;
-      margin-bottom:8px;
-    }
-    .template-card strong{display:block;font-size:14px}
-    .template-card small{color:#64748b;font-weight:700}
-    .bottom-bar{
-      position:fixed;
-      left:0;right:0;bottom:0;
-      z-index:1000;
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:6px;
-      padding:10px 10px calc(10px + env(safe-area-inset-bottom));
-      background:rgba(255,255,255,.96);
-      backdrop-filter:blur(14px);
-      border-top:1px solid var(--line);
-    }
-    .bottom-btn{
-      height:46px;
-      border-radius:14px;
-      background:#f8fafc;
-      border:1px solid #e5e7eb;
-      font-weight:950;
-      font-size:13px;
-      color:#334155;
-    }
-    .bottom-btn.active{background:#111827;color:#fff;border-color:#111827}
-    .sheet{
-      position:fixed;
-      left:10px;right:10px;bottom:76px;
-      z-index:999;
-      max-height:62vh;
-      overflow:auto;
-      border-radius:22px;
-      background:#fff;
-      border:1px solid var(--line);
-      box-shadow:0 18px 50px rgba(15,23,42,.22);
-      padding:14px;
-      display:none;
-    }
-    .sheet.open{display:block}
-    .toast{
-      position:fixed;
-      left:50%;
-      bottom:92px;
-      transform:translateX(-50%);
-      z-index:2000;
-      background:#111827;
-      color:#fff;
-      padding:11px 15px;
-      border-radius:999px;
-      font-size:13px;
-      font-weight:800;
-      box-shadow:0 15px 40px rgba(0,0,0,.24);
-      display:none;
-      max-width:90vw;
-      text-align:center;
-    }
-    .toast.show{display:block}
-    .input-row{display:flex;gap:8px;margin-top:8px}
-    .input-row input{
-      flex:1;
-      min-width:0;
-      border:1px solid var(--line);
-      border-radius:13px;
-      padding:10px;
-      outline:0;
-    }
-    .note{
-      padding:10px 12px;
-      border-radius:15px;
-      background:#f8fafc;
-      border:1px solid #e5e7eb;
-      color:#475569;
-      font-size:12px;
-      font-weight:750;
-      line-height:1.45;
-      margin-bottom:12px;
-    }
-    @media (min-width:900px){
-      .viewport-tabs{display:flex}
-      .main{
-        grid-template-columns:260px 1fr;
-      }
-      .side{display:block}
-      .stage-wrap{padding:18px 20px 60px}
-      .bottom-bar,.sheet{display:none!important}
-      .brand-title{font-size:17px}
-      .topbar{padding:11px 16px}
-      .editor-canvas.desktop-canvas{border-radius:18px}
-    }
-    @media (max-width:430px){
-      .stage-wrap{padding-left:0;padding-right:0}
-      .editor-canvas{border-radius:0;box-shadow:none}
-      .canvas-shell{width:100%}
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>입점자 편집기 MVP - 재작성</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",sans-serif;background:#f3f4f6;color:#111827}
+  button,input{font:inherit}
+  button{cursor:pointer;border:0;background:none;color:inherit}
+  .topbar{
+    position:sticky;top:0;z-index:1000;height:56px;background:#fff;border-bottom:1px solid #e5e7eb;
+    display:flex;align-items:center;justify-content:space-between;padding:0 12px;gap:8px
+  }
+  .title{font-weight:950;letter-spacing:-.05em;white-space:nowrap;font-size:16px}
+  .top-actions{display:flex;align-items:center;gap:6px}
+  .btn{
+    height:34px;padding:0 11px;border-radius:999px;background:#fff;border:1px solid #d1d5db;
+    font-weight:850;font-size:13px;white-space:nowrap
+  }
+  .btn.dark{background:#111827;color:white;border-color:#111827}
+  .btn.blue{background:#2563eb;color:white;border-color:#2563eb}
+  .btn.red{color:#dc2626;border-color:#fecaca}
+  .layout{display:block}
+  .sidebar{display:none}
+  .viewport-tabs{display:none;gap:4px;background:#eef2ff;border:1px solid #dbeafe;padding:3px;border-radius:999px}
+  .tab{height:31px;padding:0 12px;border-radius:999px;font-size:13px;font-weight:900;color:#334155}
+  .tab.active{background:#fff;color:#1d4ed8;box-shadow:0 4px 12px rgba(37,99,235,.15)}
+  .workarea{padding:14px 0 96px;min-height:calc(100vh - 56px);overflow:auto}
+  .status{text-align:center;font-size:12px;font-weight:900;color:#64748b;margin:3px 0 10px}
+  .canvas{
+    position:relative;margin:0 auto;width:390px;min-height:1300px;background:var(--page-bg,#FFF8F1);
+    box-shadow:0 20px 50px rgba(15,23,42,.14);border-radius:22px;overflow:visible;
+    --page-bg:#FFF8F1;--card-bg:#FFFDF9;--text-main:#2B2118;--text-sub:#7A6654;
+    --primary:#8B5E3C;--primary-text:#fff;--accent:#F4A261;--border:#E8D8C8;
+  }
+  .canvas.preview .edit-only{display:none!important}
+  .widget{position:absolute;touch-action:none;box-sizing:border-box}
+  .widget.selected{outline:2px solid #2563eb;outline-offset:3px}
+  .move-handle{
+    position:absolute;left:-8px;top:-28px;display:none;align-items:center;justify-content:center;
+    height:24px;padding:0 9px;border-radius:999px;background:#2563eb;color:#fff;font-size:12px;font-weight:950;
+    z-index:20;box-shadow:0 8px 18px rgba(37,99,235,.25);cursor:grab;user-select:none
+  }
+  .resize-handle{
+    position:absolute;right:-10px;bottom:-10px;width:20px;height:20px;border-radius:50%;background:#fff;
+    border:3px solid #2563eb;display:none;z-index:20;box-shadow:0 4px 12px rgba(0,0,0,.2);cursor:nwse-resize
+  }
+  .mini{
+    position:absolute;right:0;top:-36px;display:none;gap:4px;z-index:21
+  }
+  .mini button{
+    width:28px;height:28px;border-radius:999px;background:#fff;border:1px solid #dbeafe;
+    box-shadow:0 6px 14px rgba(15,23,42,.15);font-weight:950;color:#1e40af
+  }
+  .mini button.red{color:#dc2626;border-color:#fecaca}
+  .selected .move-handle,.selected .resize-handle,.selected .mini{display:flex}
+  .editable{width:100%;height:100%;outline:0;white-space:pre-wrap;overflow:hidden;cursor:text}
+  .text-widget .editable:empty:before,.button-widget .editable:empty:before{content:attr(data-placeholder);color:#94a3b8}
+  .image-box{
+    width:100%;height:100%;border-radius:inherit;background:linear-gradient(135deg,#e5e7eb,#f8fafc);
+    border:1px dashed #94a3b8;display:flex;align-items:center;justify-content:center;text-align:center;
+    color:#94a3b8;font-weight:950;overflow:hidden
+  }
+  .image-box img{width:100%;height:100%;object-fit:cover;display:block}
+  .button-box{width:100%;height:100%;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+  .box-inner{width:100%;height:100%;border-radius:inherit;background:var(--card-bg);border:1px solid var(--border)}
+  .divider-line{width:100%;height:3px;background:var(--border);border-radius:999px;position:absolute;top:50%;transform:translateY(-50%)}
+  .card{
+    width:100%;height:100%;border-radius:inherit;background:var(--card-bg);border:1px solid var(--border);
+    color:var(--text-main);padding:14px;overflow:hidden
+  }
+  .card-title{font-weight:950;letter-spacing:-.04em;margin-bottom:10px;outline:0}
+  .menu-item{display:grid;grid-template-columns:48px 1fr auto;gap:9px;align-items:center;padding:8px;border-radius:14px;background:rgba(255,255,255,.6);margin-bottom:8px}
+  .thumb{width:48px;height:48px;border-radius:12px;background:#e5e7eb;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:11px;font-weight:950}
+  .mi-name{font-weight:950;outline:0}.mi-desc{font-size:12px;color:var(--text-sub);outline:0}.mi-price{font-weight:950;color:var(--primary);outline:0}
+  .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;height:calc(100% - 34px)}
+  .gcell{border-radius:13px;background:#e5e7eb;color:#94a3b8;font-size:12px;font-weight:950;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .gcell img{width:100%;height:100%;object-fit:cover}
+  .row{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid rgba(148,163,184,.25);padding:7px 0;font-size:14px}
+  .row span{outline:0}
+  .pill-wrap{display:flex;gap:8px;flex-wrap:wrap}
+  .pill{flex:1 1 120px;min-height:42px;border-radius:999px;background:var(--primary);color:var(--primary-text);font-weight:950;display:flex;align-items:center;justify-content:center;outline:0}
+  .coupon{background:linear-gradient(135deg,var(--primary),var(--accent));border:0!important;color:var(--primary-text)}
+  .coupon .big{font-size:25px;font-weight:950;letter-spacing:-.05em;outline:0}.coupon .small{margin-top:8px;font-size:14px;font-weight:800;opacity:.88;outline:0}
+  .video-frame{height:calc(100% - 86px);border-radius:14px;background:#111827;color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:900;padding:12px;overflow:hidden}
+  .video-frame iframe{width:100%;height:100%;border:0;border-radius:14px}
+  .video-input{display:flex;gap:6px;margin-top:8px}
+  .video-input input{flex:1;min-width:0;border:1px solid var(--border);border-radius:12px;padding:9px;font-size:12px}
+  .panel-title{font-size:18px;font-weight:950;letter-spacing:-.05em;margin:4px 0 12px}
+  .panel-section{padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid #e5e7eb}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+  .tool{
+    min-height:52px;border:1px solid #e5e7eb;background:#fff;border-radius:15px;font-size:13px;font-weight:950;
+    display:flex;align-items:center;justify-content:center;text-align:center;padding:8px
+  }
+  .template,.palette{
+    width:100%;text-align:left;background:#fff;border:1px solid #e5e7eb;border-radius:15px;padding:11px;margin-bottom:8px
+  }
+  .template strong,.palette strong{display:block;font-size:14px}.template small,.palette small{display:block;color:#64748b;font-size:12px;font-weight:800;margin-top:2px}
+  .palette.active{border-color:#2563eb;box-shadow:0 0 0 2px rgba(37,99,235,.12)}
+  .swatches{display:flex;gap:5px;margin-top:8px}.swatches i{width:22px;height:22px;border-radius:999px;border:1px solid rgba(0,0,0,.08)}
+  .bottom{
+    position:fixed;left:0;right:0;bottom:0;z-index:1000;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);
+    border-top:1px solid #e5e7eb;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:10px 10px calc(10px + env(safe-area-inset-bottom))
+  }
+  .bottom button{height:46px;border-radius:14px;background:#f8fafc;border:1px solid #e5e7eb;font-weight:950;color:#334155}
+  .bottom button.active{background:#111827;color:#fff;border-color:#111827}
+  .sheet{
+    position:fixed;left:10px;right:10px;bottom:76px;z-index:999;background:#fff;border:1px solid #e5e7eb;border-radius:22px;
+    box-shadow:0 20px 50px rgba(15,23,42,.22);padding:14px;max-height:64vh;overflow:auto;display:none
+  }
+  .sheet.open{display:block}
+  .toast{
+    position:fixed;left:50%;bottom:92px;transform:translateX(-50%);z-index:2000;background:#111827;color:#fff;border-radius:999px;
+    padding:11px 15px;font-size:13px;font-weight:850;display:none;max-width:90vw;text-align:center
+  }
+  .toast.show{display:block}
+  @media(max-width:430px){
+    .canvas{border-radius:0;box-shadow:none}
+    .workarea{padding-top:0}
+  }
+  @media(min-width:900px){
+    .layout{display:grid;grid-template-columns:270px 1fr}
+    .sidebar{display:block;background:#fff;border-right:1px solid #e5e7eb;padding:14px;height:calc(100vh - 56px);overflow:auto;position:sticky;top:56px}
+    .workarea{padding:18px 20px 60px}
+    .bottom,.sheet{display:none!important}
+    .viewport-tabs{display:flex}
+    .title{font-size:17px}
+  }
+</style>
 </head>
 <body>
-<div class="app">
-  <header class="topbar">
-    <div class="top-left">
-      <div class="brand-title">입점자 미니홈 편집기</div>
-      <div id="viewportTabs" class="viewport-tabs">
-        <button type="button" class="viewport-tab active" data-vp="mobile">모바일</button>
-        <button type="button" class="viewport-tab" data-vp="desktop">데스크탑</button>
-      </div>
+<header class="topbar">
+  <div style="display:flex;align-items:center;gap:10px;min-width:0">
+    <div class="title">입점자 편집기 MVP</div>
+    <div id="viewportTabs" class="viewport-tabs">
+      <button type="button" class="tab active" data-vp="mobile">모바일</button>
+      <button type="button" class="tab" data-vp="desktop">데스크탑</button>
     </div>
-    <div class="top-right">
-      <button type="button" class="btn" id="undoBtn">↶</button>
-      <button type="button" class="btn" id="redoBtn">↷</button>
-      <button type="button" class="btn" id="previewBtn">미리보기</button>
-      <button type="button" class="btn blue" id="saveBtn">저장</button>
-    </div>
-  </header>
+  </div>
+  <div class="top-actions">
+    <button type="button" class="btn" id="undoBtn">↶</button>
+    <button type="button" class="btn" id="redoBtn">↷</button>
+    <button type="button" class="btn" id="previewBtn">미리보기</button>
+    <button type="button" class="btn blue" id="saveBtn">저장</button>
+  </div>
+</header>
 
-  <main class="main">
-    <aside class="side">
-      <div class="panel-section">
-        <div class="panel-title">템플릿</div>
-        <div id="templatePanel"></div>
-      </div>
-      <div class="panel-section">
-        <div class="panel-title">위젯 추가</div>
-        <div id="widgetPanel" class="tool-grid"></div>
-      </div>
-      <div class="panel-section">
-        <div class="panel-title">색상 팔레트</div>
-        <div class="note">같은 팔레트를 다시 누르면 색조합이 로테이션됩니다.</div>
-        <div id="palettePanel" class="palette-list"></div>
-      </div>
-    </aside>
-
-    <section class="stage-wrap" id="stageWrap">
-      <div id="stageLabel" class="stage-label">모바일 화면 편집 중</div>
-      <div class="canvas-shell">
-        <div id="editorCanvas" class="editor-canvas"></div>
-      </div>
+<div class="layout">
+  <aside class="sidebar">
+    <section class="panel-section">
+      <div class="panel-title">템플릿</div>
+      <div id="desktopTemplates"></div>
     </section>
+    <section class="panel-section">
+      <div class="panel-title">위젯 추가</div>
+      <div id="desktopWidgets" class="grid"></div>
+    </section>
+    <section class="panel-section">
+      <div class="panel-title">색상 팔레트</div>
+      <div style="font-size:12px;color:#64748b;font-weight:800;line-height:1.45;margin-bottom:10px">같은 팔레트를 다시 누르면 색조합이 로테이션됩니다.</div>
+      <div id="desktopPalettes"></div>
+    </section>
+  </aside>
+
+  <main class="workarea" id="workarea">
+    <div id="status" class="status">모바일 화면 편집 중</div>
+    <div id="canvas" class="canvas"></div>
   </main>
-
-  <nav class="bottom-bar">
-    <button type="button" class="bottom-btn active" data-panel="widgets">위젯</button>
-    <button type="button" class="bottom-btn" data-panel="templates">템플릿</button>
-    <button type="button" class="bottom-btn" data-panel="colors">색상</button>
-    <button type="button" class="bottom-btn" data-panel="more">도구</button>
-  </nav>
-
-  <div id="sheet" class="sheet"></div>
-  <div id="toast" class="toast"></div>
 </div>
 
+<nav class="bottom">
+  <button type="button" class="active" data-panel="widgets">위젯</button>
+  <button type="button" data-panel="templates">템플릿</button>
+  <button type="button" data-panel="colors">색상</button>
+  <button type="button" data-panel="tools">도구</button>
+</nav>
+<div id="sheet" class="sheet"></div>
+<div id="toast" class="toast"></div>
+
 <script>
-(function(){
-  const STORAGE_KEY = "tenant_store_editor_mvp_v1";
-  const DESKTOP_BREAKPOINT = 900;
-  const canvasEl = document.getElementById("editorCanvas");
-  const stageLabel = document.getElementById("stageLabel");
-  const viewportTabs = document.getElementById("viewportTabs");
+document.addEventListener("DOMContentLoaded", function(){
+  "use strict";
+
+  const STORAGE_KEY = "tenant_editor_rewrite_v1";
+  const BREAK = 900;
+  const canvas = document.getElementById("canvas");
+  const statusEl = document.getElementById("status");
   const sheet = document.getElementById("sheet");
   const toast = document.getElementById("toast");
-  const topbarEl = document.querySelector(".topbar");
-  const bottomBarEl = document.querySelector(".bottom-bar");
-  const sideEl = document.querySelector(".side");
 
-  [topbarEl, bottomBarEl, sideEl, sheet].forEach(el => {
-    if (!el) return;
-    el.addEventListener("pointerdown", e => e.stopPropagation());
-    el.addEventListener("click", e => e.stopPropagation());
-  });
-
-  const PALETTE_GROUPS = [
-    {
-      id:"cafe_warm", name:"따뜻한 카페", category:"카페/디저트",
-      rotations:[
-        {name:"크림 브라운",colors:{pageBg:"#FFF8F1",sectionBg:"#FFFFFF",cardBg:"#FFFDF9",textMain:"#2B2118",textSub:"#7A6654",primary:"#8B5E3C",primaryText:"#FFFFFF",accent:"#F4A261",border:"#E8D8C8"}},
-        {name:"화이트 카라멜",colors:{pageBg:"#FFFFFF",sectionBg:"#FFF6EA",cardBg:"#FFFFFF",textMain:"#2A1A12",textSub:"#846850",primary:"#B8793E",primaryText:"#FFFFFF",accent:"#E6B17E",border:"#EAD8C5"}},
-        {name:"에스프레소",colors:{pageBg:"#24180F",sectionBg:"#332217",cardBg:"#4A3122",textMain:"#FFF7EF",textSub:"#D9C3AD",primary:"#D6A15D",primaryText:"#24180F",accent:"#F3C77B",border:"#6A4A35"}}
-      ]
-    },
-    {
-      id:"fresh_market", name:"싱그러운 로컬", category:"농산물/마트",
-      rotations:[
-        {name:"초록 장터",colors:{pageBg:"#F7FBF2",sectionBg:"#FFFFFF",cardBg:"#F0F8E8",textMain:"#1F2F1F",textSub:"#65765F",primary:"#5A9E45",primaryText:"#FFFFFF",accent:"#F2C94C",border:"#D7E8C8"}},
-        {name:"토마토 포인트",colors:{pageBg:"#FFFDF4",sectionBg:"#FFFFFF",cardBg:"#F7FFE8",textMain:"#24301E",textSub:"#68715F",primary:"#E4503A",primaryText:"#FFFFFF",accent:"#76B947",border:"#DFE8C9"}},
-        {name:"딥 그린",colors:{pageBg:"#142218",sectionBg:"#1B3323",cardBg:"#24452F",textMain:"#F4FFF6",textSub:"#BBD5C1",primary:"#A8D672",primaryText:"#142218",accent:"#F5CE52",border:"#3B6547"}}
-      ]
-    },
-    {
-      id:"beauty_pink", name:"뷰티 핑크", category:"뷰티",
-      rotations:[
-        {name:"소프트 핑크",colors:{pageBg:"#FFF5F8",sectionBg:"#FFFFFF",cardBg:"#FFF0F5",textMain:"#3A1F2B",textSub:"#8A5B6B",primary:"#E85D8C",primaryText:"#FFFFFF",accent:"#FFC2D4",border:"#F5D5DF"}},
-        {name:"로즈 골드",colors:{pageBg:"#FFF9F7",sectionBg:"#FFFFFF",cardBg:"#FFF1EE",textMain:"#3A2621",textSub:"#8A6A64",primary:"#C76C64",primaryText:"#FFFFFF",accent:"#E6B8A8",border:"#F0D3CC"}},
-        {name:"모브",colors:{pageBg:"#F8F2FF",sectionBg:"#FFFFFF",cardBg:"#F1E8FF",textMain:"#2F2440",textSub:"#71657F",primary:"#8B5CF6",primaryText:"#FFFFFF",accent:"#C4B5FD",border:"#DDD1F5"}}
-      ]
-    },
-    {
-      id:"premium_black", name:"프리미엄 블랙", category:"프리미엄",
-      rotations:[
-        {name:"블랙 골드",colors:{pageBg:"#0E0E0E",sectionBg:"#171717",cardBg:"#222222",textMain:"#F7F7F7",textSub:"#B8B8B8",primary:"#D6B36A",primaryText:"#111111",accent:"#FFFFFF",border:"#333333"}},
-        {name:"차콜 실버",colors:{pageBg:"#15171A",sectionBg:"#20242A",cardBg:"#2B3038",textMain:"#F8FAFC",textSub:"#CBD5E1",primary:"#CBD5E1",primaryText:"#111827",accent:"#94A3B8",border:"#3B4350"}},
-        {name:"네이비 럭스",colors:{pageBg:"#0F172A",sectionBg:"#16213A",cardBg:"#1E2D4D",textMain:"#F8FAFC",textSub:"#CBD5E1",primary:"#F8C471",primaryText:"#111827",accent:"#60A5FA",border:"#334155"}}
-      ]
-    },
-    {
-      id:"clean_blue", name:"클린 블루", category:"교육/병원",
-      rotations:[
-        {name:"화이트 블루",colors:{pageBg:"#F5FAFF",sectionBg:"#FFFFFF",cardBg:"#EFF6FF",textMain:"#172033",textSub:"#64748B",primary:"#2563EB",primaryText:"#FFFFFF",accent:"#38BDF8",border:"#D8E8FF"}},
-        {name:"스카이",colors:{pageBg:"#ECFEFF",sectionBg:"#FFFFFF",cardBg:"#F0FDFA",textMain:"#12333A",textSub:"#587279",primary:"#0891B2",primaryText:"#FFFFFF",accent:"#67E8F9",border:"#CFFAFE"}},
-        {name:"딥 블루",colors:{pageBg:"#0B1B34",sectionBg:"#102A4C",cardBg:"#163B68",textMain:"#F8FBFF",textSub:"#B8C7DA",primary:"#60A5FA",primaryText:"#061225",accent:"#93C5FD",border:"#29527F"}}
-      ]
-    }
+  const WIDGET_TYPES = [
+    ["text","텍스트"],["image","이미지"],["button","버튼"],["box","배경박스"],["divider","구분선"],
+    ["menu","메뉴/상품"],["gallery","갤러리"],["hours","영업시간"],["map","주소/지도"],["contact","전화/카카오"],
+    ["coupon","쿠폰"],["video","영상링크"]
   ];
 
-  const WIDGETS = [
-    ["text","텍스트"],["image","이미지"],["button","버튼"],["box","배경박스"],
-    ["divider","구분선"],["menu","메뉴/상품"],["gallery","갤러리"],["hours","영업시간"],
-    ["map","주소/지도"],["contact","전화/카카오"],["coupon","쿠폰"],["video","영상링크"]
+  const PALETTES = [
+    {id:"cafe",name:"따뜻한 카페",rotations:[
+      {name:"크림 브라운",colors:{pageBg:"#FFF8F1",cardBg:"#FFFDF9",textMain:"#2B2118",textSub:"#7A6654",primary:"#8B5E3C",primaryText:"#fff",accent:"#F4A261",border:"#E8D8C8"}},
+      {name:"화이트 카라멜",colors:{pageBg:"#FFFFFF",cardBg:"#FFF6EA",textMain:"#2A1A12",textSub:"#846850",primary:"#B8793E",primaryText:"#fff",accent:"#E6B17E",border:"#EAD8C5"}},
+      {name:"에스프레소",colors:{pageBg:"#24180F",cardBg:"#4A3122",textMain:"#FFF7EF",textSub:"#D9C3AD",primary:"#D6A15D",primaryText:"#24180F",accent:"#F3C77B",border:"#6A4A35"}}
+    ]},
+    {id:"fresh",name:"싱그러운 로컬",rotations:[
+      {name:"초록 장터",colors:{pageBg:"#F7FBF2",cardBg:"#F0F8E8",textMain:"#1F2F1F",textSub:"#65765F",primary:"#5A9E45",primaryText:"#fff",accent:"#F2C94C",border:"#D7E8C8"}},
+      {name:"토마토 포인트",colors:{pageBg:"#FFFDF4",cardBg:"#F7FFE8",textMain:"#24301E",textSub:"#68715F",primary:"#E4503A",primaryText:"#fff",accent:"#76B947",border:"#DFE8C9"}}
+    ]},
+    {id:"beauty",name:"뷰티 핑크",rotations:[
+      {name:"소프트 핑크",colors:{pageBg:"#FFF5F8",cardBg:"#FFF0F5",textMain:"#3A1F2B",textSub:"#8A5B6B",primary:"#E85D8C",primaryText:"#fff",accent:"#FFC2D4",border:"#F5D5DF"}},
+      {name:"모브",colors:{pageBg:"#F8F2FF",cardBg:"#F1E8FF",textMain:"#2F2440",textSub:"#71657F",primary:"#8B5CF6",primaryText:"#fff",accent:"#C4B5FD",border:"#DDD1F5"}}
+    ]},
+    {id:"black",name:"프리미엄 블랙",rotations:[
+      {name:"블랙 골드",colors:{pageBg:"#0E0E0E",cardBg:"#222",textMain:"#F7F7F7",textSub:"#B8B8B8",primary:"#D6B36A",primaryText:"#111",accent:"#fff",border:"#333"}},
+      {name:"네이비 럭스",colors:{pageBg:"#0F172A",cardBg:"#1E2D4D",textMain:"#F8FAFC",textSub:"#CBD5E1",primary:"#F8C471",primaryText:"#111827",accent:"#60A5FA",border:"#334155"}}
+    ]},
+    {id:"blue",name:"클린 블루",rotations:[
+      {name:"화이트 블루",colors:{pageBg:"#F5FAFF",cardBg:"#EFF6FF",textMain:"#172033",textSub:"#64748B",primary:"#2563EB",primaryText:"#fff",accent:"#38BDF8",border:"#D8E8FF"}},
+      {name:"딥 블루",colors:{pageBg:"#0B1B34",cardBg:"#163B68",textMain:"#F8FBFF",textSub:"#B8C7DA",primary:"#60A5FA",primaryText:"#061225",accent:"#93C5FD",border:"#29527F"}}
+    ]}
   ];
 
   const TEMPLATES = [
-    {id:"blank",name:"빈 캔버스",desc:"처음부터 자유롭게 배치"},
-    {id:"cafe",name:"감성 카페형",desc:"대표 이미지, 메뉴, 문의 중심"},
-    {id:"market",name:"상가/가게 홍보형",desc:"쿠폰, 영업시간, 위치 중심"}
+    {id:"blank",name:"빈 캔버스",desc:"아무것도 없는 상태"},
+    {id:"cafe",name:"감성 카페형",desc:"대표 이미지, 메뉴, 문의"},
+    {id:"store",name:"상가/가게형",desc:"쿠폰, 위치, 영업시간"}
   ];
 
-  let pageDraft = loadDraft() || createInitialDraft();
-  let editorState = {
-    deviceType:getDeviceType(),
-    activeViewport:"mobile",
-    selectedWidgetId:null,
-    activePanel:"widgets",
-    preview:false,
-    historyStack:[],
-    redoStack:[],
-    dragging:null,
-    resizing:null
+  let state = {
+    device: isDesktop() ? "desktop" : "mobile",
+    viewport: "mobile",
+    selected: null,
+    panel: "widgets",
+    preview: false,
+    drag: null,
+    resize: null,
+    history: [],
+    redo: []
   };
-  let saveTimer = null;
 
-  function createInitialDraft(){
-    const group = PALETTE_GROUPS[0];
+  let page = load() || makeDefaultPage();
+
+  function makeDefaultPage(){
+    const p = PALETTES[0];
     return {
-      storeId:"coffee",
-      canvas:{mobile:{width:390,minHeight:1500},desktop:{width:1080,minHeight:1200}},
-      paletteGroupId:group.id,
-      paletteRotationIndex:0,
-      colors:deepClone(group.rotations[0].colors),
-      widgets:createTemplateWidgets("cafe")
+      storeId:"demo",
+      canvas:{mobile:{width:390,minHeight:1350},desktop:{width:1080,minHeight:1050}},
+      paletteId:p.id,
+      rotation:0,
+      colors:clone(p.rotations[0].colors),
+      widgets:makeTemplate("cafe")
     };
   }
 
-  function createTemplateWidgets(id){
+  function makeTemplate(id){
     if(id==="blank") return [];
-    if(id==="market"){
+    if(id==="store"){
       return [
-        defaultWidget("text",{mobile:{x:24,y:70,width:340,height:78,fontSize:34},desktop:{x:80,y:90,width:720,height:92,fontSize:50}}, {text:"민수네 상점"}),
-        defaultWidget("coupon",{mobile:{x:24,y:170,width:340,height:150},desktop:{x:80,y:210,width:460,height:180}}),
-        defaultWidget("image",{mobile:{x:24,y:350,width:340,height:230},desktop:{x:580,y:180,width:420,height:360}}),
-        defaultWidget("hours",{mobile:{x:24,y:610,width:340,height:220},desktop:{x:80,y:440,width:430,height:230}}),
-        defaultWidget("map",{mobile:{x:24,y:860,width:340,height:180},desktop:{x:550,y:580,width:460,height:230}}),
-        defaultWidget("contact",{mobile:{x:24,y:1070,width:340,height:130},desktop:{x:80,y:720,width:430,height:150}})
+        makeWidget("text", {mobile:{x:24,y:70,width:340,height:82,fontSize:34}, desktop:{x:80,y:80,width:700,height:100,fontSize:54}}, {text:"민수네 상점"}),
+        makeWidget("coupon", {mobile:{x:24,y:175,width:340,height:150}, desktop:{x:80,y:210,width:440,height:180}}),
+        makeWidget("image", {mobile:{x:24,y:350,width:340,height:230}, desktop:{x:580,y:130,width:420,height:330}}),
+        makeWidget("hours", {mobile:{x:24,y:610,width:340,height:220}, desktop:{x:80,y:460,width:430,height:230}}),
+        makeWidget("map", {mobile:{x:24,y:860,width:340,height:180}, desktop:{x:550,y:520,width:450,height:220}}),
+        makeWidget("contact", {mobile:{x:24,y:1070,width:340,height:130}, desktop:{x:80,y:740,width:920,height:150}})
       ];
     }
     return [
-      defaultWidget("text",{mobile:{x:24,y:70,width:340,height:82,fontSize:36},desktop:{x:80,y:80,width:720,height:100,fontSize:56}}, {text:"민수네 커피"}),
-      defaultWidget("text",{mobile:{x:26,y:150,width:320,height:54,fontSize:16},desktop:{x:84,y:180,width:620,height:60,fontSize:22}}, {text:"군산 골목의 따뜻한 로스터리 카페"}),
-      defaultWidget("image",{mobile:{x:24,y:230,width:340,height:245},desktop:{x:620,y:90,width:380,height:360}}),
-      defaultWidget("button",{mobile:{x:24,y:505,width:180,height:54,fontSize:16},desktop:{x:84,y:270,width:220,height:58,fontSize:17}}, {text:"문의하기"}),
-      defaultWidget("menu",{mobile:{x:24,y:600,width:340,height:360},desktop:{x:80,y:500,width:470,height:380}}),
-      defaultWidget("gallery",{mobile:{x:24,y:990,width:340,height:270},desktop:{x:590,y:500,width:410,height:300}}),
-      defaultWidget("contact",{mobile:{x:24,y:1290,width:340,height:130},desktop:{x:80,y:920,width:920,height:150}})
+      makeWidget("text", {mobile:{x:24,y:70,width:340,height:82,fontSize:36}, desktop:{x:80,y:80,width:700,height:105,fontSize:58}}, {text:"민수네 커피"}),
+      makeWidget("text", {mobile:{x:26,y:153,width:320,height:52,fontSize:16}, desktop:{x:84,y:185,width:620,height:60,fontSize:22}}, {text:"군산 골목의 따뜻한 로스터리 카페"}),
+      makeWidget("image", {mobile:{x:24,y:230,width:340,height:245}, desktop:{x:620,y:90,width:380,height:360}}),
+      makeWidget("button", {mobile:{x:24,y:505,width:180,height:54,fontSize:16}, desktop:{x:84,y:275,width:220,height:60,fontSize:17}}, {text:"문의하기"}),
+      makeWidget("menu", {mobile:{x:24,y:600,width:340,height:360}, desktop:{x:80,y:500,width:470,height:380}}),
+      makeWidget("gallery", {mobile:{x:24,y:990,width:340,height:270}, desktop:{x:590,y:500,width:410,height:300}}),
+      makeWidget("contact", {mobile:{x:24,y:1290,width:340,height:130}, desktop:{x:80,y:920,width:920,height:150}})
     ];
   }
 
-  function defaultWidget(type, layouts, propsPatch){
-    const baseMobile = layouts?.mobile || {x:24,y:140,width:340,height:80};
-    const desktop = layouts?.desktop || createDesktopLayoutFromMobile({type,responsive:{mobile:baseMobile}});
-    const id = type + "_" + Math.random().toString(36).slice(2,8) + "_" + Date.now().toString(36).slice(-4);
-    const common = {
-      id,type,zIndex:getNextZIndex(),rotate:0,locked:false,
-      visible:{mobile:true,desktop:true},
-      responsive:{mobile:deepClone(baseMobile),desktop:deepClone(desktop)},
-      props:{},
-      styles:{}
-    };
+  function makeWidget(type, layouts, propsPatch){
+    const id = type + "_" + Math.random().toString(36).slice(2,8);
+    const mobile = layouts && layouts.mobile ? clone(layouts.mobile) : {x:24,y:100,width:340,height:defaultHeight(type),fontSize:type==="text"?24:undefined};
+    const desktop = layouts && layouts.desktop ? clone(layouts.desktop) : desktopFromMobile(type, mobile);
+    const w = {id,type,z:getNextZ(),visible:{mobile:true,desktop:true},responsive:{mobile,desktop},props:{},styles:{}};
     if(type==="text"){
-      common.props={text:"텍스트를 입력하세요",placeholder:"텍스트를 입력하세요",...(propsPatch||{})};
-      common.styles={fontWeight:800,color:"var(--text-main)",lineHeight:1.2,textAlign:"left"};
+      w.props={text:"텍스트를 입력하세요",placeholder:"텍스트를 입력하세요",...(propsPatch||{})};
+      w.styles={fontWeight:850,color:"var(--text-main)",lineHeight:1.18,textAlign:"left"};
     }else if(type==="image"){
-      common.props={imageUrl:"",alt:""};
-      common.styles={radius:24,objectFit:"cover"};
+      w.props={url:""};
+      w.styles={radius:24};
     }else if(type==="button"){
-      common.props={text:"버튼",linkType:"",linkValue:"",...(propsPatch||{})};
-      common.styles={background:"var(--primary)",color:"var(--primary-text)",radius:999,fontWeight:900};
+      w.props={text:"버튼",link:"",...(propsPatch||{})};
+      w.styles={radius:999,background:"var(--primary)",color:"var(--primary-text)",fontWeight:900};
     }else if(type==="box"){
-      common.styles={radius:24,background:"var(--card-bg)",border:"1px solid var(--border)"};
+      w.styles={radius:24};
     }else if(type==="divider"){
-      common.responsive.mobile.height = common.responsive.mobile.height || 30;
-      common.responsive.desktop.height = common.responsive.desktop.height || 30;
-      common.styles={lineColor:"var(--border)"};
+      w.responsive.mobile.height = 28; w.responsive.desktop.height = 32;
     }else if(type==="menu"){
-      common.props={title:"대표 메뉴",items:[
-        {name:"아메리카노",desc:"고소한 기본 커피",price:"3,500원",imageUrl:""},
-        {name:"카페라떼",desc:"부드러운 라떼",price:"4,500원",imageUrl:""},
-        {name:"디저트",desc:"오늘의 추천",price:"5,000원",imageUrl:""}
+      w.props={title:"대표 메뉴",items:[
+        {name:"아메리카노",desc:"고소한 기본 커피",price:"3,500원"},
+        {name:"카페라떼",desc:"부드러운 라떼",price:"4,500원"},
+        {name:"디저트",desc:"오늘의 추천",price:"5,000원"}
       ]};
-      common.styles={radius:22};
+      w.styles={radius:22};
     }else if(type==="gallery"){
-      common.props={title:"사진 모음",images:["","","","","",""]};
-      common.styles={radius:22};
+      w.props={title:"사진 모음",images:["","","","","",""]};
+      w.styles={radius:22};
     }else if(type==="hours"){
-      common.props={title:"영업시간",rows:[
-        {day:"월-금",time:"10:00 - 21:00"},
-        {day:"토-일",time:"11:00 - 20:00"},
-        {day:"휴무",time:"매주 화요일"}
-      ]};
-      common.styles={radius:22};
+      w.props={title:"영업시간",rows:[{a:"월-금",b:"10:00 - 21:00"},{a:"토-일",b:"11:00 - 20:00"},{a:"휴무",b:"매주 화요일"}]};
+      w.styles={radius:22};
     }else if(type==="map"){
-      common.props={title:"오시는 길",address:"주소를 입력하세요",parking:"주차 안내를 입력하세요"};
-      common.styles={radius:22};
+      w.props={title:"오시는 길",address:"주소를 입력하세요",parking:"주차 안내를 입력하세요"};
+      w.styles={radius:22};
     }else if(type==="contact"){
-      common.props={title:"문의하기",phone:"전화하기",kakao:"카카오 문의"};
-      common.styles={radius:22};
+      w.props={title:"문의하기",phone:"전화하기",kakao:"카카오 문의"};
+      w.styles={radius:22};
     }else if(type==="coupon"){
-      common.props={title:"첫 방문 혜택",desc:"이 화면을 보여주시면 할인"};
-      common.styles={radius:24};
+      w.props={title:"첫 방문 혜택",desc:"이 화면을 보여주시면 할인"};
+      w.styles={radius:24};
     }else if(type==="video"){
-      common.props={title:"영상",videoUrl:"",provider:"",embedUrl:""};
-      common.styles={radius:22};
+      w.props={title:"영상",url:"",provider:"",embed:""};
+      w.styles={radius:22};
     }
-    ensureLayouts(common);
-    return common;
+    return w;
   }
 
-  function getNextZIndex(){
-    const max = Math.max(0, ...(pageDraft?.widgets||[]).map(w=>w.zIndex||1));
-    return max + 1;
+  function defaultHeight(type){
+    return {text:80,image:220,button:54,box:180,divider:28,menu:360,gallery:280,hours:220,map:180,contact:130,coupon:150,video:300}[type] || 100;
   }
 
-  function getDeviceType(){ return window.innerWidth >= DESKTOP_BREAKPOINT ? "desktop" : "mobile"; }
-
-  function canEditViewport(vp){
-    return editorState.deviceType === "desktop" || vp === "mobile";
+  function getNextZ(){
+    return Math.max(0,...(page && page.widgets ? page.widgets.map(w=>w.z||1) : [0])) + 1;
   }
 
-  function setActiveViewport(vp){
-    if(!canEditViewport(vp)){
-      showToast("데스크탑 화면 편집은 PC에서 가능합니다.");
-      return;
-    }
-    editorState.activeViewport = vp;
-    editorState.selectedWidgetId = null;
-    render();
-  }
-
-  function getCanvasPreset(){
-    return pageDraft.canvas[editorState.activeViewport];
+  function desktopFromMobile(type,m){
+    if(type==="text") return {x:Math.round(m.x*2.2),y:Math.round(m.y*.85),width:Math.min(Math.round(m.width*2.2),760),height:Math.round(m.height*1.25),fontSize:Math.round((m.fontSize||24)*1.35)};
+    if(type==="button") return {x:Math.round(m.x*2.2),y:Math.round(m.y*.85),width:Math.min(Math.round(m.width*1.4),260),height:Math.min(Math.round(m.height*1.2),64),fontSize:Math.round((m.fontSize||16)*1.1)};
+    return {x:Math.round(m.x*2.2),y:Math.round(m.y*.85),width:Math.min(Math.round(m.width*2),900),height:Math.round(m.height*1.2)};
   }
 
   function render(){
-    editorState.deviceType = getDeviceType();
-    if(editorState.deviceType === "mobile") editorState.activeViewport = "mobile";
-    ensureAllLayouts();
-    applyColors(pageDraft.colors);
-    renderPanels();
+    state.device = isDesktop() ? "desktop" : "mobile";
+    if(state.device === "mobile") state.viewport = "mobile";
+    applyColors();
+    renderToolbarPanels();
     renderCanvas();
-    updateViewportTabs();
+    renderViewportTabs();
+    renderSheet();
   }
 
   function renderCanvas(){
-    const vp = editorState.activeViewport;
-    const canvas = getCanvasPreset();
-    canvasEl.className = "editor-canvas" + (editorState.preview ? " preview" : "") + (vp==="desktop" ? " desktop-canvas" : "");
-    canvasEl.style.width = canvas.width + "px";
-    canvasEl.style.minHeight = canvas.minHeight + "px";
-    stageLabel.textContent = vp === "mobile" ? "모바일 화면 편집 중" : "데스크탑 화면 편집 중";
-    canvasEl.innerHTML = "";
-    pageDraft.widgets
-      .filter(w => w.visible?.[vp] !== false)
-      .sort((a,b)=>(a.zIndex||1)-(b.zIndex||1))
-      .forEach(w => canvasEl.appendChild(createWidgetElement(w, vp)));
-    applyColors(pageDraft.colors);
+    const vp = state.viewport;
+    const c = page.canvas[vp];
+    canvas.className = "canvas" + (state.preview ? " preview" : "");
+    canvas.style.width = c.width + "px";
+    canvas.style.minHeight = c.minHeight + "px";
+    statusEl.textContent = vp === "mobile" ? "모바일 화면 편집 중" : "데스크탑 화면 편집 중";
+    canvas.innerHTML = "";
+    page.widgets
+      .filter(w => w.visible[vp] !== false)
+      .sort((a,b)=>(a.z||1)-(b.z||1))
+      .forEach(w => canvas.appendChild(renderWidget(w)));
+    applyColors();
   }
 
-  function createWidgetElement(widget, vp){
-    const layout = widget.responsive[vp];
+  function renderWidget(w){
+    const vp = state.viewport;
+    const l = w.responsive[vp] || w.responsive.mobile;
     const el = document.createElement("div");
-    el.className = "editor-widget widget-" + widget.type + (editorState.selectedWidgetId===widget.id ? " selected" : "");
-    el.dataset.id = widget.id;
-    el.style.left = layout.x + "px";
-    el.style.top = layout.y + "px";
-    el.style.width = layout.width + "px";
-    el.style.height = layout.height + "px";
-    el.style.zIndex = widget.zIndex || 1;
-    if(widget.rotate) el.style.transform = `rotate(${widget.rotate}deg)`;
-    el.addEventListener("pointerdown", e => {
-      if(editorState.preview) return;
-      editorState.selectedWidgetId = widget.id;
-      render();
+    el.className = "widget " + w.type + "-widget" + (state.selected === w.id ? " selected" : "");
+    el.dataset.id = w.id;
+    el.style.left = px(l.x); el.style.top = px(l.y); el.style.width = px(l.width); el.style.height = px(l.height); el.style.zIndex = w.z || 1;
+    el.addEventListener("click", function(e){
+      if(state.preview) return;
       e.stopPropagation();
+      state.selected = w.id;
+      renderCanvas();
     });
 
-    el.appendChild(renderWidgetContent(widget, layout));
+    el.appendChild(renderContent(w,l));
 
-    if(!editorState.preview){
+    if(!state.preview){
       const move = document.createElement("div");
-      move.className = "widget-move edit-ui";
+      move.className = "move-handle edit-only";
       move.textContent = "이동";
-      move.addEventListener("pointerdown", e => startDrag(e, widget.id));
+      move.addEventListener("pointerdown", function(e){ startDrag(e,w.id); });
       el.appendChild(move);
 
       const resize = document.createElement("div");
-      resize.className = "resize-handle edit-ui";
-      resize.addEventListener("pointerdown", e => startResize(e, widget.id));
+      resize.className = "resize-handle edit-only";
+      resize.addEventListener("pointerdown", function(e){ startResize(e,w.id); });
       el.appendChild(resize);
 
-      const toolbar = document.createElement("div");
-      toolbar.className = "mini-toolbar edit-ui";
-      toolbar.innerHTML = `
-        <button type="button" class="mini-btn" title="복제" data-act="dup">⧉</button>
-        <button type="button" class="mini-btn" title="앞으로" data-act="front">↑</button>
-        <button type="button" class="mini-btn" title="뒤로" data-act="back">↓</button>
-        <button type="button" class="mini-btn danger" title="삭제" data-act="del">×</button>
-      `;
-      toolbar.addEventListener("pointerdown", e => e.stopPropagation());
-      toolbar.addEventListener("click", e => {
-        const btn = e.target.closest("button");
-        if(!btn) return;
-        const act = btn.dataset.act;
-        if(act==="dup") duplicateWidget(widget.id);
-        if(act==="front") bringForward(widget.id);
-        if(act==="back") sendBackward(widget.id);
-        if(act==="del") deleteWidget(widget.id);
+      const mini = document.createElement("div");
+      mini.className = "mini edit-only";
+      mini.innerHTML = '<button type="button" data-act="dup">⧉</button><button type="button" data-act="front">↑</button><button type="button" data-act="back">↓</button><button type="button" data-act="del" class="red">×</button>';
+      mini.addEventListener("click", function(e){
+        e.stopPropagation();
+        const b = e.target.closest("button");
+        if(!b) return;
+        const act = b.dataset.act;
+        if(act==="dup") duplicateWidget(w.id);
+        if(act==="front") bringFront(w.id);
+        if(act==="back") sendBack(w.id);
+        if(act==="del") deleteWidget(w.id);
       });
-      el.appendChild(toolbar);
+      el.appendChild(mini);
     }
     return el;
   }
 
-  function renderWidgetContent(widget, layout){
-    const d = document.createElement("div");
-    const type = widget.type;
+  function renderContent(w,l){
+    const type = w.type;
     if(type==="text"){
+      const d = document.createElement("div");
       d.className = "editable";
-      d.contentEditable = !editorState.preview;
-      d.dataset.placeholder = widget.props.placeholder || "텍스트";
-      d.innerText = widget.props.text || "";
-      d.style.fontSize = (layout.fontSize || 24) + "px";
-      d.style.fontWeight = widget.styles.fontWeight || 700;
-      d.style.lineHeight = widget.styles.lineHeight || 1.2;
-      d.style.color = widget.styles.color || "var(--text-main)";
-      d.style.textAlign = widget.styles.textAlign || "left";
-      d.addEventListener("input", () => {
-        widget.props.text = d.innerText;
-        scheduleSave();
-      });
-      d.addEventListener("pointerdown", e => e.stopPropagation());
-    }else if(type==="image"){
+      d.contentEditable = !state.preview;
+      d.dataset.placeholder = w.props.placeholder || "텍스트";
+      d.innerText = w.props.text || "";
+      d.style.fontSize = px(l.fontSize || 24);
+      d.style.fontWeight = w.styles.fontWeight || 800;
+      d.style.lineHeight = w.styles.lineHeight || 1.2;
+      d.style.color = w.styles.color || "var(--text-main)";
+      d.style.textAlign = w.styles.textAlign || "left";
+      d.addEventListener("click", e => e.stopPropagation());
+      d.addEventListener("input", () => { w.props.text = d.innerText; scheduleSave(); });
+      return d;
+    }
+
+    if(type==="image"){
+      const d = document.createElement("div");
       d.className = "image-box";
-      d.style.borderRadius = (widget.styles.radius ?? 20) + "px";
-      if(widget.props.imageUrl){
+      d.style.borderRadius = px(w.styles.radius || 20);
+      if(w.props.url){
         const img = document.createElement("img");
-        img.src = widget.props.imageUrl;
-        img.alt = widget.props.alt || "";
+        img.src = w.props.url;
         d.appendChild(img);
       }else{
-        d.innerHTML = `<div>이미지<br><small>선택 후 URL 입력</small></div>`;
+        d.innerHTML = "이미지<br><small>더블클릭 URL</small>";
       }
-      d.addEventListener("dblclick", () => promptImage(widget.id));
-    }else if(type==="button"){
+      d.addEventListener("dblclick", e => { e.stopPropagation(); setImage(w.id); });
+      return d;
+    }
+
+    if(type==="button"){
+      const d = document.createElement("div");
       d.className = "button-box";
-      d.style.borderRadius = (widget.styles.radius ?? 999) + "px";
-      d.style.background = widget.styles.background || "var(--primary)";
-      d.style.color = widget.styles.color || "var(--primary-text)";
-      d.style.fontWeight = widget.styles.fontWeight || 900;
-      d.style.fontSize = (layout.fontSize || 16) + "px";
+      d.style.borderRadius = px(w.styles.radius || 999);
+      d.style.background = w.styles.background || "var(--primary)";
+      d.style.color = w.styles.color || "var(--primary-text)";
+      d.style.fontWeight = w.styles.fontWeight || 900;
+      d.style.fontSize = px(l.fontSize || 16);
       const inner = document.createElement("div");
       inner.className = "editable";
-      inner.contentEditable = !editorState.preview;
+      inner.contentEditable = !state.preview;
       inner.dataset.placeholder = "버튼";
-      inner.innerText = widget.props.text || "";
-      inner.addEventListener("input", () => { widget.props.text = inner.innerText; scheduleSave(); });
-      inner.addEventListener("pointerdown", e => e.stopPropagation());
+      inner.innerText = w.props.text || "";
+      inner.addEventListener("click", e => e.stopPropagation());
+      inner.addEventListener("input", () => { w.props.text = inner.innerText; scheduleSave(); });
       d.appendChild(inner);
-    }else if(type==="box"){
+      return d;
+    }
+
+    if(type==="box"){
+      const d = document.createElement("div");
       d.className = "box-inner";
-      d.style.borderRadius = (widget.styles.radius ?? 20) + "px";
-    }else if(type==="divider"){
-      d.className = "divider-inner";
-      d.innerHTML = `<div class="divider-line"></div>`;
-    }else if(type==="menu"){
-      d.className = "menu-card";
-      d.style.borderRadius = (widget.styles.radius ?? 22) + "px";
-      d.innerHTML = `<div class="card-title" contenteditable="${!editorState.preview}"></div><div class="menu-list"></div>`;
-      const title = d.querySelector(".card-title");
-      title.innerText = widget.props.title || "대표 메뉴";
-      title.addEventListener("input",()=>{widget.props.title=title.innerText;scheduleSave();});
-      title.addEventListener("pointerdown", e=>e.stopPropagation());
-      const list = d.querySelector(".menu-list");
-      widget.props.items.forEach((item,idx)=>{
+      d.style.borderRadius = px(w.styles.radius || 20);
+      return d;
+    }
+
+    if(type==="divider"){
+      const d = document.createElement("div");
+      d.style.width="100%";d.style.height="100%";d.style.position="relative";
+      d.innerHTML = '<div class="divider-line"></div>';
+      return d;
+    }
+
+    if(type==="menu"){
+      const d = card(w);
+      d.appendChild(titleEditor(w,"title",w.props.title || "대표 메뉴"));
+      (w.props.items || []).forEach((it,idx)=>{
         const row = document.createElement("div");
         row.className = "menu-item";
-        row.innerHTML = `
-          <div class="menu-thumb">사진</div>
-          <div>
-            <div class="menu-name" contenteditable="${!editorState.preview}"></div>
-            <div class="menu-desc" contenteditable="${!editorState.preview}"></div>
-          </div>
-          <div class="menu-price" contenteditable="${!editorState.preview}"></div>
-        `;
-        const name = row.querySelector(".menu-name");
-        const desc = row.querySelector(".menu-desc");
-        const price = row.querySelector(".menu-price");
-        name.innerText = item.name || "";
-        desc.innerText = item.desc || "";
-        price.innerText = item.price || "";
-        [name,desc,price].forEach(node=>node.addEventListener("pointerdown", e=>e.stopPropagation()));
-        name.addEventListener("input",()=>{item.name=name.innerText;scheduleSave();});
-        desc.addEventListener("input",()=>{item.desc=desc.innerText;scheduleSave();});
-        price.addEventListener("input",()=>{item.price=price.innerText;scheduleSave();});
-        list.appendChild(row);
+        row.innerHTML = '<div class="thumb">사진</div><div><div class="mi-name"></div><div class="mi-desc"></div></div><div class="mi-price"></div>';
+        bindInline(row.querySelector(".mi-name"), it, "name");
+        bindInline(row.querySelector(".mi-desc"), it, "desc");
+        bindInline(row.querySelector(".mi-price"), it, "price");
+        d.appendChild(row);
       });
-    }else if(type==="gallery"){
-      d.className = "gallery-card";
-      d.style.borderRadius = (widget.styles.radius ?? 22) + "px";
-      d.innerHTML = `<div class="card-title" contenteditable="${!editorState.preview}"></div><div class="gallery-grid"></div>`;
-      const title = d.querySelector(".card-title");
-      title.innerText = widget.props.title || "사진 모음";
-      title.addEventListener("input",()=>{widget.props.title=title.innerText;scheduleSave();});
-      title.addEventListener("pointerdown", e=>e.stopPropagation());
-      const grid = d.querySelector(".gallery-grid");
-      (widget.props.images||[]).slice(0,6).forEach((url,i)=>{
-        const cell = document.createElement("div");
-        cell.className = "gallery-cell";
-        cell.textContent = "사진";
-        if(url){ cell.innerHTML = `<img src="${escapeAttr(url)}" alt="">`; }
-        cell.addEventListener("dblclick",()=>promptGalleryImage(widget.id,i));
-        grid.appendChild(cell);
+      return d;
+    }
+
+    if(type==="gallery"){
+      const d = card(w);
+      d.appendChild(titleEditor(w,"title",w.props.title || "사진 모음"));
+      const g = document.createElement("div"); g.className="gallery";
+      (w.props.images || []).slice(0,6).forEach((url,i)=>{
+        const cell = document.createElement("div"); cell.className="gcell"; cell.textContent="사진";
+        if(url){ cell.innerHTML = '<img src="'+esc(url)+'">'; }
+        cell.addEventListener("dblclick", e => { e.stopPropagation(); setGalleryImage(w.id,i); });
+        g.appendChild(cell);
       });
-    }else if(type==="hours"){
-      d.className = "hours-card";
-      d.style.borderRadius = (widget.styles.radius ?? 22) + "px";
-      d.appendChild(editableTitle(widget,"title",widget.props.title || "영업시간"));
-      (widget.props.rows||[]).forEach(row=>{
-        const r = document.createElement("div");
-        r.className = "hours-row";
-        const day = editableSpan(row,"day",row.day);
-        const time = editableSpan(row,"time",row.time);
-        r.append(day,time);
-        d.appendChild(r);
+      d.appendChild(g);
+      return d;
+    }
+
+    if(type==="hours"){
+      const d = card(w);
+      d.appendChild(titleEditor(w,"title",w.props.title || "영업시간"));
+      (w.props.rows || []).forEach(r=>{
+        const row = document.createElement("div"); row.className="row";
+        row.appendChild(spanEditor(r,"a",r.a)); row.appendChild(spanEditor(r,"b",r.b));
+        d.appendChild(row);
       });
-    }else if(type==="map"){
-      d.className = "map-card";
-      d.style.borderRadius = (widget.styles.radius ?? 22) + "px";
-      d.appendChild(editableTitle(widget,"title",widget.props.title || "오시는 길"));
-      const r1 = document.createElement("div");
-      r1.className = "map-row";
-      r1.append(labelSpan("주소"), editablePropSpan(widget.props,"address",widget.props.address||"주소를 입력하세요"));
-      const r2 = document.createElement("div");
-      r2.className = "map-row";
-      r2.append(labelSpan("주차"), editablePropSpan(widget.props,"parking",widget.props.parking||"주차 안내를 입력하세요"));
-      d.append(r1,r2);
-    }else if(type==="contact"){
-      d.className = "contact-card";
-      d.style.borderRadius = (widget.styles.radius ?? 22) + "px";
-      d.appendChild(editableTitle(widget,"title",widget.props.title || "문의하기"));
-      const actions = document.createElement("div");
-      actions.className = "contact-actions";
-      const phone = document.createElement("div");
-      phone.className = "contact-pill";
-      phone.contentEditable = !editorState.preview;
-      phone.innerText = widget.props.phone || "전화하기";
-      const kakao = document.createElement("div");
-      kakao.className = "contact-pill";
-      kakao.contentEditable = !editorState.preview;
-      kakao.innerText = widget.props.kakao || "카카오 문의";
-      phone.addEventListener("pointerdown",e=>e.stopPropagation());
-      kakao.addEventListener("pointerdown",e=>e.stopPropagation());
-      phone.addEventListener("input",()=>{widget.props.phone=phone.innerText;scheduleSave();});
-      kakao.addEventListener("input",()=>{widget.props.kakao=kakao.innerText;scheduleSave();});
-      actions.append(phone,kakao);
-      d.appendChild(actions);
-    }else if(type==="coupon"){
-      d.className = "coupon-card";
-      d.style.borderRadius = (widget.styles.radius ?? 24) + "px";
-      d.innerHTML = `<div class="coupon-big" contenteditable="${!editorState.preview}"></div><div class="coupon-small" contenteditable="${!editorState.preview}"></div>`;
-      const big = d.querySelector(".coupon-big");
-      const small = d.querySelector(".coupon-small");
-      big.innerText = widget.props.title || "첫 방문 혜택";
-      small.innerText = widget.props.desc || "이 화면을 보여주시면 할인";
-      big.addEventListener("pointerdown",e=>e.stopPropagation());
-      small.addEventListener("pointerdown",e=>e.stopPropagation());
-      big.addEventListener("input",()=>{widget.props.title=big.innerText;scheduleSave();});
-      small.addEventListener("input",()=>{widget.props.desc=small.innerText;scheduleSave();});
-    }else if(type==="video"){
-      d.className = "video-card";
-      d.style.borderRadius = (widget.styles.radius ?? 22) + "px";
-      d.appendChild(editableTitle(widget,"title",widget.props.title || "영상"));
-      const frame = document.createElement("div");
-      frame.className = "video-frame";
-      if(widget.props.embedUrl){
-        frame.innerHTML = `<iframe src="${escapeAttr(widget.props.embedUrl)}" allowfullscreen></iframe>`;
-      }else{
-        frame.innerHTML = `영상 링크를 입력하세요<br><small>유튜브는 미리보기, 그 외는 링크 카드</small>`;
-      }
+      return d;
+    }
+
+    if(type==="map"){
+      const d = card(w);
+      d.appendChild(titleEditor(w,"title",w.props.title || "오시는 길"));
+      d.appendChild(infoRow("주소", w.props, "address"));
+      d.appendChild(infoRow("주차", w.props, "parking"));
+      return d;
+    }
+
+    if(type==="contact"){
+      const d = card(w);
+      d.appendChild(titleEditor(w,"title",w.props.title || "문의하기"));
+      const wrap = document.createElement("div"); wrap.className="pill-wrap";
+      const p1 = document.createElement("div"); p1.className="pill";
+      const p2 = document.createElement("div"); p2.className="pill";
+      bindInline(p1,w.props,"phone"); bindInline(p2,w.props,"kakao");
+      wrap.append(p1,p2); d.appendChild(wrap);
+      return d;
+    }
+
+    if(type==="coupon"){
+      const d = card(w); d.classList.add("coupon");
+      const big = document.createElement("div"); big.className="big";
+      const small = document.createElement("div"); small.className="small";
+      bindInline(big,w.props,"title"); bindInline(small,w.props,"desc");
+      d.append(big,small); return d;
+    }
+
+    if(type==="video"){
+      const d = card(w);
+      d.appendChild(titleEditor(w,"title",w.props.title || "영상"));
+      const frame = document.createElement("div"); frame.className="video-frame";
+      if(w.props.embed){ frame.innerHTML = '<iframe src="'+esc(w.props.embed)+'" allowfullscreen></iframe>'; }
+      else { frame.innerHTML = '영상 링크를 입력하세요<br><small>유튜브는 미리보기</small>'; }
       d.appendChild(frame);
-      if(!editorState.preview){
-        const row = document.createElement("div");
-        row.className = "input-row";
-        row.innerHTML = `<input value="${escapeAttr(widget.props.videoUrl||"")}" placeholder="유튜브/인스타/틱톡/네이버TV 링크"><button type="button" class="btn primary">적용</button>`;
-        const input = row.querySelector("input");
-        row.querySelector("button").addEventListener("click",()=>applyVideoUrl(widget.id,input.value));
-        input.addEventListener("pointerdown",e=>e.stopPropagation());
+      if(!state.preview){
+        const row = document.createElement("div"); row.className="video-input";
+        row.innerHTML = '<input placeholder="유튜브/인스타/틱톡/네이버TV 링크"><button type="button" class="btn dark">적용</button>';
+        const input = row.querySelector("input"); input.value = w.props.url || "";
+        input.addEventListener("click", e => e.stopPropagation());
+        row.querySelector("button").addEventListener("click", e => { e.stopPropagation(); applyVideo(w.id,input.value); });
         d.appendChild(row);
       }
+      return d;
     }
+
+    const d = document.createElement("div"); d.textContent=type; return d;
+  }
+
+  function card(w){
+    const d = document.createElement("div");
+    d.className = "card";
+    d.style.borderRadius = px((w.styles && w.styles.radius) || 22);
     return d;
   }
 
-  function editableTitle(widget,key,value){
-    const t = document.createElement("div");
-    t.className = "card-title";
-    t.contentEditable = !editorState.preview;
-    t.innerText = value;
-    t.addEventListener("pointerdown", e=>e.stopPropagation());
-    t.addEventListener("input",()=>{widget.props[key]=t.innerText;scheduleSave();});
+  function titleEditor(w,key,val){
+    const t = document.createElement("div"); t.className="card-title";
+    t.contentEditable = !state.preview; t.innerText = val;
+    t.addEventListener("click", e => e.stopPropagation());
+    t.addEventListener("input", () => { w.props[key]=t.innerText; scheduleSave(); });
     return t;
   }
-  function editableSpan(obj,key,value){
+
+  function bindInline(el,obj,key){
+    el.contentEditable = !state.preview; el.innerText = obj[key] || "";
+    el.addEventListener("click", e => e.stopPropagation());
+    el.addEventListener("input", () => { obj[key]=el.innerText; scheduleSave(); });
+  }
+
+  function spanEditor(obj,key,val){
     const s = document.createElement("span");
-    s.contentEditable = !editorState.preview;
-    s.innerText = value || "";
-    s.addEventListener("pointerdown", e=>e.stopPropagation());
-    s.addEventListener("input",()=>{obj[key]=s.innerText;scheduleSave();});
+    bindInline(s,obj,key);
     return s;
   }
-  function editablePropSpan(obj,key,value){ return editableSpan(obj,key,value); }
-  function labelSpan(txt){ const s=document.createElement("span"); s.textContent=txt; s.style.fontWeight="900"; return s; }
 
-  function renderPanels(){
-    renderWidgetPanel(document.getElementById("widgetPanel"));
-    renderPalettePanel(document.getElementById("palettePanel"));
-    renderTemplatePanel(document.getElementById("templatePanel"));
-    renderMobileSheet();
+  function infoRow(label,obj,key){
+    const row = document.createElement("div"); row.className="row";
+    const l = document.createElement("span"); l.textContent=label; l.style.fontWeight="950";
+    const v = document.createElement("span"); bindInline(v,obj,key);
+    row.append(l,v); return row;
   }
 
-  function renderWidgetPanel(target){
+  function renderToolbarPanels(){
+    fillWidgets(document.getElementById("desktopWidgets"));
+    fillTemplates(document.getElementById("desktopTemplates"));
+    fillPalettes(document.getElementById("desktopPalettes"));
+  }
+
+  function fillWidgets(target){
     if(!target) return;
     target.innerHTML = "";
-    WIDGETS.forEach(([type,label])=>{
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "tool-card";
-      btn.textContent = label;
-      btn.onclick = () => addWidget(type);
-      target.appendChild(btn);
+    WIDGET_TYPES.forEach(([type,label])=>{
+      const b = document.createElement("button");
+      b.type="button"; b.className="tool"; b.textContent=label;
+      b.addEventListener("click", () => addWidget(type));
+      target.appendChild(b);
     });
   }
 
-  function renderPalettePanel(target){
-    if(!target) return;
-    target.innerHTML = "";
-    PALETTE_GROUPS.forEach(group=>{
-      const rot = group.rotations[pageDraft.paletteGroupId===group.id ? pageDraft.paletteRotationIndex : 0];
-      const c = rot.colors;
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "palette-card" + (pageDraft.paletteGroupId===group.id ? " active" : "");
-      btn.innerHTML = `
-        <div class="palette-name">${group.name}</div>
-        <div class="palette-sub">${rot.name} ${pageDraft.paletteGroupId===group.id ? (pageDraft.paletteRotationIndex+1)+"/"+group.rotations.length : "1/"+group.rotations.length}</div>
-        <div class="swatches">
-          <span style="background:${c.pageBg}"></span>
-          <span style="background:${c.cardBg}"></span>
-          <span style="background:${c.textMain}"></span>
-          <span style="background:${c.primary}"></span>
-          <span style="background:${c.accent}"></span>
-        </div>`;
-      btn.onclick = () => selectPaletteGroup(group.id);
-      target.appendChild(btn);
-    });
-  }
-
-  function renderTemplatePanel(target){
+  function fillTemplates(target){
     if(!target) return;
     target.innerHTML = "";
     TEMPLATES.forEach(t=>{
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "template-card";
-      btn.innerHTML = `<strong>${t.name}</strong><small>${t.desc}</small>`;
-      btn.onclick = () => applyTemplate(t.id);
-      target.appendChild(btn);
+      const b = document.createElement("button");
+      b.type="button"; b.className="template";
+      b.innerHTML = '<strong>'+t.name+'</strong><small>'+t.desc+'</small>';
+      b.addEventListener("click", () => applyTemplate(t.id));
+      target.appendChild(b);
     });
   }
 
-  function renderMobileSheet(){
-    if(editorState.deviceType === "desktop") return;
-    const panel = editorState.activePanel;
-    const btns = document.querySelectorAll(".bottom-btn");
-    btns.forEach(b => b.classList.toggle("active", b.dataset.panel === panel));
-    if(panel === "widgets"){
-      sheet.className = "sheet open";
-      sheet.innerHTML = `<div class="panel-title">위젯 추가</div><div id="sheetWidgets" class="tool-grid"></div>`;
-      renderWidgetPanel(document.getElementById("sheetWidgets"));
-    }else if(panel === "templates"){
-      sheet.className = "sheet open";
-      sheet.innerHTML = `<div class="panel-title">템플릿</div><div id="sheetTemplates"></div>`;
-      renderTemplatePanel(document.getElementById("sheetTemplates"));
-    }else if(panel === "colors"){
-      sheet.className = "sheet open";
-      sheet.innerHTML = `<div class="panel-title">색상 팔레트</div><div class="note">같은 팔레트를 다시 누르면 색조합이 바뀝니다.</div><div id="sheetPalettes" class="palette-list"></div>`;
-      renderPalettePanel(document.getElementById("sheetPalettes"));
-    }else if(panel === "more"){
-      sheet.className = "sheet open";
-      sheet.innerHTML = `
-        <div class="panel-title">도구</div>
-        <div class="tool-grid">
-          <button type="button" class="tool-card" id="mUndo">되돌리기</button>
-          <button type="button" class="tool-card" id="mRedo">다시하기</button>
-          <button type="button" class="tool-card" id="mPreview">미리보기</button>
-          <button type="button" class="tool-card" id="mSave">저장</button>
-        </div>
-        <div class="note" style="margin-top:12px;">모바일에서는 모바일 화면만 편집됩니다. 데스크탑 화면 편집은 PC에서 가능합니다.</div>
-      `;
-      document.getElementById("mUndo").onclick=undo;
-      document.getElementById("mRedo").onclick=redo;
-      document.getElementById("mPreview").onclick=togglePreview;
-      document.getElementById("mSave").onclick=saveNow;
+  function fillPalettes(target){
+    if(!target) return;
+    target.innerHTML = "";
+    PALETTES.forEach(p=>{
+      const active = page.paletteId === p.id;
+      const rotIndex = active ? page.rotation : 0;
+      const rot = p.rotations[rotIndex];
+      const c = rot.colors;
+      const b = document.createElement("button");
+      b.type="button"; b.className="palette" + (active ? " active" : "");
+      b.innerHTML = '<strong>'+p.name+'</strong><small>'+rot.name+' '+(rotIndex+1)+'/'+p.rotations.length+'</small>'+
+        '<div class="swatches"><i style="background:'+c.pageBg+'"></i><i style="background:'+c.cardBg+'"></i><i style="background:'+c.textMain+'"></i><i style="background:'+c.primary+'"></i><i style="background:'+c.accent+'"></i></div>';
+      b.addEventListener("click", () => selectPalette(p.id));
+      target.appendChild(b);
+    });
+  }
+
+  function renderSheet(){
+    if(state.device === "desktop") return;
+    document.querySelectorAll(".bottom button").forEach(b=>b.classList.toggle("active", b.dataset.panel === state.panel));
+    sheet.className = "sheet open";
+    if(state.panel === "widgets"){
+      sheet.innerHTML = '<div class="panel-title">위젯 추가</div><div id="sheetWidgets" class="grid"></div>';
+      fillWidgets(document.getElementById("sheetWidgets"));
+    }else if(state.panel === "templates"){
+      sheet.innerHTML = '<div class="panel-title">템플릿</div><div id="sheetTemplates"></div>';
+      fillTemplates(document.getElementById("sheetTemplates"));
+    }else if(state.panel === "colors"){
+      sheet.innerHTML = '<div class="panel-title">색상 팔레트</div><div style="font-size:12px;color:#64748b;font-weight:800;line-height:1.45;margin-bottom:10px">같은 팔레트를 다시 누르면 색조합이 바뀝니다.</div><div id="sheetPalettes"></div>';
+      fillPalettes(document.getElementById("sheetPalettes"));
     }else{
-      sheet.className = "sheet";
+      sheet.innerHTML = '<div class="panel-title">도구</div><div class="grid"><button type="button" class="tool" id="sUndo">되돌리기</button><button type="button" class="tool" id="sRedo">다시하기</button><button type="button" class="tool" id="sPreview">미리보기</button><button type="button" class="tool" id="sSave">저장</button></div><div style="font-size:12px;color:#64748b;font-weight:800;line-height:1.45;margin-top:12px">모바일에서는 모바일 화면만 편집됩니다.</div>';
+      document.getElementById("sUndo").addEventListener("click", undo);
+      document.getElementById("sRedo").addEventListener("click", redo);
+      document.getElementById("sPreview").addEventListener("click", togglePreview);
+      document.getElementById("sSave").addEventListener("click", saveNow);
     }
   }
 
-  function updateViewportTabs(){
-    viewportTabs.style.display = editorState.deviceType === "desktop" ? "flex" : "none";
-    viewportTabs.querySelectorAll(".viewport-tab").forEach(btn=>{
-      btn.classList.toggle("active", btn.dataset.vp === editorState.activeViewport);
-    });
+  function renderViewportTabs(){
+    document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active", b.dataset.vp === state.viewport));
   }
 
   function addWidget(type){
     pushHistory();
-    const vp = editorState.activeViewport;
-    const baseY = Math.max(70, Math.round((document.getElementById("stageWrap").scrollTop || window.scrollY) + 120));
-    let mobileLayout;
-    if(vp==="mobile"){
-      mobileLayout = {x:24,y:baseY,width:340,height:defaultHeight(type),fontSize:type==="text"?24:undefined};
-    }else{
-      mobileLayout = {x:24,y:Math.round(baseY/1.8),width:340,height:defaultHeight(type),fontSize:type==="text"?24:undefined};
+    const vp = state.viewport;
+    const scrollTop = document.getElementById("workarea").scrollTop || 0;
+    const y = Math.max(70, Math.round(scrollTop + 130));
+    const mobile = vp === "mobile"
+      ? {x:24,y:y,width:340,height:defaultHeight(type),fontSize:type==="text"?24:undefined}
+      : {x:24,y:Math.round(y/1.7),width:340,height:defaultHeight(type),fontSize:type==="text"?24:undefined};
+    const w = makeWidget(type,{mobile});
+    if(vp === "desktop"){
+      w.responsive.desktop = {x:80,y:y,width:type==="button"?220:520,height:Math.round(defaultHeight(type)*1.2),fontSize:type==="text"?36:undefined};
     }
-    const widget = defaultWidget(type,{mobile:mobileLayout});
-    if(vp==="desktop"){
-      widget.responsive.desktop = {x:80,y:baseY,width:type==="button"?220:520,height:defaultHeight(type)*1.2,fontSize:type==="text"?36:undefined};
-    }
-    pageDraft.widgets.push(widget);
-    editorState.selectedWidgetId = widget.id;
-    updateCanvasHeight("mobile");
-    updateCanvasHeight("desktop");
-    scheduleSave();
-    render();
-    showToast("위젯을 추가했습니다.");
-  }
-
-  function defaultHeight(type){
-    return {text:80,image:220,button:54,box:180,divider:30,menu:360,gallery:280,hours:220,map:180,contact:130,coupon:150,video:300}[type] || 100;
-  }
-
-  function selectPaletteGroup(groupId){
-    pushHistory();
-    if(pageDraft.paletteGroupId === groupId){
-      rotatePalette(false);
-      return;
-    }
-    const group = PALETTE_GROUPS.find(p=>p.id===groupId);
-    pageDraft.paletteGroupId = groupId;
-    pageDraft.paletteRotationIndex = 0;
-    pageDraft.colors = deepClone(group.rotations[0].colors);
-    applyColors(pageDraft.colors);
-    scheduleSave();
-    render();
-  }
-
-  function rotatePalette(withHistory=true){
-    if(withHistory) pushHistory();
-    const group = PALETTE_GROUPS.find(p=>p.id===pageDraft.paletteGroupId);
-    if(!group) return;
-    pageDraft.paletteRotationIndex = (pageDraft.paletteRotationIndex + 1) % group.rotations.length;
-    pageDraft.colors = deepClone(group.rotations[pageDraft.paletteRotationIndex].colors);
-    applyColors(pageDraft.colors);
-    scheduleSave();
-    render();
+    page.widgets.push(w);
+    state.selected = w.id;
+    updateCanvasHeight("mobile"); updateCanvasHeight("desktop");
+    saveSoon(); render(); show("위젯을 추가했습니다.");
   }
 
   function applyTemplate(id){
-    if(!confirm("현재 편집 내용을 템플릿으로 교체할까요?")) return;
+    if(!confirm("현재 내용을 템플릿으로 교체할까요?")) return;
     pushHistory();
-    pageDraft.widgets = createTemplateWidgets(id);
-    updateCanvasHeight("mobile");
-    updateCanvasHeight("desktop");
-    editorState.selectedWidgetId = null;
-    scheduleSave();
-    render();
+    page.widgets = makeTemplate(id);
+    state.selected = null;
+    updateCanvasHeight("mobile"); updateCanvasHeight("desktop");
+    saveSoon(); render();
   }
 
-  function applyColors(colors){
-    const root = canvasEl;
-    if(!root || !colors) return;
-    root.style.setProperty("--page-bg", colors.pageBg);
-    root.style.setProperty("--section-bg", colors.sectionBg);
-    root.style.setProperty("--card-bg", colors.cardBg);
-    root.style.setProperty("--text-main", colors.textMain);
-    root.style.setProperty("--text-sub", colors.textSub);
-    root.style.setProperty("--primary", colors.primary);
-    root.style.setProperty("--primary-text", colors.primaryText);
-    root.style.setProperty("--accent", colors.accent);
-    root.style.setProperty("--border", colors.border);
+  function selectPalette(id){
+    pushHistory();
+    const p = PALETTES.find(x=>x.id===id);
+    if(!p) return;
+    if(page.paletteId === id){
+      page.rotation = (page.rotation + 1) % p.rotations.length;
+    }else{
+      page.paletteId = id;
+      page.rotation = 0;
+    }
+    page.colors = clone(p.rotations[page.rotation].colors);
+    applyColors(); saveSoon(); render();
   }
 
-  function startDrag(e, id){
-    if(editorState.preview) return;
+  function applyColors(){
+    const c = page.colors || {};
+    Object.keys(c).forEach(k => canvas.style.setProperty("--"+k.replace(/[A-Z]/g, m=>"-"+m.toLowerCase()), c[k]));
+    canvas.style.setProperty("--page-bg", c.pageBg || "#fff");
+    canvas.style.setProperty("--card-bg", c.cardBg || "#fff");
+    canvas.style.setProperty("--text-main", c.textMain || "#111");
+    canvas.style.setProperty("--text-sub", c.textSub || "#666");
+    canvas.style.setProperty("--primary", c.primary || "#111");
+    canvas.style.setProperty("--primary-text", c.primaryText || "#fff");
+    canvas.style.setProperty("--accent", c.accent || "#999");
+    canvas.style.setProperty("--border", c.border || "#ddd");
+  }
+
+  function startDrag(e,id){
     e.preventDefault(); e.stopPropagation();
-    const w = findWidget(id);
-    const layout = w.responsive[editorState.activeViewport];
-    editorState.dragging = {
-      id, startX:layout.x, startY:layout.y, pointerX:e.clientX, pointerY:e.clientY
-    };
-    e.target.setPointerCapture?.(e.pointerId);
+    const w = find(id); if(!w) return;
+    const l = w.responsive[state.viewport];
+    state.drag = {id, sx:l.x, sy:l.y, px:e.clientX, py:e.clientY};
+    try{ e.currentTarget.setPointerCapture(e.pointerId); }catch(_){}
   }
-
-  function startResize(e, id){
-    if(editorState.preview) return;
+  function startResize(e,id){
     e.preventDefault(); e.stopPropagation();
-    const w = findWidget(id);
-    const layout = w.responsive[editorState.activeViewport];
-    editorState.resizing = {
-      id, startW:layout.width, startH:layout.height, pointerX:e.clientX, pointerY:e.clientY
-    };
-    e.target.setPointerCapture?.(e.pointerId);
+    const w = find(id); if(!w) return;
+    const l = w.responsive[state.viewport];
+    state.resize = {id, sw:l.width, sh:l.height, px:e.clientX, py:e.clientY};
+    try{ e.currentTarget.setPointerCapture(e.pointerId); }catch(_){}
   }
 
-  window.addEventListener("pointermove", e=>{
-    if(editorState.dragging){
-      const d = editorState.dragging;
-      const dx = e.clientX - d.pointerX;
-      const dy = e.clientY - d.pointerY;
-      updateWidgetLayout(d.id,{x:Math.round(d.startX+dx),y:Math.round(d.startY+dy)},false);
+  window.addEventListener("pointermove", function(e){
+    if(state.drag){
+      const d = state.drag;
+      updateLayout(d.id,{x:Math.round(d.sx + e.clientX - d.px), y:Math.round(d.sy + e.clientY - d.py)}, false);
       renderCanvas();
     }
-    if(editorState.resizing){
-      const r = editorState.resizing;
-      const dx = e.clientX - r.pointerX;
-      const dy = e.clientY - r.pointerY;
-      updateWidgetLayout(r.id,{width:Math.max(40,Math.round(r.startW+dx)),height:Math.max(28,Math.round(r.startH+dy))},false);
+    if(state.resize){
+      const r = state.resize;
+      updateLayout(r.id,{width:Math.max(40,Math.round(r.sw + e.clientX - r.px)), height:Math.max(28,Math.round(r.sh + e.clientY - r.py))}, false);
       renderCanvas();
     }
   });
 
-  window.addEventListener("pointerup", ()=>{
-    if(editorState.dragging || editorState.resizing){
+  window.addEventListener("pointerup", function(){
+    if(state.drag || state.resize){
       pushHistory();
-      editorState.dragging = null;
-      editorState.resizing = null;
-      updateCanvasHeight(editorState.activeViewport);
-      scheduleSave();
-      render();
+      state.drag = null; state.resize = null;
+      updateCanvasHeight(state.viewport); saveSoon(); render();
     }
   });
 
-  canvasEl.addEventListener("pointerdown", ()=>{
-    if(editorState.preview) return;
-    editorState.selectedWidgetId = null;
-    render();
-  });
-
-  function updateWidgetLayout(id, patch, save=true){
-    const w = findWidget(id);
-    if(!w) return;
-    const vp = editorState.activeViewport;
-    if(!canEditViewport(vp)) return;
-    w.responsive[vp] = {...w.responsive[vp], ...patch};
-    updateCanvasHeight(vp);
-    if(save) scheduleSave();
+  function updateLayout(id,patch,save){
+    const w = find(id); if(!w) return;
+    w.responsive[state.viewport] = Object.assign({}, w.responsive[state.viewport], patch);
+    updateCanvasHeight(state.viewport);
+    if(save !== false) saveSoon();
   }
 
-  function findWidget(id){ return pageDraft.widgets.find(w=>w.id===id); }
+  function find(id){ return page.widgets.find(w=>w.id===id); }
 
   function deleteWidget(id){
-    pushHistory();
-    pageDraft.widgets = pageDraft.widgets.filter(w=>w.id!==id);
-    editorState.selectedWidgetId = null;
-    scheduleSave();
-    render();
+    pushHistory(); page.widgets = page.widgets.filter(w=>w.id!==id); state.selected=null; saveSoon(); render();
   }
-
   function duplicateWidget(id){
-    const w = findWidget(id);
-    if(!w) return;
+    const w = find(id); if(!w) return;
     pushHistory();
-    const copy = deepClone(w);
-    copy.id = w.type + "_" + Math.random().toString(36).slice(2,8);
-    copy.zIndex = getNextZIndex();
-    copy.responsive.mobile.x += 18; copy.responsive.mobile.y += 18;
-    copy.responsive.desktop.x += 26; copy.responsive.desktop.y += 26;
-    pageDraft.widgets.push(copy);
-    editorState.selectedWidgetId = copy.id;
-    scheduleSave();
-    render();
+    const c = clone(w); c.id = c.type + "_" + Math.random().toString(36).slice(2,8); c.z = getNextZ();
+    c.responsive.mobile.x += 18; c.responsive.mobile.y += 18; c.responsive.desktop.x += 28; c.responsive.desktop.y += 28;
+    page.widgets.push(c); state.selected=c.id; saveSoon(); render();
   }
+  function bringFront(id){ const w=find(id); if(!w)return; pushHistory(); w.z=getNextZ(); saveSoon(); render(); }
+  function sendBack(id){ const w=find(id); if(!w)return; pushHistory(); w.z=Math.max(1,(w.z||1)-2); saveSoon(); render(); }
 
-  function bringForward(id){
-    const w = findWidget(id);
-    if(!w) return;
-    pushHistory();
-    w.zIndex = getNextZIndex();
-    scheduleSave();
-    render();
-  }
-
-  function sendBackward(id){
-    const w = findWidget(id);
-    if(!w) return;
-    pushHistory();
-    w.zIndex = Math.max(1,(w.zIndex||1)-2);
-    scheduleSave();
-    render();
-  }
-
-  function promptImage(id){
-    const w = findWidget(id);
-    if(!w) return;
-    const url = prompt("이미지 URL을 입력하세요.", w.props.imageUrl || "");
+  function setImage(id){
+    const w = find(id); if(!w) return;
+    const url = prompt("이미지 URL을 입력하세요.", w.props.url || "");
     if(url === null) return;
-    pushHistory();
-    w.props.imageUrl = url.trim();
-    scheduleSave();
-    render();
+    pushHistory(); w.props.url = url.trim(); saveSoon(); render();
   }
-
-  function promptGalleryImage(id, index){
-    const w = findWidget(id);
-    if(!w) return;
-    const current = w.props.images[index] || "";
-    const url = prompt("갤러리 이미지 URL을 입력하세요.", current);
+  function setGalleryImage(id,i){
+    const w = find(id); if(!w) return;
+    const url = prompt("갤러리 이미지 URL을 입력하세요.", w.props.images[i] || "");
     if(url === null) return;
-    pushHistory();
-    w.props.images[index] = url.trim();
-    scheduleSave();
-    render();
+    pushHistory(); w.props.images[i] = url.trim(); saveSoon(); render();
   }
-
-  function applyVideoUrl(id,url){
-    const w = findWidget(id);
-    if(!w) return;
-    url = (url || "").trim();
-    if(isBlockedVideoFileUrl(url)){
-      showToast("mp4/mov/webm 같은 영상 파일 링크는 받지 않습니다.");
-      return;
-    }
+  function applyVideo(id,url){
+    const w = find(id); if(!w)return;
+    url = (url||"").trim();
+    if(/\.(mp4|mov|webm|avi|mkv)(\?.*)?$/i.test(url)){ show("영상 파일 링크는 받지 않습니다."); return; }
     pushHistory();
-    const parsed = parseVideoUrl(url);
-    w.props.videoUrl = url;
-    w.props.provider = parsed.provider;
-    w.props.embedUrl = parsed.embedUrl;
-    scheduleSave();
-    render();
+    const parsed = parseVideo(url);
+    w.props.url=url; w.props.provider=parsed.provider; w.props.embed=parsed.embed;
+    saveSoon(); render();
   }
-
-  function parseVideoUrl(url){
-    if(!url) return {provider:"",embedUrl:""};
-    let id = "";
+  function parseVideo(url){
+    if(!url) return {provider:"",embed:""};
     try{
-      const u = new URL(url);
+      const u = new URL(url); let id="";
       if(u.hostname.includes("youtube.com")){
         if(u.pathname.startsWith("/shorts/")) id = u.pathname.split("/")[2] || "";
         else id = u.searchParams.get("v") || "";
-      }
-      if(u.hostname.includes("youtu.be")){
+      }else if(u.hostname.includes("youtu.be")){
         id = u.pathname.replace("/","").split("?")[0];
       }
-      if(id) return {provider:"youtube",embedUrl:"https://www.youtube.com/embed/"+id};
-      if(u.hostname.includes("instagram.com")) return {provider:"instagram",embedUrl:""};
-      if(u.hostname.includes("tiktok.com")) return {provider:"tiktok",embedUrl:""};
-      if(u.hostname.includes("tv.naver.com")) return {provider:"navertv",embedUrl:""};
-    }catch(e){}
-    return {provider:"link",embedUrl:""};
-  }
-
-  function isBlockedVideoFileUrl(url){
-    return /\.(mp4|mov|webm|avi|mkv)(\?.*)?$/i.test(url || "");
-  }
-
-  function ensureAllLayouts(){
-    pageDraft.widgets.forEach(ensureLayouts);
-  }
-
-  function ensureLayouts(w){
-    if(!w.responsive) w.responsive = {};
-    if(!w.responsive.mobile) w.responsive.mobile = {x:24,y:100,width:340,height:defaultHeight(w.type)};
-    if(!w.responsive.desktop) w.responsive.desktop = createDesktopLayoutFromMobile(w);
-    if(!w.visible) w.visible = {mobile:true,desktop:true};
-  }
-
-  function createDesktopLayoutFromMobile(widget){
-    const m = widget.responsive.mobile;
-    if(widget.type==="text"){
-      return {x:Math.round(m.x*2.2),y:Math.round(m.y*.85),width:Math.min(Math.round(m.width*2.2),760),height:Math.round(m.height*1.25),fontSize:Math.round((m.fontSize||24)*1.35)};
-    }
-    if(widget.type==="button"){
-      return {x:Math.round(m.x*2.2),y:Math.round(m.y*.85),width:Math.min(Math.round(m.width*1.4),260),height:Math.min(Math.round(m.height*1.2),64),fontSize:Math.round((m.fontSize||16)*1.1)};
-    }
-    return {x:Math.round(m.x*2.2),y:Math.round(m.y*.85),width:Math.min(Math.round(m.width*2),900),height:Math.round(m.height*1.2)};
+      if(id) return {provider:"youtube",embed:"https://www.youtube.com/embed/"+id};
+      if(u.hostname.includes("instagram.com")) return {provider:"instagram",embed:""};
+      if(u.hostname.includes("tiktok.com")) return {provider:"tiktok",embed:""};
+      if(u.hostname.includes("tv.naver.com")) return {provider:"navertv",embed:""};
+    }catch(_){}
+    return {provider:"link",embed:""};
   }
 
   function updateCanvasHeight(vp){
-    const widgets = pageDraft.widgets.filter(w=>w.visible?.[vp]!==false);
     const min = vp==="mobile" ? 1200 : 1000;
-    if(!widgets.length){ pageDraft.canvas[vp].minHeight = min; return; }
-    const maxBottom = Math.max(...widgets.map(w=>{
-      const l = w.responsive[vp] || {};
-      return (l.y||0) + (l.height||0);
-    }));
-    pageDraft.canvas[vp].minHeight = Math.max(min, maxBottom + 160);
-  }
-
-  function saveNow(){
-    saveDraft();
-    showToast("저장했습니다. 현재 MVP는 브라우저 localStorage 저장입니다.");
-  }
-
-  function scheduleSave(){
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(saveDraft, 600);
-  }
-
-  function saveDraft(){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(pageDraft));
-  }
-
-  function loadDraft(){
-    try{
-      const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : null;
-    }catch(e){ return null; }
-  }
-
-  function pushHistory(){
-    editorState.historyStack.push(JSON.stringify(pageDraft));
-    if(editorState.historyStack.length > 50) editorState.historyStack.shift();
-    editorState.redoStack = [];
-  }
-
-  function undo(){
-    if(!editorState.historyStack.length){ showToast("되돌릴 내용이 없습니다."); return; }
-    editorState.redoStack.push(JSON.stringify(pageDraft));
-    pageDraft = JSON.parse(editorState.historyStack.pop());
-    saveDraft();
-    render();
-  }
-
-  function redo(){
-    if(!editorState.redoStack.length){ showToast("다시할 내용이 없습니다."); return; }
-    editorState.historyStack.push(JSON.stringify(pageDraft));
-    pageDraft = JSON.parse(editorState.redoStack.pop());
-    saveDraft();
-    render();
+    const bottoms = page.widgets.filter(w=>w.visible[vp]!==false).map(w=>{
+      const l=w.responsive[vp]; return (l.y||0)+(l.height||0);
+    });
+    page.canvas[vp].minHeight = Math.max(min, bottoms.length ? Math.max(...bottoms)+160 : min);
   }
 
   function togglePreview(){
-    editorState.preview = !editorState.preview;
-    document.getElementById("previewBtn").textContent = editorState.preview ? "편집으로" : "미리보기";
+    state.preview = !state.preview;
+    document.getElementById("previewBtn").textContent = state.preview ? "편집으로" : "미리보기";
     render();
   }
 
-  function showToast(msg){
-    toast.textContent = msg;
-    toast.classList.add("show");
-    clearTimeout(showToast._t);
-    showToast._t = setTimeout(()=>toast.classList.remove("show"),1800);
+  function saveNow(){ save(); show("저장했습니다. localStorage 저장입니다."); }
+  let saveTimer=null;
+  function saveSoon(){ clearTimeout(saveTimer); saveTimer=setTimeout(save,400); }
+  function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(page)); }
+  function load(){ try{ const raw=localStorage.getItem(STORAGE_KEY); return raw?JSON.parse(raw):null; }catch(_){ return null; } }
+
+  function pushHistory(){
+    state.history.push(JSON.stringify(page));
+    if(state.history.length>50) state.history.shift();
+    state.redo=[];
+  }
+  function undo(){
+    if(!state.history.length){ show("되돌릴 내용이 없습니다."); return; }
+    state.redo.push(JSON.stringify(page));
+    page = JSON.parse(state.history.pop());
+    save(); render();
+  }
+  function redo(){
+    if(!state.redo.length){ show("다시할 내용이 없습니다."); return; }
+    state.history.push(JSON.stringify(page));
+    page = JSON.parse(state.redo.pop());
+    save(); render();
   }
 
-  function deepClone(obj){ return JSON.parse(JSON.stringify(obj)); }
-  function escapeAttr(s){ return String(s||"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
-
-  function debounce(fn,ms){
-    let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args),ms); };
+  function show(msg){
+    toast.textContent=msg; toast.classList.add("show");
+    clearTimeout(show._t); show._t=setTimeout(()=>toast.classList.remove("show"),1600);
   }
 
-  document.getElementById("saveBtn").onclick = saveNow;
-  document.getElementById("previewBtn").onclick = togglePreview;
-  document.getElementById("undoBtn").onclick = undo;
-  document.getElementById("redoBtn").onclick = redo;
+  function isDesktop(){ return window.innerWidth >= BREAK; }
+  function px(v){ return (v||0)+"px"; }
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+  function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 
-  viewportTabs.addEventListener("click", e=>{
-    const btn = e.target.closest(".viewport-tab");
-    if(btn) setActiveViewport(btn.dataset.vp);
+  document.getElementById("saveBtn").addEventListener("click", saveNow);
+  document.getElementById("previewBtn").addEventListener("click", togglePreview);
+  document.getElementById("undoBtn").addEventListener("click", undo);
+  document.getElementById("redoBtn").addEventListener("click", redo);
+
+  document.getElementById("viewportTabs").addEventListener("click", function(e){
+    const b = e.target.closest(".tab");
+    if(!b) return;
+    if(!isDesktop()){ show("데스크탑 편집은 PC에서 가능합니다."); return; }
+    state.viewport = b.dataset.vp;
+    state.selected = null;
+    render();
   });
 
-  bottomBarEl.addEventListener("click", e=>{
-    const btn = e.target.closest(".bottom-btn");
-    if(!btn) return;
-    editorState.activePanel = btn.dataset.panel;
-    renderMobileSheet();
+  document.querySelector(".bottom").addEventListener("click", function(e){
+    const b = e.target.closest("button[data-panel]");
+    if(!b) return;
+    state.panel = b.dataset.panel;
+    renderSheet();
   });
 
-  document.addEventListener("click", e => {
-    const target = e.target;
-    if (target.closest && target.closest("#saveBtn")) { saveNow(); return; }
-    if (target.closest && target.closest("#previewBtn")) { togglePreview(); return; }
-    if (target.closest && target.closest("#undoBtn")) { undo(); return; }
-    if (target.closest && target.closest("#redoBtn")) { redo(); return; }
-    const vpBtn = target.closest && target.closest(".viewport-tab");
-    if (vpBtn) { setActiveViewport(vpBtn.dataset.vp); return; }
-    const bottomBtn = target.closest && target.closest(".bottom-btn");
-    if (bottomBtn) { editorState.activePanel = bottomBtn.dataset.panel; renderMobileSheet(); return; }
-  }, true);
+  canvas.addEventListener("click", function(){
+    if(state.preview) return;
+    state.selected = null; renderCanvas();
+  });
 
-  window.addEventListener("resize", debounce(()=>{
-    const old = editorState.deviceType;
-    editorState.deviceType = getDeviceType();
-    if(editorState.deviceType === "mobile") editorState.activeViewport = "mobile";
-    if(old !== editorState.deviceType) render();
-  },200));
+  window.addEventListener("resize", function(){
+    const prev = state.device;
+    state.device = isDesktop() ? "desktop" : "mobile";
+    if(state.device === "mobile") state.viewport = "mobile";
+    if(prev !== state.device) render();
+  });
 
-  updateCanvasHeight("mobile");
-  updateCanvasHeight("desktop");
+  updateCanvasHeight("mobile"); updateCanvasHeight("desktop");
   render();
-})();
+});
 </script>
 </body>
 </html>
