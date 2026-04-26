@@ -817,7 +817,20 @@
       .hero{padding:36px var(--pageX) 24px}
       .hero-title{font-size:52px}
       .hero-desc{font-size:15px;line-height:1.68}
-      .hero-actions .btn{width:100%}
+      .hero-actions{
+        display:flex;
+        flex-direction:row;
+        flex-wrap:nowrap;
+        gap:10px;
+      }
+
+      .hero-actions .btn{
+        width:auto;
+        flex:0 0 auto;
+        min-height:48px;
+        padding:0 18px;
+        font-size:14px;
+      }
 
       .video-section{padding:4px 0 40px}
       .video-frame{
