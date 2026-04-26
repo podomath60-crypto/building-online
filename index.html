@@ -742,6 +742,78 @@
       }
     }
 
+
+    .category-card{
+      cursor:pointer;
+    }
+
+    .category-card.active-category{
+      outline:4px solid rgba(79,140,255,.34);
+      transform:translateY(-6px);
+    }
+
+    .category-results{
+      margin-top:26px;
+      padding:28px;
+      border-radius:32px;
+      background:rgba(255,255,255,.74);
+      border:1px solid rgba(16,24,40,.08);
+      box-shadow:0 20px 60px rgba(16,24,40,.09);
+    }
+
+    .category-result-head{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:20px;
+    }
+
+    .category-result-head h3{
+      margin:0;
+      color:#101827;
+      font-size:34px;
+      line-height:1.1;
+      letter-spacing:-.08em;
+      font-weight:1000;
+    }
+
+    .category-result-head p{
+      margin:8px 0 0;
+      color:#667085;
+      font-size:15px;
+      line-height:1.55;
+      letter-spacing:-.035em;
+      font-weight:650;
+    }
+
+    .category-result-block{
+      display:none;
+    }
+
+    .category-result-block.active{
+      display:block;
+    }
+
+    .category-store-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:20px;
+    }
+
+    .category-empty{
+      padding:34px 22px;
+      border-radius:26px;
+      background:#fff;
+      color:#667085;
+      text-align:center;
+      font-size:15px;
+      font-weight:850;
+      letter-spacing:-.04em;
+      border:1px solid rgba(16,24,40,.07);
+      box-shadow:0 14px 40px rgba(16,24,40,.07);
+    }
+
     @media(max-width:980px){
       .intro-grid{
         grid-template-columns:1fr;
@@ -914,15 +986,48 @@
       }
 
       .category-grid{
-        grid-template-columns:1fr;
+        grid-template-columns:repeat(4,1fr);
+        gap:8px;
       }
 
       .cat{
-        min-height:172px;
+        min-height:92px;
+        border-radius:18px;
+        padding:12px 8px;
       }
 
       .cat-icon{
-        margin-bottom:38px;
+        width:30px;
+        height:30px;
+        border-radius:11px;
+        font-size:15px;
+        margin-bottom:16px;
+      }
+
+      .cat h3{
+        font-size:13px;
+        line-height:1.15;
+        letter-spacing:-.055em;
+        margin-bottom:4px;
+      }
+
+      .cat p{
+        display:none;
+      }
+
+
+      .category-results{
+        margin-top:22px;
+        padding:18px;
+        border-radius:28px;
+      }
+
+      .category-result-head h3{
+        font-size:30px;
+      }
+
+      .category-store-grid{
+        grid-template-columns:1fr;
       }
 
       .footer-inner{
@@ -943,6 +1048,28 @@
       .floor-chip{
         min-width:58px;
         height:48px;
+      }
+
+      .category-grid{
+        grid-template-columns:repeat(4,1fr);
+        gap:7px;
+      }
+
+      .cat{
+        min-height:86px;
+        padding:10px 6px;
+        border-radius:16px;
+      }
+
+      .cat-icon{
+        width:28px;
+        height:28px;
+        font-size:14px;
+        margin-bottom:14px;
+      }
+
+      .cat h3{
+        font-size:12px;
       }
     }
   </style>
@@ -1158,47 +1285,188 @@
           </div>
 
           <div class="category-grid">
-            <a class="cat food" href="#stores">
+            <a class="cat food category-card" href="#categoryResults" data-category="food">
               <div class="cat-icon">🍽️</div>
               <h3>음식·카페</h3>
               <p>식사, 커피, 간식, 포장</p>
             </a>
-            <a class="cat health" href="#stores">
+            <a class="cat health category-card" href="#categoryResults" data-category="health">
               <div class="cat-icon">🏥</div>
               <h3>병원·건강</h3>
               <p>병원, 약국, 건강관리</p>
             </a>
-            <a class="cat edu" href="#stores">
+            <a class="cat edu category-card" href="#categoryResults" data-category="edu">
               <div class="cat-icon">📚</div>
               <h3>학원·교육</h3>
               <p>학원, 공부방, 교육 서비스</p>
             </a>
-            <a class="cat office" href="#stores">
+            <a class="cat office category-card" href="#categoryResults" data-category="office">
               <div class="cat-icon">💼</div>
               <h3>사무실·전문서비스</h3>
               <p>법무, 세무, 보험, 사무실</p>
             </a>
-            <a class="cat beauty" href="#stores">
+            <a class="cat beauty category-card" href="#categoryResults" data-category="beauty">
               <div class="cat-icon">✨</div>
               <h3>미용·뷰티</h3>
               <p>미용, 피부, 네일, 관리</p>
             </a>
-            <a class="cat life" href="#stores">
+            <a class="cat life category-card" href="#categoryResults" data-category="life">
               <div class="cat-icon">🛠️</div>
               <h3>생활서비스</h3>
               <p>수리, 세탁, 생활 편의</p>
             </a>
-            <a class="cat shop" href="#stores">
+            <a class="cat shop category-card" href="#categoryResults" data-category="shop">
               <div class="cat-icon">🛍️</div>
               <h3>판매·소매</h3>
               <p>상품 판매, 쇼핑, 매장</p>
             </a>
-            <a class="cat etc" href="#stores">
+            <a class="cat etc category-card" href="#categoryResults" data-category="etc">
               <div class="cat-icon">➕</div>
               <h3>기타</h3>
               <p>다양한 업체와 사무공간</p>
             </a>
           </div>
+
+          <div class="category-results" id="categoryResults">
+            <div class="category-result-head">
+              <div>
+                <div class="kicker">CATEGORY RESULT</div>
+                <h3 id="categoryResultTitle">음식·카페</h3>
+                <p id="categoryResultDesc">선택한 업종의 업체를 확인할 수 있습니다.</p>
+              </div>
+            </div>
+
+            <div class="category-result-block active" data-result="food">
+              <div class="category-store-grid">
+                <article class="store-card" data-floor="1F" data-category="음식·카페">
+                  <div class="store-photo p1">
+                    <span class="tag">음식·카페</span>
+                    <span class="floor-badge">1F</span>
+                  </div>
+                  <div class="store-body">
+                    <h3>26 커피라운지</h3>
+                    <p>커피와 간단한 디저트를 즐길 수 있는 26빌딩 안의 편안한 휴식 공간입니다.</p>
+                    <div class="store-actions">
+                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
+                      <a class="small-btn" href="#">상세보기</a>
+                    </div>
+                  </div>
+                </article>
+
+                <article class="store-card" data-floor="B1" data-category="음식·카페">
+                  <div class="store-photo p5">
+                    <span class="tag">음식점</span>
+                    <span class="floor-badge">B1</span>
+                  </div>
+                  <div class="store-body">
+                    <h3>26 다이닝</h3>
+                    <p>건물 이용객과 주변 직장인을 위한 식사 공간을 소개하는 더미 카드입니다.</p>
+                    <div class="store-actions">
+                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
+                      <a class="small-btn" href="#">상세보기</a>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </div>
+
+            <div class="category-result-block" data-result="health">
+              <div class="category-empty">
+                병원·건강 업종의 업체 정보를 준비하고 있습니다.
+              </div>
+            </div>
+
+            <div class="category-result-block" data-result="edu">
+              <div class="category-store-grid">
+                <article class="store-card" data-floor="7F" data-category="학원·교육">
+                  <div class="store-photo p3">
+                    <span class="tag">학원·교육</span>
+                    <span class="floor-badge">7F</span>
+                  </div>
+                  <div class="store-body">
+                    <h3>26 스터디랩</h3>
+                    <p>학생과 직장인을 위한 학습공간, 교육 프로그램을 소개하는 카드 예시입니다.</p>
+                    <div class="store-actions">
+                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
+                      <a class="small-btn" href="#">상세보기</a>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </div>
+
+            <div class="category-result-block" data-result="office">
+              <div class="category-store-grid">
+                <article class="store-card" data-floor="5F" data-category="사무실·전문서비스">
+                  <div class="store-photo p2">
+                    <span class="tag">전문서비스</span>
+                    <span class="floor-badge">5F</span>
+                  </div>
+                  <div class="store-body">
+                    <h3>나운 상담오피스</h3>
+                    <p>상담, 문서, 업무 지원 서비스를 제공하는 사무실 소개 페이지 예시입니다.</p>
+                    <div class="store-actions">
+                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
+                      <a class="small-btn" href="#">상세보기</a>
+                    </div>
+                  </div>
+                </article>
+
+                <article class="store-card" data-floor="9F" data-category="사무실·전문서비스">
+                  <div class="store-photo p4">
+                    <span class="tag">사무실</span>
+                    <span class="floor-badge">9F</span>
+                  </div>
+                  <div class="store-body">
+                    <h3>비즈니스 스튜디오</h3>
+                    <p>소규모 사무실, 회의, 상담 업무에 적합한 비즈니스 공간 소개 예시입니다.</p>
+                    <div class="store-actions">
+                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
+                      <a class="small-btn" href="#">상세보기</a>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </div>
+
+            <div class="category-result-block" data-result="beauty">
+              <div class="category-empty">
+                미용·뷰티 업종의 업체 정보를 준비하고 있습니다.
+              </div>
+            </div>
+
+            <div class="category-result-block" data-result="life">
+              <div class="category-store-grid">
+                <article class="store-card" data-floor="3F" data-category="생활서비스">
+                  <div class="store-photo p6">
+                    <span class="tag">생활서비스</span>
+                    <span class="floor-badge">3F</span>
+                  </div>
+                  <div class="store-body">
+                    <h3>생활편의 센터</h3>
+                    <p>예약, 문의, 운영시간 등 방문자에게 필요한 정보를 한눈에 보여줄 수 있습니다.</p>
+                    <div class="store-actions">
+                      <a class="small-btn dark" href="tel:01000000000">전화하기</a>
+                      <a class="small-btn" href="#">상세보기</a>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </div>
+
+            <div class="category-result-block" data-result="shop">
+              <div class="category-empty">
+                판매·소매 업종의 업체 정보를 준비하고 있습니다.
+              </div>
+            </div>
+
+            <div class="category-result-block" data-result="etc">
+              <div class="category-empty">
+                기타 업종의 업체 정보를 준비하고 있습니다.
+              </div>
+            </div>
+          </div>
+
         </section>
       </div>
     </main>
@@ -1241,6 +1509,54 @@
         });
       });
     })();
+  
+    (function(){
+      const categoryCards = document.querySelectorAll(".category-card[data-category]");
+      const resultBlocks = document.querySelectorAll(".category-result-block[data-result]");
+      const resultTitle = document.getElementById("categoryResultTitle");
+      const resultDesc = document.getElementById("categoryResultDesc");
+      const resultWrap = document.getElementById("categoryResults");
+
+      const categoryText = {
+        food: ["음식·카페", "음식·카페 업종의 업체를 확인할 수 있습니다."],
+        health: ["병원·건강", "병원·건강 업종의 업체를 확인할 수 있습니다."],
+        edu: ["학원·교육", "학원·교육 업종의 업체를 확인할 수 있습니다."],
+        office: ["사무실·전문서비스", "사무실·전문서비스 업종의 업체를 확인할 수 있습니다."],
+        beauty: ["미용·뷰티", "미용·뷰티 업종의 업체를 확인할 수 있습니다."],
+        life: ["생활서비스", "생활서비스 업종의 업체를 확인할 수 있습니다."],
+        shop: ["판매·소매", "판매·소매 업종의 업체를 확인할 수 있습니다."],
+        etc: ["기타", "기타 업종의 업체를 확인할 수 있습니다."]
+      };
+
+      function showCategory(category){
+        categoryCards.forEach(card => {
+          card.classList.toggle("active-category", card.dataset.category === category);
+        });
+
+        resultBlocks.forEach(block => {
+          block.classList.toggle("active", block.dataset.result === category);
+        });
+
+        if(categoryText[category]){
+          resultTitle.textContent = categoryText[category][0];
+          resultDesc.textContent = categoryText[category][1];
+        }
+
+        if(resultWrap){
+          resultWrap.scrollIntoView({ behavior:"smooth", block:"start" });
+        }
+      }
+
+      categoryCards.forEach(card => {
+        card.addEventListener("click", function(e){
+          e.preventDefault();
+          showCategory(card.dataset.category);
+        });
+      });
+
+      showCategory("food");
+    })();
+
   </script>
 </body>
 </html>
