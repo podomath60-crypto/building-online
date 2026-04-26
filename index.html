@@ -743,31 +743,30 @@
       background:radial-gradient(circle,rgba(117,215,255,.18),transparent 68%);
       pointer-events:none;
     }
-    .register-content{
+    .register-title-row{
       position:relative;
       z-index:1;
       display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap:22px;
-      padding-top:6px;
+      align-items:center;
+      gap:24px;
+      flex-wrap:wrap;
     }
     .register-btn{
       position:relative;
       overflow:hidden;
       flex:0 0 auto;
-      min-height:52px;
-      padding:0 22px;
+      min-height:64px;
+      padding:0 34px;
       border-radius:999px;
       display:inline-flex;
       align-items:center;
       justify-content:center;
       color:#fff;
       background:linear-gradient(135deg,var(--blue),var(--sky),var(--mint));
-      font-size:14px;
+      font-size:16px;
       font-weight:1000;
       letter-spacing:-.04em;
-      box-shadow:0 14px 34px rgba(31,140,255,.20);
+      box-shadow:0 18px 44px rgba(31,140,255,.22);
       white-space:nowrap;
     }
 
@@ -896,8 +895,8 @@
       .category-result-head h3{font-size:30px}
 
       .register-section{padding:46px 18px 58px}
-      .register-content{display:block;padding-top:0}
-      .register-btn{width:100%;margin-top:0}
+      .register-title-row{display:block}
+      .register-btn{display:flex;width:70%;min-height:56px;margin:20px auto 0;padding:0 24px;font-size:15px}
 
       .footer-inner{display:block}
     }
@@ -964,8 +963,7 @@
               <span>옆으로 밀어서 층을 선택하세요</span>
             </div>
             <div class="floor-scroll">
-              <button class="floor-chip active" type="button" data-floor="all">전체</button>
-              <button class="floor-chip" type="button" data-floor="B1">B1</button>
+              <button class="floor-chip active" type="button" data-floor="B1">B1</button>
               <button class="floor-chip" type="button" data-floor="1F">1F</button>
               <button class="floor-chip" type="button" data-floor="2F">2F</button>
               <button class="floor-chip" type="button" data-floor="3F">3F</button>
@@ -1024,11 +1022,11 @@
         <section class="register-section">
           <div class="section-head">
             <div class="kicker">REGISTER</div>
-            <h2 class="section-title">26빌딩 입점업체이신가요?</h2>
+            <div class="register-title-row">
+              <h2 class="section-title">26빌딩 입점업체이신가요?</h2>
+              <a class="register-btn" href="/register">업체등록</a>
+            </div>
             <p class="section-desc">업체 정보 등록·수정은 전용 페이지에서 신청할 수 있습니다.</p>
-          </div>
-          <div class="register-content">
-            <a class="register-btn" href="/register">업체등록</a>
           </div>
         </section>
       </div>
@@ -1160,7 +1158,7 @@
       });
     });
 
-    renderStores(stores);
+    renderStores(stores.filter(s=>s.floor === "B1"));
     renderCategory("food", false);
   </script>
 </body>
