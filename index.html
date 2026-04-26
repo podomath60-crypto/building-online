@@ -717,39 +717,40 @@
     .category-result-block.active{display:block}
 
     .register-section{
+      position:relative;
+      overflow:hidden;
       max-width:1180px;
       margin:0 auto;
-      padding:0 var(--pageX) 72px;
+      padding:58px var(--pageX) 72px;
     }
-    .register-card{
+    .register-section::before{
+      content:"";
+      position:absolute;
+      left:var(--pageX);
+      right:var(--pageX);
+      top:0;
+      height:1px;
+      background:linear-gradient(90deg,rgba(31,140,255,0),rgba(31,140,255,.18),rgba(52,211,153,.18),rgba(31,140,255,0));
+    }
+    .register-section::after{
+      content:"";
+      position:absolute;
+      right:-70px;
+      top:24px;
+      width:240px;
+      height:240px;
+      border-radius:50%;
+      background:radial-gradient(circle,rgba(117,215,255,.18),transparent 68%);
+      pointer-events:none;
+    }
+    .register-content{
+      position:relative;
+      z-index:1;
       display:flex;
-      align-items:center;
+      align-items:flex-end;
       justify-content:space-between;
       gap:22px;
-      padding:26px;
-      border-radius:28px;
-      background:
-        radial-gradient(circle at 12% 18%,rgba(31,140,255,.13),transparent 30%),
-        radial-gradient(circle at 86% 12%,rgba(52,211,153,.14),transparent 30%),
-        #fff;
-      border:1px solid rgba(31,140,255,.12);
-      box-shadow:var(--shadow);
-    }
-    .register-card h2{
-      margin:0;
-      color:var(--ink);
-      font-size:28px;
-      line-height:1.16;
-      letter-spacing:-.08em;
-      font-weight:1000;
-    }
-    .register-card p{
-      margin:10px 0 0;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.6;
-      letter-spacing:-.035em;
-      font-weight:650;
+      padding-top:6px;
     }
     .register-btn{
       position:relative;
@@ -894,10 +895,9 @@
       }
       .category-result-head h3{font-size:30px}
 
-      .register-section{padding:0 18px 58px}
-      .register-card{display:block;padding:24px 20px;border-radius:26px}
-      .register-card h2{font-size:28px}
-      .register-btn{width:100%;margin-top:20px}
+      .register-section{padding:46px 18px 58px}
+      .register-content{display:block;padding-top:0}
+      .register-btn{width:100%;margin-top:0}
 
       .footer-inner{display:block}
     }
@@ -1022,11 +1022,12 @@
         </section>
 
         <section class="register-section">
-          <div class="register-card">
-            <div>
-              <h2>26빌딩 입점업체이신가요?</h2>
-              <p>업체 정보 등록·수정은 전용 페이지에서 신청할 수 있습니다.</p>
-            </div>
+          <div class="section-head">
+            <div class="kicker">REGISTER</div>
+            <h2 class="section-title">26빌딩 입점업체이신가요?</h2>
+            <p class="section-desc">업체 정보 등록·수정은 전용 페이지에서 신청할 수 있습니다.</p>
+          </div>
+          <div class="register-content">
             <a class="register-btn" href="/register">업체등록</a>
           </div>
         </section>
